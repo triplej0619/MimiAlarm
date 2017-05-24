@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Roboto.Regular.15.Gray1" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/normalText</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    <style name="Roboto.Thin.60.Gray1" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">60sp</item>
+        <item name="android:textColor">@color/normalText</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+    <style name="Roboto.Thin.30.Gray1" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/normalText</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
+    <style name="Noto.Regular.12.Gray2" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/dayOfWeek</item>
+        <item name="android:fontFamily">serif</item>
+    </style>
+
+
+    <style name="Roboto.Regular.16.Accent" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?colorAccent</item>
+        <item name="fontPath">fonts/NotoSansCJKkr-Thin.otf</item>
+    </style>
+</resources>
