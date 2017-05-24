@@ -87,12 +87,12 @@
                     <TextView
                         style="@style/Noto.Regular.12.Gray2"
                         android:text="@string/tuesday"
-                        android:textColor="@{viewModel.monday ? @color/dayOfWeek : @color/dayOfWeekNegative}"
+                        android:textColor="@{viewModel.tuesDay ? @color/dayOfWeek : @color/dayOfWeekNegative}"
                         android:layout_centerInParent="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <View
-                        android:visibility="@{viewModel.tuesday ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{viewModel.tuesDay ? View.VISIBLE : View.GONE}"
                         android:background="?attr/colorAccent"
                         android:layout_alignParentBottom="true"
                         android:layout_width="match_parent"
@@ -104,12 +104,12 @@
                     <TextView
                         style="@style/Noto.Regular.12.Gray2"
                         android:text="@string/wednesday"
-                        android:textColor="@{viewModel.monday ? @color/dayOfWeek : @color/dayOfWeekNegative}"
+                        android:textColor="@{viewModel.wednesDay ? @color/dayOfWeek : @color/dayOfWeekNegative}"
                         android:layout_centerInParent="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <View
-                        android:visibility="@{viewModel.wednesday ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{viewModel.wednesDay ? View.VISIBLE : View.GONE}"
                         android:background="?attr/colorAccent"
                         android:layout_alignParentBottom="true"
                         android:layout_width="match_parent"
@@ -121,12 +121,12 @@
                     <TextView
                         style="@style/Noto.Regular.12.Gray2"
                         android:text="@string/thursday"
-                        android:textColor="@{viewModel.monday ? @color/dayOfWeek : @color/dayOfWeekNegative}"
+                        android:textColor="@{viewModel.thurseDay ? @color/dayOfWeek : @color/dayOfWeekNegative}"
                         android:layout_centerInParent="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <View
-                        android:visibility="@{viewModel.thursday ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{viewModel.thurseDay ? View.VISIBLE : View.GONE}"
                         android:background="?attr/colorAccent"
                         android:layout_alignParentBottom="true"
                         android:layout_width="match_parent"
@@ -138,12 +138,12 @@
                     <TextView
                         style="@style/Noto.Regular.12.Gray2"
                         android:text="@string/friday"
-                        android:textColor="@{viewModel.monday ? @color/dayOfWeek : @color/dayOfWeekNegative}"
+                        android:textColor="@{viewModel.friDay ? @color/dayOfWeek : @color/dayOfWeekNegative}"
                         android:layout_centerInParent="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <View
-                        android:visibility="@{viewModel.friday ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{viewModel.friDay ? View.VISIBLE : View.GONE}"
                         android:background="?attr/colorAccent"
                         android:layout_alignParentBottom="true"
                         android:layout_width="match_parent"
@@ -155,12 +155,12 @@
                     <TextView
                         style="@style/Noto.Regular.12.Gray2"
                         android:text="@string/saturday"
-                        android:textColor="@{viewModel.monday ? @color/dayOfWeek : @color/dayOfWeekNegative}"
+                        android:textColor="@{viewModel.saturDay ? @color/dayOfWeek : @color/dayOfWeekNegative}"
                         android:layout_centerInParent="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <View
-                        android:visibility="@{viewModel.saturday ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{viewModel.saturDay ? View.VISIBLE : View.GONE}"
                         android:background="?attr/colorAccent"
                         android:layout_alignParentBottom="true"
                         android:layout_width="match_parent"
@@ -172,12 +172,12 @@
                     <TextView
                         style="@style/Noto.Regular.12.Gray2"
                         android:text="@string/sunday"
-                        android:textColor="@{viewModel.monday ? @color/dayOfWeek : @color/dayOfWeekNegative}"
+                        android:textColor="@{viewModel.sunDay ? @color/dayOfWeek : @color/dayOfWeekNegative}"
                         android:layout_centerInParent="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <View
-                        android:visibility="@{viewModel.sunday ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{viewModel.sunDay ? View.VISIBLE : View.GONE}"
                         android:background="?attr/colorAccent"
                         android:layout_alignParentBottom="true"
                         android:layout_width="match_parent"
