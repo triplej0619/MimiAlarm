@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.view.PagerAdapter
 import android.support.v7.app.AppCompatActivity
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.databinding.ActivityMainBinding
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         viewPagerAdapter = CustomViewPagerAdapter(supportFragmentManager);
 
         binding?.viewpager?.adapter = viewPagerAdapter
-//        binding!!.viewpager.offscreenPageLimit = 2
+        binding!!.viewpager.offscreenPageLimit = 2
 
         viewPagerAdapter?.addItem(AlarmFragment())
         viewPagerAdapter?.addItem(TimerFragment())

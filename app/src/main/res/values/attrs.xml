@@ -4,4 +4,5 @@
     <attr name="colorPrimaryDark" format="color" />
     <attr name="colorPrimaryAccent" format="color" />
     <attr name="colorGradientEnd" format="color" />
+    <attr name="colorBg" format="color" />
 </resources>
