@@ -1,12 +1,16 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.databinding.ObservableBoolean
+import com.mimi.mimialarm.android.infrastructure.StartAlarmDetailActivityEvent
+import com.squareup.otto.Bus
 
 /**
  * Created by MihyeLee on 2017. 5. 24..
  */
 
-class AlarmViewModel : BaseViewModel() {
+class AlarmViewModel : BaseViewModel {
+    lateinit var bus: Bus
+
     var alarmList: MutableList<AlarmListItemViewModel> = ArrayList()
 
     init {
@@ -29,11 +33,19 @@ class AlarmViewModel : BaseViewModel() {
 //        alarmList.get(2).thurseDay = false
     }
 
-    public fun clickListItem(position: Int) {
+    constructor(bus: Bus) {
+        bus.register(this)
+    }
+
+    fun release() {
+        bus.unregister(this)
+    }
+
+    fun clickListItem(position: Int) {
         showAlarmDetailView()
     }
 
     fun showAlarmDetailView() {
-
+        bus.post(StartAlarmDetailActivityEvent())
     }
 }
