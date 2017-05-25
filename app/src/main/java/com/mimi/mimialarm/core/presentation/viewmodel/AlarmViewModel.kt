@@ -28,4 +28,12 @@ class AlarmViewModel : BaseViewModel() {
 //        alarmList.get(2).wednesDay = false
 //        alarmList.get(2).thurseDay = false
     }
+
+    public fun clickListItem(position: Int) {
+        showAlarmDetailView()
+    }
+
+    fun showAlarmDetailView() {
+
+    }
 }
