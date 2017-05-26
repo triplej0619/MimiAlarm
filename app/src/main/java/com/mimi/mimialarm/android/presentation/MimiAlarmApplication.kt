@@ -17,11 +17,15 @@ class MimiAlarmApplication : Application() {
     @Inject
     lateinit var activityManager: ActivityManager
 
+    fun buildComponent(): ApplicationComponent {
+        component = DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this)).build()
+        return component
+    }
+
     override fun onCreate() {
         super.onCreate()
 
-        component = DaggerApplicationComponent.builder().build()  //.applicationModule(ApplicationModule(this)).build()
-        component.inject(this)
+        buildComponent().inject(this)
 
         init()
     }

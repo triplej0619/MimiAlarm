@@ -5,9 +5,7 @@ import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import com.mimi.mimialarm.android.infrastructure.StartAlarmDetailActivityEvent
-import com.mimi.mimialarm.android.presentation.ApplicationComponent
-import com.mimi.mimialarm.android.presentation.DaggerApplicationComponent
-import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
+import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.android.presentation.view.AlarmDetailActivity
 import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
@@ -21,14 +19,15 @@ class ActivityManager: Application.ActivityLifecycleCallbacks {
 
     @Inject
     lateinit var bus: Bus
-    val component: ApplicationComponent
+
+    fun buildComponent(application: MimiAlarmApplication): ActivityComponent {
+        return DaggerActivityComponent.builder().applicationComponent((application).component).viewModelModule(ViewModelModule()).build()
+    }
 
     private var currentActivity: Activity? = null
 
     constructor(application: MimiAlarmApplication) {
-        component = DaggerApplicationComponent.builder().build()
-        component.inject(application)
-
+        buildComponent(application).inject(this)
         bus.register(this)
     }
 
@@ -41,11 +40,9 @@ class ActivityManager: Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityStarted(activity: Activity?) {
-        currentActivity = activity
     }
 
     override fun onActivityDestroyed(activity: Activity?) {
-        currentActivity = null
     }
 
     override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {

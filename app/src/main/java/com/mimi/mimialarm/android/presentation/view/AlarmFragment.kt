@@ -23,14 +23,16 @@ class AlarmFragment : Fragment() {
     var binding: FragmentAlarmBinding? = null
     @Inject
     lateinit var viewModel: AlarmViewModel
-    lateinit var activityComponent: ActivityComponent
+
+    fun buildComponent(): ActivityComponent {
+        return DaggerActivityComponent.builder().applicationComponent((activity.application as MimiAlarmApplication).component).viewModelModule(ViewModelModule()).build()
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_alarm, container, false)
-        initListView()
+        buildComponent().inject(this)
 
-        activityComponent = DaggerActivityComponent.builder().build()
-        activityComponent.inject(this)
+        initListView()
 
         return binding?.root
     }

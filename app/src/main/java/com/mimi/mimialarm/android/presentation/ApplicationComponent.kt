@@ -1,5 +1,6 @@
 package com.mimi.mimialarm.android.presentation
 
+import com.squareup.otto.Bus
 import dagger.Component
 import javax.inject.Singleton
 
@@ -11,4 +12,5 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(ApplicationModule::class))
 interface ApplicationComponent {
     fun inject(application: MimiAlarmApplication)
+    fun bus(): Bus
 }
