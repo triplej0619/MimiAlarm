@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
-                    style="@style/Roboto.Regular.16.Accent"
+                    style="@style/NotoSans.Thin.16.Accent"
                     tools:text="10분x4회"
                     android:layout_below="@id/when"
                     android:text="10분x4회"
@@ -197,7 +197,7 @@
 
         <View
             android:layout_alignParentBottom="true"
-            android:background="@color/listDivider"
+            android:background="?attr/colorListDivider"
             android:layout_width="match_parent"
             android:layout_height="1dp" />
     </RelativeLayout>

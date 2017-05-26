@@ -6,6 +6,7 @@
     <color name="colorAccent1">#65BEC9</color>
     <color name="gradientEnd1">#BF134A</color>
     <color name="bg1">#f2eff1</color>
+    <color name="listDivider1">#eaeaea</color>
 
     <!--theme 2-->
     <color name="colorPrimary2">#ff2b01</color>
@@ -13,6 +14,7 @@
     <color name="colorAccent2">#65c976</color>
     <color name="gradientEnd2">#bf4713</color>
     <color name="bg2">#f2eff1</color>
+    <color name="listDivider2">#eaeaea</color>
 
 
 
@@ -20,5 +22,4 @@
     <color name="normalText">#7c787b</color>
     <color name="dayOfWeek">#383643</color>
     <color name="dayOfWeekNegative">#b0b0b0</color>
-    <color name="listDivider">#eaeaea</color>
 </resources>

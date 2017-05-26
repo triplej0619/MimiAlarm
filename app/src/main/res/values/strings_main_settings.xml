@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_alarm_close_method">알람 종료 방법 변경</string>
+    <string name="settings_alarm_close_method_in_window">알람이 울릴 때 알림창에서 종료 가능</string>
+    <string name="settings_alarm_close_method_in_window_summary">알림창에 다시알림 버튼과 종료 버튼이 함께 표시됩니다.</string>
+    <string name="settings_alarm_close_method_in_app">앱을 켜서 종료 가능</string>
+    <string name="settings_alarm_close_method_in_app_summary">알림창에 다시알림 버튼만 표시됩니다.</string>
+
+    <string name="settings_change_theme">컬러 테마 변경</string>
+
+    <string name="settings_app_recommend">추천하기</string>
+    <string name="settings_app_recommend_to_friends">친구에게 알람앱을 추천해주세요</string>
+
+    <string name="settings_app_version">버전</string>
+</resources>

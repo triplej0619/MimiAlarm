@@ -5,4 +5,5 @@
     <attr name="colorPrimaryAccent" format="color" />
     <attr name="colorGradientEnd" format="color" />
     <attr name="colorBg" format="color" />
+    <attr name="colorListDivider" format="color" />
 </resources>
