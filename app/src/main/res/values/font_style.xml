@@ -43,4 +43,41 @@
         <item name="android:textColor">?colorAccent</item>
         <item name="fontPath">fonts/NotoSansCJKkr-Thin.otf</item>
     </style>
+    <style name="NotoSans.Regula.13.Accent" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">?colorAccent</item>
+        <item name="fontPath">fonts/NotoSansCJKkr-Regular.otf</item>
+    </style>
+
+
+    <style name="Roboto.Thin.60.White" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">60sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+    <style name="Roboto.Thin.80.White" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">80sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+    <style name="Roboto.Light.30.White" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+    <style name="NotoSans.Thin.14.White" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="fontPath">fonts/NotoSansCJKkr-Thin.otf</item>
+    </style>
+    <style name="NotoSans.Regular.16.White" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="fontPath">fonts/NotoSansCJKkr-Regular.otf</item>
+    </style>
+    <style name="NotoSans.Regular.18.White" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="fontPath">fonts/NotoSansCJKkr-Regular.otf</item>
+    </style>
 </resources>

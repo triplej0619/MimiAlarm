@@ -1,20 +1,35 @@
 <resources>
 
-    <style name="AppTheme1" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="MimiBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme1" parent="MimiBaseTheme">
         <item name="colorPrimary">@color/colorPrimary1</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark1</item>
         <item name="colorAccent">@color/colorAccent1</item>
         <item name="colorGradientEnd">@color/gradientEnd1</item>
+        <item name="colorGradientMid">@color/gradientMid1</item>
         <item name="colorBg">@color/bg1</item>
         <item name="colorListDivider">@color/listDivider1</item>
     </style>
 
-    <style name="AppTheme2" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme2" parent="MimiBaseTheme">
         <item name="colorPrimary">@color/colorPrimary2</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark2</item>
         <item name="colorAccent">@color/colorAccent2</item>
+        <item name="colorGradientEnd">@color/gradientEnd2</item>
+        <item name="colorGradientMid">@color/gradientMid2</item>
         <item name="colorBg">@color/bg2</item>
         <item name="colorListDivider">@color/listDivider2</item>
     </style>
+
+    <style name="CustomEditInTimer" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">60sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
+
 
 </resources>

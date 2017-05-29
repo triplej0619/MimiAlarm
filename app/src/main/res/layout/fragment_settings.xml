@@ -18,82 +18,80 @@
             android:layout_width="match_parent"
             android:layout_height="46dp" />
 
-        <RadioGroup
-            android:checkedButton="@+id/alarmCloseMethodInWindow"
+        <android.support.constraint.ConstraintLayout
             android:background="@android:color/white"
+            android:paddingLeft="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <android.support.constraint.ConstraintLayout
-                android:layout_marginLeft="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="72dp">
-                <RadioButton
-                    style="@style/NotoSans.Regular.16.Gray1"
-                    android:id="@+id/alarmCloseMethodInWindow"
-                    android:gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="72dp" />
-                <TextView
-                    app:layout_constraintLeft_toRightOf="@id/alarmCloseMethodInWindow"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.25"
-                    style="@style/NotoSans.Regular.16.Gray1"
-                    android:id="@+id/alarmCloseMethodInWindowText1"
-                    android:paddingLeft="8dp"
-                    android:text="@string/settings_alarm_close_method_in_window"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    app:layout_constraintLeft_toRightOf="@id/alarmCloseMethodInWindow"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.85"
-                    style="@style/NotoSans.Regular.11.Gray1"
-                    android:id="@+id/alarmCloseMethodInWindowText2"
-                    android:paddingLeft="8dp"
-                    android:text="@string/settings_alarm_close_method_in_window_summary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </android.support.constraint.ConstraintLayout>
-            <View
-                android:background="?attr/colorListDivider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp" />
-            <android.support.constraint.ConstraintLayout
-                android:layout_marginLeft="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="72dp">
-                <RadioButton
-                    style="@style/NotoSans.Regular.16.Gray1"
-                    android:id="@+id/alarmCloseMethodInApp"
-                    android:gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="72dp" />
-                <TextView
-                    app:layout_constraintLeft_toRightOf="@id/alarmCloseMethodInApp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.25"
-                    style="@style/NotoSans.Regular.16.Gray1"
-                    android:id="@+id/alarmCloseMethodInAppText1"
-                    android:paddingLeft="8dp"
-                    android:text="@string/settings_alarm_close_method_in_app"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    app:layout_constraintLeft_toRightOf="@id/alarmCloseMethodInApp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.85"
-                    style="@style/NotoSans.Regular.11.Gray1"
-                    android:id="@+id/alarmCloseMethodInAppText2"
-                    android:paddingLeft="8dp"
-                    android:text="@string/settings_alarm_close_method_in_app_summary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </android.support.constraint.ConstraintLayout>
-        </RadioGroup>
+            android:layout_height="72dp">
+            <RadioButton
+                style="@style/NotoSans.Regular.16.Gray1"
+                android:checked="true"
+                android:id="@+id/alarmCloseMethodInWindow"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="72dp" />
+            <TextView
+                app:layout_constraintLeft_toRightOf="@id/alarmCloseMethodInWindow"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.25"
+                style="@style/NotoSans.Regular.16.Gray1"
+                android:id="@+id/alarmCloseMethodInWindowText1"
+                android:paddingLeft="8dp"
+                android:text="@string/settings_alarm_close_method_in_window"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                app:layout_constraintLeft_toRightOf="@id/alarmCloseMethodInWindow"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.85"
+                style="@style/NotoSans.Regular.11.Gray1"
+                android:id="@+id/alarmCloseMethodInWindowText2"
+                android:paddingLeft="8dp"
+                android:text="@string/settings_alarm_close_method_in_window_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </android.support.constraint.ConstraintLayout>
+        <View
+            android:background="?attr/colorListDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+        <android.support.constraint.ConstraintLayout
+            android:background="@android:color/white"
+            android:paddingLeft="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="72dp">
+            <RadioButton
+                style="@style/NotoSans.Regular.16.Gray1"
+                android:checked="false"
+                android:id="@+id/alarmCloseMethodInApp"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="72dp" />
+            <TextView
+                app:layout_constraintLeft_toRightOf="@id/alarmCloseMethodInApp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.25"
+                style="@style/NotoSans.Regular.16.Gray1"
+                android:id="@+id/alarmCloseMethodInAppText1"
+                android:paddingLeft="8dp"
+                android:text="@string/settings_alarm_close_method_in_app"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                app:layout_constraintLeft_toRightOf="@id/alarmCloseMethodInApp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.85"
+                style="@style/NotoSans.Regular.11.Gray1"
+                android:id="@+id/alarmCloseMethodInAppText2"
+                android:paddingLeft="8dp"
+                android:text="@string/settings_alarm_close_method_in_app_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </android.support.constraint.ConstraintLayout>
 
         <TextView
             style="@style/NotoSans.Regular.15.Gray1"

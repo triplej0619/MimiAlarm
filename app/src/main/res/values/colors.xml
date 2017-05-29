@@ -5,6 +5,7 @@
     <color name="colorPrimaryDark1">#FF0180</color>
     <color name="colorAccent1">#65BEC9</color>
     <color name="gradientEnd1">#BF134A</color>
+    <color name="gradientMid1">#d60b5d</color>
     <color name="bg1">#f2eff1</color>
     <color name="listDivider1">#eaeaea</color>
 
@@ -13,6 +14,7 @@
     <color name="colorPrimaryDark2">#ff2b01</color>
     <color name="colorAccent2">#65c976</color>
     <color name="gradientEnd2">#bf4713</color>
+    <color name="gradientMid2">#d60b5d</color>
     <color name="bg2">#f2eff1</color>
     <color name="listDivider2">#eaeaea</color>
 

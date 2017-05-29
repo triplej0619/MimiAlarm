@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:background="@android:color/white"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+
+        <TextView
+            tools:text="8시간 20분 설정"
+            style="@style/NotoSans.Regula.13.Accent"
+            android:id="@+id/settedTime"
+            android:layout_marginTop="11dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            tools:text="01:15:55"
+            style="@style/Roboto.Thin.60.Gray1"
+            android:id="@+id/remainTime"
+            android:layout_below="@id/settedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        
+        <Button
+            style="@style/NotoSans.Regular.16.White"
+            android:text="@string/delete"
+            android:background="@drawable/selector_delete_btn"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="60dp"
+            android:layout_height="40dp" />
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            tools:max="100"
+            tools:progress="20"
+            android:id="@+id/progressbar"
+            android:indeterminate="false"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+    </RelativeLayout>
+</layout>

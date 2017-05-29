@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
+        android:background="@drawable/bg_gradient"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/img_ringing_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.02"
+            style="@style/Roboto.Light.30.White"
+            android:id="@+id/ampm"
+            android:text="pm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ampm"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0"
+            style="@style/Roboto.Thin.80.White"
+            android:id="@+id/time"
+            android:text="12:30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/time"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0"
+            style="@style/NotoSans.Regular.18.White"
+            android:id="@+id/date"
+            android:text="12월 8일 목요일"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        
+        <Button
+            style="@style/NotoSans.Regular.16.White"
+            app:layout_constraintVertical_bias="0.9"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/snooze"
+            android:id="@+id/close"
+            android:text="@string/alarm_close"
+            android:background="@drawable/selector_btn_accent"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+
+        <Button
+            style="@style/NotoSans.Regular.16.White"
+            app:layout_constraintVertical_bias="0.9"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/close"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/snooze"
+            android:text="@string/alarm_snooze"
+            android:background="@drawable/selector_btn_gray"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+
+    </android.support.constraint.ConstraintLayout>
+    
+</layout>
