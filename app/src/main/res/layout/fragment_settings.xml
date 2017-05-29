@@ -118,7 +118,7 @@
                 android:layout_height="40dp" />
             <RadioButton
                 android:id="@+id/theme2"
-                android:background="@drawable/selector_theme_btn1"
+                android:background="@drawable/selector_theme_btn2"
                 android:button="@android:color/transparent"
                 android:layout_gravity="center"
                 android:layout_margin="16dp"
@@ -126,7 +126,23 @@
                 android:layout_height="40dp" />
             <RadioButton
                 android:id="@+id/theme3"
-                android:background="@drawable/selector_theme_btn1"
+                android:background="@drawable/selector_theme_btn3"
+                android:button="@android:color/transparent"
+                android:layout_gravity="center"
+                android:layout_margin="16dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+            <RadioButton
+                android:id="@+id/theme4"
+                android:background="@drawable/selector_theme_btn4"
+                android:button="@android:color/transparent"
+                android:layout_gravity="center"
+                android:layout_margin="16dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+            <RadioButton
+                android:id="@+id/theme5"
+                android:background="@drawable/selector_theme_btn5"
                 android:button="@android:color/transparent"
                 android:layout_gravity="center"
                 android:layout_margin="16dp"
