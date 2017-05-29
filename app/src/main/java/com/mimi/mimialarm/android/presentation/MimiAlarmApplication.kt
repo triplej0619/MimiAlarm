@@ -4,6 +4,7 @@ import android.app.Application
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.presentation.service.ActivityManager
 import dagger.internal.DaggerCollections
+import io.realm.Realm
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 import javax.inject.Inject
 
@@ -31,6 +32,8 @@ class MimiAlarmApplication : Application() {
     }
 
     fun init() {
+        Realm.init(this)
+
         registerActivityLifecycleCallbacks(activityManager)
 
         CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
