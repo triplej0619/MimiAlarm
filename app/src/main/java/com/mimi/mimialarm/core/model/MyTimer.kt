@@ -6,7 +6,7 @@ import java.util.*
 /**
  * Created by MihyeLee on 2017. 5. 29..
  */
-class MyTimer : RealmObject() {
+open class MyTimer : RealmObject() {
     var createdAt: Date? = null
     var completedAt: Date? = null
     var seconds: Int? = null

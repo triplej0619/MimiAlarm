@@ -30,6 +30,13 @@
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>
 
+    <style name="CustomCheckBox" parent="Theme.AppCompat.Light">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="fontPath">fonts/NotoSansCJKkr-Regular.otf</item>
+        <item name="colorControlNormal">?attr/colorPrimary</item>
+        <item name="colorControlActivated">?attr/colorPrimary</item>
+    </style>
 
 
 </resources>

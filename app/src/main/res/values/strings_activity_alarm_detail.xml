@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="repeat">요일반복</string>
+    <string name="snooze">다시알림</string>
+    <string name="sound">사운드</string>
+    <string name="vibration">진동</string>
+</resources>

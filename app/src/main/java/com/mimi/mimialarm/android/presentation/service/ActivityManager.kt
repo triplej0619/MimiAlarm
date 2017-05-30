@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
+import com.mimi.mimialarm.android.infrastructure.FinishForegroundActivityEvent
 import com.mimi.mimialarm.android.infrastructure.StartAlarmDetailActivityEvent
 import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.android.presentation.view.AlarmDetailActivity
@@ -64,5 +65,10 @@ class ActivityManager: Application.ActivityLifecycleCallbacks {
     @Subscribe
     fun answerStartAlarmDetailActivity(event: StartAlarmDetailActivityEvent) {
         startActivityWithoutExtras<AlarmDetailActivity>(AlarmDetailActivity::class.java)
+    }
+
+    @Subscribe
+    fun answerFinishForegroundActivity(event: FinishForegroundActivityEvent) {
+        currentActivity?.finish()
     }
 }

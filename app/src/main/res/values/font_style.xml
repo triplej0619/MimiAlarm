@@ -36,6 +36,11 @@
         <item name="android:textColor">@color/dayOfWeek</item>
         <item name="android:fontFamily">serif</item>
     </style>
+    <style name="Noto.Regular.17.Gray2" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/dayOfWeek</item>
+        <item name="android:fontFamily">serif</item>
+    </style>
 
 
     <style name="NotoSans.Thin.16.Accent" parent="@android:style/TextAppearance.Medium">
@@ -43,9 +48,14 @@
         <item name="android:textColor">?colorAccent</item>
         <item name="fontPath">fonts/NotoSansCJKkr-Thin.otf</item>
     </style>
-    <style name="NotoSans.Regula.13.Accent" parent="@android:style/TextAppearance.Medium">
+    <style name="NotoSans.Regular.13.Accent" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">?colorAccent</item>
+        <item name="fontPath">fonts/NotoSansCJKkr-Regular.otf</item>
+    </style>
+    <style name="NotoSans.Regular.13.Primary" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">?colorPrimary</item>
         <item name="fontPath">fonts/NotoSansCJKkr-Regular.otf</item>
     </style>
 

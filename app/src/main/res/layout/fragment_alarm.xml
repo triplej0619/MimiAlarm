@@ -11,6 +11,7 @@
         <android.support.v7.widget.RecyclerView
             tools:listitem="@layout/list_item_alarm"
             android:id="@+id/list"
+            android:layout_marginBottom="72dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -30,7 +31,7 @@
             android:src="@drawable/icn_add"
             app:rippleColor="#FFF"
             android:clickable="true"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="16dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
