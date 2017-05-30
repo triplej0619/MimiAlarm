@@ -28,6 +28,6 @@ class AlarmDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_detail)
         buildComponent().inject(this)
-        binding?.viewModel = viewModel
+        binding?.alarmDetailViewModel = viewModel
     }
 }

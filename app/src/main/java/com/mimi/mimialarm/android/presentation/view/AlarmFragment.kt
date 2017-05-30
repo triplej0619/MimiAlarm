@@ -56,7 +56,7 @@ class AlarmFragment : Fragment() {
 
         override fun setViewModel(holder: CustomRecyclerViewHolder, item: AlarmListItemViewModel) {
             if(holder.binding is ListItemAlarmBinding) {
-                holder.binding.viewModel = item
+                holder.binding.alarmListItemViewModel = item
             }
         }
     }
