@@ -8,6 +8,7 @@ import com.mimi.mimialarm.android.infrastructure.FinishForegroundActivityEvent
 import com.mimi.mimialarm.android.infrastructure.StartAlarmDetailActivityEvent
 import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.android.presentation.view.AlarmDetailActivity
+import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
 import javax.inject.Inject
@@ -16,19 +17,12 @@ import javax.inject.Inject
  * Created by MihyeLee on 2017. 5. 25..
  */
 
-class ActivityManager: Application.ActivityLifecycleCallbacks {
-
-    @Inject
-    lateinit var bus: Bus
-
-    fun buildComponent(application: MimiAlarmApplication): ActivityComponent {
-        return DaggerActivityComponent.builder().applicationComponent((application).component).viewModelModule(ViewModelModule()).build()
-    }
+class MimiActivityManager @Inject constructor(private val application: MimiAlarmApplication, private val bus: Bus)
+    : Application.ActivityLifecycleCallbacks, UIManager {
 
     private var currentActivity: Activity? = null
 
-    constructor(application: MimiAlarmApplication) {
-        buildComponent(application).inject(this)
+    init {
         bus.register(this)
     }
 
@@ -62,13 +56,21 @@ class ActivityManager: Application.ActivityLifecycleCallbacks {
         }
     }
 
-    @Subscribe
-    fun answerStartAlarmDetailActivity(event: StartAlarmDetailActivityEvent) {
-        startActivityWithoutExtras<AlarmDetailActivity>(AlarmDetailActivity::class.java)
+//    @Subscribe
+//    fun answerStartAlarmDetailActivity(event: StartAlarmDetailActivityEvent) {
+//        startActivityWithoutExtras<AlarmDetailActivity>(AlarmDetailActivity::class.java)
+//    }
+//
+//    @Subscribe
+//    fun answerFinishForegroundActivity(event: FinishForegroundActivityEvent) {
+//        currentActivity?.finish()
+//    }
+
+    override fun finishForegroundActivity() {
+        currentActivity?.finish()
     }
 
-    @Subscribe
-    fun answerFinishForegroundActivity(event: FinishForegroundActivityEvent) {
-        currentActivity?.finish()
+    override fun startAlarmDetailActivity() {
+        startActivityWithoutExtras<AlarmDetailActivity>(AlarmDetailActivity::class.java)
     }
 }

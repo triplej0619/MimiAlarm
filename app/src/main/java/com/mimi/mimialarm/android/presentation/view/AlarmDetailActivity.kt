@@ -2,8 +2,6 @@ package com.mimi.mimialarm.android.presentation.view
 
 import android.databinding.DataBindingUtil
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import android.widget.AdapterView
 import android.widget.TimePicker
 import com.jakewharton.rxbinding2.widget.RxAdapterView
 import com.mimi.mimialarm.R
@@ -77,9 +75,7 @@ class AlarmDetailActivity : AppCompatActivity() {
                 calendar.set(GregorianCalendar.HOUR_OF_DAY, hourOfDay)
                 calendar.set(GregorianCalendar.MINUTE, minute)
 
-                if(viewModel.endTime.get().time != calendar.time.time) {
-                    viewModel.endTime.set(calendar.time)
-                }
+                viewModel.endTime.set(calendar.time)
             }
         })
     }

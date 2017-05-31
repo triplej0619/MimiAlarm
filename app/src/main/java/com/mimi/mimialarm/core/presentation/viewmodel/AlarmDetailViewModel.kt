@@ -3,20 +3,18 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
-import com.mimi.mimialarm.android.infrastructure.FinishForegroundActivityEvent
+import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.MyAlarm
 import com.mimi.mimialarm.core.utils.Command
-import com.squareup.otto.Bus
 import io.realm.Realm
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.HashSet
 import kotlin.properties.Delegates
 
 /**
  * Created by MihyeLee on 2017. 5. 29..
  */
-class AlarmDetailViewModel @Inject constructor(private val bus: Bus) : BaseViewModel() {
+class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager) : BaseViewModel() {
 
     var endTime: ObservableField<Date> = ObservableField<Date>()
     var repeat: ObservableBoolean = ObservableBoolean(true)
@@ -59,34 +57,46 @@ class AlarmDetailViewModel @Inject constructor(private val bus: Bus) : BaseViewM
             monDay.set(!monDay.get())
         }
     }
+
     val changeTuesDayStatus: Command = object : Command {
         override fun execute(arg: Any) {
             tuesDay.set(!tuesDay.get())
         }
     }
+
     val changeWednesDayStatus: Command = object : Command {
         override fun execute(arg: Any) {
             wednesDay.set(!wednesDay.get())
         }
     }
+
     val changeThursDayStatus: Command = object : Command {
         override fun execute(arg: Any) {
             thursDay.set(!thursDay.get())
         }
     }
+
     val changeFriDayStatus: Command = object : Command {
         override fun execute(arg: Any) {
             friDay.set(!friDay.get())
         }
     }
+
     val changeSaturDayStatus: Command = object : Command {
         override fun execute(arg: Any) {
             saturDay.set(!saturDay.get())
         }
     }
+
     val changeSunDayStatus: Command = object : Command {
         override fun execute(arg: Any) {
             sunDay.set(!sunDay.get())
+        }
+    }
+
+    val finishViewCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            closeView()
         }
     }
 
@@ -117,6 +127,7 @@ class AlarmDetailViewModel @Inject constructor(private val bus: Bus) : BaseViewM
     }
 
     fun closeView() {
-        bus.post(FinishForegroundActivityEvent())
+//        bus.post(FinishForegroundActivityEvent())
+        uiManager.finishForegroundActivity()
     }
 }

@@ -2,6 +2,7 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.databinding.ObservableBoolean
 import com.mimi.mimialarm.android.infrastructure.StartAlarmDetailActivityEvent
+import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.MyAlarm
 import com.squareup.otto.Bus
 import io.realm.Realm
@@ -13,7 +14,7 @@ import kotlin.properties.Delegates
  * Created by MihyeLee on 2017. 5. 24..
  */
 
-class AlarmViewModel @Inject constructor(private val bus: Bus) : BaseViewModel() {
+class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : BaseViewModel() {
 
     var alarmList: MutableList<AlarmListItemViewModel> = ArrayList()
     private var realm: Realm by Delegates.notNull()
@@ -41,6 +42,7 @@ class AlarmViewModel @Inject constructor(private val bus: Bus) : BaseViewModel()
     }
 
     fun showAlarmDetailView() {
-        bus.post(StartAlarmDetailActivityEvent())
+//        bus.post(StartAlarmDetailActivityEvent())
+        uiManager.startAlarmDetailActivity()
     }
 }

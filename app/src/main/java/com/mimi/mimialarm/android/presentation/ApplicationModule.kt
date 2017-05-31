@@ -1,6 +1,7 @@
 package com.mimi.mimialarm.android.presentation
 
-import com.mimi.mimialarm.android.presentation.service.ActivityManager
+import com.mimi.mimialarm.android.presentation.service.MimiActivityManager
+import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.squareup.otto.Bus
 import com.squareup.otto.ThreadEnforcer
 import dagger.Module
@@ -14,8 +15,8 @@ import javax.inject.Singleton
 @Module
 class ApplicationModule(private val application: MimiAlarmApplication) {
     @Provides @Singleton
-    fun provideActivityManager(): ActivityManager = ActivityManager(application)
+    fun provideBus(): Bus = Bus(ThreadEnforcer.ANY)
 
     @Provides @Singleton
-    fun provideBus(): Bus = Bus(ThreadEnforcer.ANY)
+    fun provideUiManager(bus: Bus): UIManager = MimiActivityManager(application, bus)
 }
