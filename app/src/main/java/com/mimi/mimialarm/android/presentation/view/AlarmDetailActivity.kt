@@ -26,8 +26,8 @@ class AlarmDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_detail)
         buildComponent().inject(this)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_detail)
         binding?.alarmDetailViewModel = viewModel
     }
 }
