@@ -11,6 +11,8 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
+
+
 /**
  * Created by MihyeLee on 2017. 5. 29..
  */
@@ -44,13 +46,12 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager)
     var realm: Realm by Delegates.notNull()
 
     init {
-//        realm = Realm.getDefaultInstance()
+        realm = Realm.getDefaultInstance()
     }
 
     fun release() {
+        realm.close()
     }
-
-//    val addAlarmCommand: Unit = addAlarm()
 
     val changeMondayStatus: Command = object : Command {
         override fun execute(arg: Any) {
@@ -100,6 +101,12 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager)
         }
     }
 
+    val addAlarmCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            addAlarm()
+        }
+    }
+
     fun addAlarm() {
         saveAlarm()
         closeView()
@@ -107,7 +114,9 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager)
 
     fun saveAlarm() {
         realm.executeTransaction {
-            val newAlarm = realm.createObject(MyAlarm::class.java, 0)
+            val currentIdNum = realm.where(MyAlarm::class.java).max(MyAlarm.FIELD_ID)
+
+            val newAlarm = realm.createObject(MyAlarm::class.java, currentIdNum ?: 0)
             newAlarm.createdAt = Date()
             newAlarm.completedAt = endTime.get()
 
@@ -123,6 +132,8 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager)
             newAlarm.snoozeCount = snoozeCount.get()
 
             newAlarm.mediaSrc = mediaSrc.get()
+
+            newAlarm.enable = true
         }
     }
 

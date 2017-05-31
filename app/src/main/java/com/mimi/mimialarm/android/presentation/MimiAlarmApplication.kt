@@ -35,7 +35,7 @@ class MimiAlarmApplication : Application() {
     }
 
     fun init() {
-        Stetho.initializeWithDefaults(this)
+//        Stetho.initializeWithDefaults(this)
 
         Realm.init(this)
 

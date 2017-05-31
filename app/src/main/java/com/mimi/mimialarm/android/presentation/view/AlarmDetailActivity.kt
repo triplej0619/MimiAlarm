@@ -79,4 +79,9 @@ class AlarmDetailActivity : AppCompatActivity() {
             }
         })
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.release()
+    }
 }

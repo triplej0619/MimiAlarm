@@ -31,6 +31,7 @@ class AlarmFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_alarm, container, false)
         buildComponent().inject(this)
+        binding?.alarmViewModel = viewModel
 
         initListView()
 
