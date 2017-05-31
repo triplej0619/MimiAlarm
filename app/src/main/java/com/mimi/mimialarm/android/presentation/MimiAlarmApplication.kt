@@ -1,6 +1,7 @@
 package com.mimi.mimialarm.android.presentation
 
 import android.app.Application
+import com.facebook.stetho.Stetho
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.presentation.service.MimiActivityManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
@@ -34,6 +35,8 @@ class MimiAlarmApplication : Application() {
     }
 
     fun init() {
+        Stetho.initializeWithDefaults(this)
+
         Realm.init(this)
 
         registerActivityLifecycleCallbacks(uiManager as MimiActivityManager)
