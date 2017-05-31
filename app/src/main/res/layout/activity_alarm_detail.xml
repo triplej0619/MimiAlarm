@@ -58,7 +58,7 @@
                         android:layout_height="104dp">
                         <CheckBox
                             style="@style/CustomCheckBox"
-                            android:checked="true"
+                            android:checked="@{alarmDetailViewModel.repeat}"
                             android:text="@string/repeat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -120,12 +120,12 @@
                         android:layout_height="104dp">
                         <CheckBox
                             style="@style/CustomCheckBox"
-                            android:checked="true"
+                            android:checked="@{alarmDetailViewModel.snooze}"
                             android:id="@+id/snoozeCheck"
                             android:text="@string/snooze"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
-                        <android.support.v7.widget.AppCompatSpinner
+                        <Spinner
                             style="@style/CustomSpinner"
                             android:id="@+id/snoozeInterval"
                             android:layout_alignParentBottom="true"
@@ -143,7 +143,7 @@
                             android:layout_toLeftOf="@+id/snoozeCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
-                        <android.support.v7.widget.AppCompatSpinner
+                        <Spinner
                             style="@style/CustomSpinner"
                             android:id="@+id/snoozeCount"
                             android:layout_alignParentBottom="true"
@@ -167,12 +167,12 @@
                         android:layout_height="64dp">
                         <CheckBox
                             style="@style/CustomCheckBox"
-                            android:checked="true"
+                            android:checked="@{alarmDetailViewModel.sound}"
                             android:text="@string/sound"
                             android:layout_centerVertical="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
-                        <android.support.v7.widget.AppCompatSpinner
+                        <Spinner
                             style="@style/CustomSpinner"
                             android:id="@+id/soundSpinner"
                             android:entries="@array/snoozeTimeInterval"
@@ -188,7 +188,7 @@
                     </RelativeLayout>
                     <CheckBox
                         style="@style/CustomCheckBox"
-                        android:checked="true"
+                        android:checked="@{alarmDetailViewModel.vibration}"
                         android:id="@+id/vibration"
                         android:text="@string/vibration"
                         android:layout_marginLeft="8dp"

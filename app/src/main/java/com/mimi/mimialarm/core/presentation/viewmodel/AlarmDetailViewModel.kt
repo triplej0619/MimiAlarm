@@ -18,11 +18,15 @@ import kotlin.properties.Delegates
  */
 class AlarmDetailViewModel @Inject constructor(private val bus: Bus) : BaseViewModel() {
 
-    val endTime: ObservableField<Date> = ObservableField<Date>()
-    val snoozeInterval: ObservableInt = ObservableInt()
-    val snoozeCount: ObservableInt = ObservableInt()
+    var endTime: ObservableField<Date> = ObservableField<Date>()
+    var repeat: ObservableBoolean = ObservableBoolean(true)
+    var snooze: ObservableBoolean = ObservableBoolean(true)
+    var snoozeInterval: ObservableInt = ObservableInt(0)
+    var snoozeCount: ObservableInt = ObservableInt(0)
 
-    val mediaSrc: ObservableField<String> = ObservableField<String>()
+    var mediaIndex: ObservableInt = ObservableInt(0)
+    var mediaSrc: ObservableField<String> = ObservableField<String>("")
+    var sound: ObservableBoolean = ObservableBoolean(true)
     var vibration: ObservableBoolean = ObservableBoolean(true)
 
 //    var monday: Boolean = true
@@ -39,7 +43,6 @@ class AlarmDetailViewModel @Inject constructor(private val bus: Bus) : BaseViewM
     var saturDay: ObservableBoolean = ObservableBoolean(false)
     var sunDay: ObservableBoolean = ObservableBoolean(false)
 
-    var days: Set<String> = HashSet<String>()
     var realm: Realm by Delegates.notNull()
 
     init {
