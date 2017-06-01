@@ -123,12 +123,12 @@
                     <TextView
                         style="@style/Noto.Regular.12.Gray2"
                         android:text="@string/thursday"
-                        android:textColor="@{alarmListItemViewModel.thurseDay ? @color/dayOfWeek : @color/dayOfWeekNegative}"
+                        android:textColor="@{alarmListItemViewModel.thursDay ? @color/dayOfWeek : @color/dayOfWeekNegative}"
                         android:layout_centerInParent="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <View
-                        android:visibility="@{alarmListItemViewModel.thurseDay ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{alarmListItemViewModel.thursDay ? View.VISIBLE : View.GONE}"
                         android:background="?attr/colorAccent"
                         android:layout_alignParentBottom="true"
                         android:layout_width="match_parent"

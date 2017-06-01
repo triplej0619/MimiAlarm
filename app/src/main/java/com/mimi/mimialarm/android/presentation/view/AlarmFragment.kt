@@ -20,6 +20,7 @@ import javax.inject.Inject
  */
 class AlarmFragment : Fragment() {
 
+    private var listAdapter: AlarmListAdapter? = null
     var binding: FragmentAlarmBinding? = null
     @Inject
     lateinit var viewModel: AlarmViewModel
@@ -43,13 +44,19 @@ class AlarmFragment : Fragment() {
         viewModel.release()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadAlarmList()
+    }
+
     fun initListView() {
         binding?.list?.layoutManager = LinearLayoutManager(activity)
-        binding?.list?.adapter = AlarmListAdapter(viewModel.alarmList, R.layout.list_item_alarm, object : IListItemClick {
+        listAdapter = AlarmListAdapter(viewModel.alarmList, R.layout.list_item_alarm, object : IListItemClick {
             override fun clickEvent(v: View, pos: Int) {
                 viewModel.clickListItem(pos)
             }
         })
+        binding?.list?.adapter = listAdapter
     }
 
     protected inner class AlarmListAdapter(items: List<AlarmListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick)

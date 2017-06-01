@@ -1,6 +1,7 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.databinding.*
+import com.mimi.mimialarm.core.model.MyAlarm
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -9,10 +10,41 @@ import java.util.*
  */
 
 class AlarmListItemViewModel : BaseViewModel() {
+
+    companion object {
+        fun alarmDataToAlarmListItem(newAlarm: MyAlarm, item: AlarmListItemViewModel) {
+            item.id = newAlarm.id
+
+            item.friDay.set(newAlarm.friDay ?: false)
+            item.monday.set(newAlarm.monday ?: false)
+            item.thursDay.set(newAlarm.thurseDay ?: false)
+            item.tuesDay.set(newAlarm.tuesDay ?: false)
+            item.wednesDay.set(newAlarm.wednesDay ?: false)
+            item.saturDay.set(newAlarm.saturDay ?: false)
+            item.sunDay.set(newAlarm.sunDay ?: false)
+
+            item.endTime = newAlarm.completedAt
+
+            if (newAlarm.snoozeCount != null && newAlarm.snoozeInterval != null) {
+                item.snooze.set(true)
+            }
+            item.snoozeCount.set(newAlarm.snoozeCount ?: 0)
+            item.snoozeInterval.set(newAlarm.snoozeInterval ?: 0)
+            item.isEnable.set(newAlarm.enable ?: false)
+        }
+
+        fun alarmDataToAlarmListItem(newAlarm: MyAlarm) : AlarmListItemViewModel {
+            val item: AlarmListItemViewModel = AlarmListItemViewModel()
+            alarmDataToAlarmListItem(newAlarm, item)
+            return item
+        }
+    }
+
+    var id: Int? = null
     var monday: ObservableBoolean = ObservableBoolean(false)
     var tuesDay: ObservableBoolean = ObservableBoolean(false)
     var wednesDay: ObservableBoolean = ObservableBoolean(false)
-    var thurseDay: ObservableBoolean = ObservableBoolean(false)
+    var thursDay: ObservableBoolean = ObservableBoolean(false)
     var friDay: ObservableBoolean = ObservableBoolean(false)
     var saturDay: ObservableBoolean = ObservableBoolean(false)
     var sunDay: ObservableBoolean = ObservableBoolean(false)
@@ -40,4 +72,8 @@ class AlarmListItemViewModel : BaseViewModel() {
     var snoozeCount: ObservableInt = ObservableInt(0)
 
     var isEnable: ObservableBoolean = ObservableBoolean(true)
+
+    fun copyFromAlarm(alarm: MyAlarm) {
+        alarmDataToAlarmListItem(alarm, this)
+    }
 }

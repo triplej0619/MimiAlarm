@@ -116,7 +116,7 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager)
         realm.executeTransaction {
             val currentIdNum = realm.where(MyAlarm::class.java).max(MyAlarm.FIELD_ID)
 
-            val newAlarm = realm.createObject(MyAlarm::class.java, currentIdNum ?: 0)
+            val newAlarm = realm.createObject(MyAlarm::class.java, currentIdNum?.toInt()?.plus(1) ?: 0)
             newAlarm.createdAt = Date()
             newAlarm.completedAt = endTime.get()
 
