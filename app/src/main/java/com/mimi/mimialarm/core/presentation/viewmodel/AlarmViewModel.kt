@@ -24,21 +24,22 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
         }
     }
 
+    var realm: Realm by Delegates.notNull()
+
     init {
-//        loadAlarmList();
+        realm = Realm.getDefaultInstance()
     }
 
     fun release() {
+        realm.close()
     }
 
     fun loadAlarmList() {
-        val realm = Realm.getDefaultInstance();
         val results: RealmResults<MyAlarm> = realm.where(MyAlarm::class.java).findAll()
         for (result in results) {
             updateOrInsertListItem(realm.copyFromRealm(result))
         }
         alarmCount.set(results.size)
-        realm.close()
     }
 
     fun updateOrInsertListItem(alarm: MyAlarm) {

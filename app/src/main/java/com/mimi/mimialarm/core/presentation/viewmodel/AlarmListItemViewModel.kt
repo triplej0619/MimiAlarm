@@ -16,8 +16,8 @@ class AlarmListItemViewModel : BaseViewModel() {
             item.id = newAlarm.id
 
             item.friDay.set(newAlarm.friDay ?: false)
-            item.monday.set(newAlarm.monday ?: false)
-            item.thursDay.set(newAlarm.thurseDay ?: false)
+            item.monDay.set(newAlarm.monDay ?: false)
+            item.thursDay.set(newAlarm.thursDay ?: false)
             item.tuesDay.set(newAlarm.tuesDay ?: false)
             item.wednesDay.set(newAlarm.wednesDay ?: false)
             item.saturDay.set(newAlarm.saturDay ?: false)
@@ -41,7 +41,7 @@ class AlarmListItemViewModel : BaseViewModel() {
     }
 
     var id: Int? = null
-    var monday: ObservableBoolean = ObservableBoolean(false)
+    var monDay: ObservableBoolean = ObservableBoolean(false)
     var tuesDay: ObservableBoolean = ObservableBoolean(false)
     var wednesDay: ObservableBoolean = ObservableBoolean(false)
     var thursDay: ObservableBoolean = ObservableBoolean(false)

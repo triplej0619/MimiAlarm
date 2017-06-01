@@ -1,6 +1,7 @@
 package com.mimi.mimialarm.core.model
 
 import io.realm.RealmObject
+import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.Required
 import java.util.*
@@ -10,6 +11,7 @@ import java.util.*
  */
 open class MyAlarm : RealmObject() {
     companion object {
+        @Ignore
         val FIELD_ID: String = "id"
     }
 
@@ -29,10 +31,10 @@ open class MyAlarm : RealmObject() {
     var snoozeCount: Int? = null
 
     var repeat: Boolean? = null
-    var monday: Boolean? = null
+    var monDay: Boolean? = null
     var tuesDay: Boolean? = null
     var wednesDay: Boolean? = null
-    var thurseDay: Boolean? = null
+    var thursDay: Boolean? = null
     var friDay: Boolean? = null
     var saturDay: Boolean? = null
     var sunDay: Boolean? = null

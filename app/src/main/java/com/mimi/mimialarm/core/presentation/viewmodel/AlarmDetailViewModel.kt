@@ -34,11 +34,11 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     var sound: ObservableBoolean = ObservableBoolean(true)
     var vibration: ObservableBoolean = ObservableBoolean(true)
 
-//    var monday: Boolean = true
+//    var monDay: Boolean = true
 //    @Bindable get() = field
 //    set(value) {
 //        field = value
-//        notifyPropertyChanged(BR.monday)
+//        notifyPropertyChanged(BR.monDay)
 //    }
     var monDay: ObservableBoolean = ObservableBoolean(true)
     var tuesDay: ObservableBoolean = ObservableBoolean(true)
@@ -48,11 +48,14 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     var saturDay: ObservableBoolean = ObservableBoolean(false)
     var sunDay: ObservableBoolean = ObservableBoolean(false)
 
+    var realm: Realm by Delegates.notNull()
 
     init {
+        realm = Realm.getDefaultInstance()
     }
 
     fun release() {
+        realm.close()
     }
 
     val changeMondayStatus: Command = object : Command {
@@ -114,22 +117,20 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     }
 
     fun loadAlarmData() {
-        val realm: Realm = Realm.getDefaultInstance()
         val alarm: MyAlarm = realm.where(MyAlarm::class.java).equalTo(MyAlarm.FIELD_ID, id).findFirst()
         alarmToThis(realm.copyFromRealm(alarm))
-        realm.close()
     }
 
     fun alarmToThis(alarm: MyAlarm) {
         endTime.set(alarm.completedAt)
 
         friDay.set(alarm.friDay ?: false)
-        monDay.set(alarm.friDay ?: false)
-        tuesDay.set(alarm.friDay ?: false)
-        wednesDay.set(alarm.friDay ?: false)
-        thursDay.set(alarm.friDay ?: false)
-        saturDay.set(alarm.friDay ?: false)
-        sunDay.set(alarm.friDay ?: false)
+        monDay.set(alarm.monDay ?: false)
+        tuesDay.set(alarm.tuesDay ?: false)
+        wednesDay.set(alarm.wednesDay ?: false)
+        thursDay.set(alarm.thursDay ?: false)
+        saturDay.set(alarm.saturDay ?: false)
+        sunDay.set(alarm.sunDay ?: false)
 
         vibration.set(alarm.vibration ?: false)
         sound.set(alarm.media ?: false)
@@ -147,10 +148,10 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
         alarm.completedAt = endTime.get()
 
         alarm.repeat = repeat.get()
-        alarm.monday = monDay.get()
+        alarm.monDay = monDay.get()
         alarm.tuesDay = tuesDay.get()
         alarm.wednesDay = wednesDay.get()
-        alarm.thurseDay = thursDay.get()
+        alarm.thursDay = thursDay.get()
         alarm.friDay = friDay.get()
         alarm.saturDay = saturDay.get()
         alarm.sunDay = sunDay.get()
@@ -180,22 +181,18 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     }
 
     fun updateAlarmInDB() {
-        val realm: Realm = Realm.getDefaultInstance()
         realm.executeTransaction {
-            val updatedAlarm: MyAlarm = thisToAlarm(id)
+            val updatedAlarm: MyAlarm = thisToAlarm(id!!)
             realm.insertOrUpdate(updatedAlarm)
         }
-        realm.close()
     }
 
     fun saveAlarmInDB() {
-        val realm: Realm = Realm.getDefaultInstance()
         realm.executeTransaction {
             val currentIdNum = realm.where(MyAlarm::class.java).max(MyAlarm.FIELD_ID)
             val alarm: MyAlarm = thisToAlarm(currentIdNum?.toInt()?.plus(1) ?: 0)
             realm.insert(alarm)
         }
-        realm.close()
     }
 
     fun closeView() {
