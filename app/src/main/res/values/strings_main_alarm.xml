@@ -9,4 +9,6 @@
     <string name="friday">금</string>
     <string name="saturday">토</string>
     <string name="sunday">일</string>
+
+    <string name="count">회</string>
 </resources>

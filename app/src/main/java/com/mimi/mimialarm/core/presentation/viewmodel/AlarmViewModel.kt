@@ -1,6 +1,7 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.databinding.ObservableBoolean
+import android.databinding.ObservableInt
 import com.mimi.mimialarm.android.infrastructure.StartAlarmDetailActivityEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.MyAlarm
@@ -18,6 +19,7 @@ import kotlin.properties.Delegates
 
 class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : BaseViewModel() {
 
+    var alarmCount: ObservableInt = ObservableInt(0)
     var alarmList: MutableList<AlarmListItemViewModel> = ArrayList()
     private var realm: Realm by Delegates.notNull()
 
@@ -52,6 +54,7 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
         for (result in results) {
             alarmList.add(savedDataToAlarmListItem(result))
         }
+        alarmCount.set(results.size)
     }
 
     fun savedDataToAlarmListItem(alarm: MyAlarm): AlarmListItemViewModel {
@@ -64,7 +67,7 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
         ret.saturDay.set(alarm.saturDay ?: false)
         ret.sunDay.set(alarm.sunDay ?: false)
 
-        ret.endTime.set(alarm.completedAt)
+        ret.endTime = alarm.completedAt
 
         if(alarm.snoozeCount != null && alarm.snoozeInterval != null) {
             ret.snooze.set(true)

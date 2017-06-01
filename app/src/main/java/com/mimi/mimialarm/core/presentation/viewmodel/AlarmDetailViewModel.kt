@@ -18,7 +18,7 @@ import kotlin.properties.Delegates
  */
 class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager) : BaseViewModel() {
 
-    var endTime: ObservableField<Date> = ObservableField<Date>()
+    var endTime: ObservableField<Date> = ObservableField<Date>(Date())
     var repeat: ObservableBoolean = ObservableBoolean(true)
     var snooze: ObservableBoolean = ObservableBoolean(true)
     var snoozeInterval: ObservableInt = ObservableInt(0)

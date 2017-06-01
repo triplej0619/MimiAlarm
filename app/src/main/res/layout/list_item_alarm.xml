@@ -25,8 +25,9 @@
             <!--time-->
             <TextView
                 style="@style/Roboto.Thin.60.Gray1"
+                tools:text="11:11"
                 android:id="@+id/time"
-                android:text="11:11"
+                android:text="@{alarmListItemViewModel.endTimeString}"
                 android:includeFontPadding="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -42,15 +43,16 @@
                     style="@style/Roboto.Thin.30.Gray1"
                     tools:text="am"
                     android:id="@+id/when"
-                    android:text="am"
+                    android:text='@{alarmListItemViewModel.isAm() ? "a.m." : "p.m."}'
                     android:includeFontPadding="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     style="@style/NotoSans.Thin.16.Accent"
                     tools:text="10분x4회"
+                    android:visibility="@{alarmListItemViewModel.snooze ? View.VISIBLE : View.GONE}"
                     android:layout_below="@id/when"
-                    android:text="10분x4회"
+                    android:text='@{String.format("%d%sx%d%s", alarmListItemViewModel.snoozeInterval, @string/minute, alarmListItemViewModel.snoozeCount, @string/count)}'
                     android:includeFontPadding="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

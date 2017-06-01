@@ -222,7 +222,7 @@
             app:layout_constraintLeft_toRightOf="@id/cancel"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:clickEvent="@{alarmDetailViewModel.finishViewCommand}"
+            app:clickEvent="@{alarmDetailViewModel.addAlarmCommand}"
             android:id="@+id/save"
             android:background="@drawable/selector_btn_rounded_rect_accent"
             android:stateListAnimator="@null"

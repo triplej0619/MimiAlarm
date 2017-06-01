@@ -1,6 +1,7 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.databinding.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -16,7 +17,24 @@ class AlarmListItemViewModel : BaseViewModel() {
     var saturDay: ObservableBoolean = ObservableBoolean(false)
     var sunDay: ObservableBoolean = ObservableBoolean(false)
 
-    var endTime: ObservableField<Date> = ObservableField<Date>()
+    var isAm: ObservableBoolean = ObservableBoolean(false)
+    var endTime: Date? = null
+    set(value) {
+        field = value
+
+        val dateFormat = SimpleDateFormat("hh:mm", Locale.KOREA)
+        endTimeString.set(dateFormat.format(value))
+
+        val calendar: GregorianCalendar = GregorianCalendar()
+        calendar.time = value
+        val hourOfDay = calendar.get(GregorianCalendar.HOUR_OF_DAY)
+        if(hourOfDay >= 12) {
+            isAm.set(false)
+        } else {
+            isAm.set(true)
+        }
+    }
+    var endTimeString: ObservableField<String> = ObservableField("")
     var snooze: ObservableBoolean = ObservableBoolean(false)
     var snoozeInterval: ObservableInt = ObservableInt(0)
     var snoozeCount: ObservableInt = ObservableInt(0)
