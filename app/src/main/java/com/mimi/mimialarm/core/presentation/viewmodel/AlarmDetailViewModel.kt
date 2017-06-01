@@ -4,6 +4,7 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.mimi.mimialarm.android.infrastructure.AddAlarmEvent
+import com.mimi.mimialarm.android.infrastructure.UpdateAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.MyAlarm
 import com.mimi.mimialarm.core.utils.Command
@@ -47,14 +48,11 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     var saturDay: ObservableBoolean = ObservableBoolean(false)
     var sunDay: ObservableBoolean = ObservableBoolean(false)
 
-    var realm: Realm by Delegates.notNull()
 
     init {
-        realm = Realm.getDefaultInstance()
     }
 
     fun release() {
-        realm.close()
     }
 
     val changeMondayStatus: Command = object : Command {
@@ -116,8 +114,10 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     }
 
     fun loadAlarmData() {
+        val realm: Realm = Realm.getDefaultInstance()
         val alarm: MyAlarm = realm.where(MyAlarm::class.java).equalTo(MyAlarm.FIELD_ID, id).findFirst()
-        alarmToThis(alarm)
+        alarmToThis(realm.copyFromRealm(alarm))
+        realm.close()
     }
 
     fun alarmToThis(alarm: MyAlarm) {
@@ -139,7 +139,10 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
         snoozeCount.set(alarm.snoozeCount ?: 0)
     }
 
-    fun thisToAlarm(alarm: MyAlarm) {
+    fun thisToAlarm(id: Int) : MyAlarm {
+        val alarm: MyAlarm = MyAlarm()
+        alarm.id = id
+
         alarm.createdAt = Date()
         alarm.completedAt = endTime.get()
 
@@ -161,6 +164,7 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
         alarm.vibration = vibration.get()
 
         alarm.enable = true
+        return alarm;
     }
 
     fun addAlarm() {
@@ -171,49 +175,30 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     
     fun updateAlarm() {
         updateAlarmInDB()
-        bus.post(updateAlarm())
+        bus.post(UpdateAlarmEvent())
         closeView()
     }
 
     fun updateAlarmInDB() {
+        val realm: Realm = Realm.getDefaultInstance()
         realm.executeTransaction {
-            val alarm: MyAlarm = realm.where(MyAlarm::class.java).equalTo(MyAlarm.FIELD_ID, id).findFirst()
-            thisToAlarm(alarm)
+            val updatedAlarm: MyAlarm = thisToAlarm(id)
+            realm.insertOrUpdate(updatedAlarm)
         }
+        realm.close()
     }
 
     fun saveAlarmInDB() {
+        val realm: Realm = Realm.getDefaultInstance()
         realm.executeTransaction {
             val currentIdNum = realm.where(MyAlarm::class.java).max(MyAlarm.FIELD_ID)
-
-            val newAlarm = realm.createObject(MyAlarm::class.java, currentIdNum?.toInt()?.plus(1) ?: 0)
-            thisToAlarm(newAlarm)
-//            newAlarm.createdAt = Date()
-//            newAlarm.completedAt = endTime.get()
-//
-//            newAlarm.repeat = repeat.get()
-//            newAlarm.monday = monDay.get()
-//            newAlarm.tuesDay = tuesDay.get()
-//            newAlarm.wednesDay = wednesDay.get()
-//            newAlarm.thurseDay = thursDay.get()
-//            newAlarm.friDay = friDay.get()
-//            newAlarm.saturDay = saturDay.get()
-//            newAlarm.sunDay = sunDay.get()
-//
-//            newAlarm.snooze = snooze.get()
-//            newAlarm.snoozeInterval = snoozeInterval.get()
-//            newAlarm.snoozeCount = snoozeCount.get()
-//
-//            newAlarm.mediaSrc = mediaSrc.get()
-//            newAlarm.media = sound.get()
-//            newAlarm.vibration = vibration.get()
-//
-//            newAlarm.enable = true
+            val alarm: MyAlarm = thisToAlarm(currentIdNum?.toInt()?.plus(1) ?: 0)
+            realm.insert(alarm)
         }
+        realm.close()
     }
 
     fun closeView() {
-//        bus.post(FinishForegroundActivityEvent())
         uiManager.finishForegroundActivity()
     }
 }

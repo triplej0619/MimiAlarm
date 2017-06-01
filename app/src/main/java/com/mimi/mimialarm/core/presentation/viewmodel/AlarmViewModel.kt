@@ -17,7 +17,6 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
 
     var alarmCount: ObservableInt = ObservableInt(0)
     var alarmList: MutableList<AlarmListItemViewModel> = ArrayList<AlarmListItemViewModel>()
-    private var realm: Realm by Delegates.notNull()
 
     val addAlarmCommand: Command = object : Command {
         override fun execute(arg: Any) {
@@ -26,20 +25,20 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
     }
 
     init {
-        realm = Realm.getDefaultInstance()
 //        loadAlarmList();
     }
 
     fun release() {
-        realm.close()
     }
 
     fun loadAlarmList() {
+        val realm = Realm.getDefaultInstance();
         val results: RealmResults<MyAlarm> = realm.where(MyAlarm::class.java).findAll()
         for (result in results) {
-            updateOrInsertListItem(result)
+            updateOrInsertListItem(realm.copyFromRealm(result))
         }
         alarmCount.set(results.size)
+        realm.close()
     }
 
     fun updateOrInsertListItem(alarm: MyAlarm) {
