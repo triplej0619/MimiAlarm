@@ -63,6 +63,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <LinearLayout
+                            android:saveEnabled="@{alarmDetailViewModel.repeat}"
                             android:layout_marginBottom="16dp"
                             android:layout_centerHorizontal="true"
                             android:layout_alignParentBottom="true"
@@ -128,6 +129,7 @@
                         <Spinner
                             style="@style/CustomSpinner"
                             android:id="@+id/snoozeInterval"
+                            android:saveEnabled="@{alarmDetailViewModel.snooze}"
                             android:layout_alignParentBottom="true"
                             android:layout_marginBottom="16dp"
                             android:textAlignment="center"
@@ -146,6 +148,7 @@
                         <Spinner
                             style="@style/CustomSpinner"
                             android:id="@+id/snoozeCount"
+                            android:saveEnabled="@{alarmDetailViewModel.snooze}"
                             android:layout_alignParentBottom="true"
                             android:layout_marginBottom="16dp"
                             android:textAlignment="center"
@@ -175,6 +178,7 @@
                         <Spinner
                             style="@style/CustomSpinner"
                             android:id="@+id/soundSpinner"
+                            android:saveEnabled="@{alarmDetailViewModel.sound}"
                             android:entries="@array/snoozeTimeInterval"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
@@ -222,7 +226,7 @@
             app:layout_constraintLeft_toRightOf="@id/cancel"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:clickEvent="@{alarmDetailViewModel.addAlarmCommand}"
+            app:clickEvent="@{alarmDetailViewModel.addOrUpdateAlarmCommand}"
             android:id="@+id/save"
             android:background="@drawable/selector_btn_rounded_rect_accent"
             android:stateListAnimator="@null"

@@ -20,11 +20,15 @@ open class MyAlarm : RealmObject() {
     var createdAt: Date? = null
     var completedAt: Date? = null
 
+    var vibration: Boolean? = null
+    var media: Boolean? = null
     var mediaSrc: String? = null
 
+    var snooze: Boolean? = null
     var snoozeInterval: Int? = null
     var snoozeCount: Int? = null
 
+    var repeat: Boolean? = null
     var monday: Boolean? = null
     var tuesDay: Boolean? = null
     var wednesDay: Boolean? = null

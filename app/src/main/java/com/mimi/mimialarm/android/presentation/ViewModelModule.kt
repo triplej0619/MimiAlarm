@@ -17,5 +17,5 @@ class ViewModelModule {
     fun provideAlarmViewModel(uiManager: UIManager): AlarmViewModel = AlarmViewModel(uiManager)
 
     @Provides
-    fun provideAlarmDetailViewModel(uiManager: UIManager): AlarmDetailViewModel = AlarmDetailViewModel(uiManager)
+    fun provideAlarmDetailViewModel(uiManager: UIManager, bus: Bus): AlarmDetailViewModel = AlarmDetailViewModel(uiManager, bus)
 }

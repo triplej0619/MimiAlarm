@@ -3,9 +3,11 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import com.mimi.mimialarm.android.infrastructure.AddAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.MyAlarm
 import com.mimi.mimialarm.core.utils.Command
+import com.squareup.otto.Bus
 import io.realm.Realm
 import java.util.*
 import javax.inject.Inject
@@ -16,7 +18,9 @@ import kotlin.properties.Delegates
 /**
  * Created by MihyeLee on 2017. 5. 29..
  */
-class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager) : BaseViewModel() {
+class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager, private val bus: Bus) : BaseViewModel() {
+
+    var id: Int? = null
 
     var endTime: ObservableField<Date> = ObservableField<Date>(Date())
     var repeat: ObservableBoolean = ObservableBoolean(true)
@@ -101,39 +105,110 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager)
         }
     }
 
-    val addAlarmCommand: Command = object : Command {
+    val addOrUpdateAlarmCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            addAlarm()
+            if(id == null) {
+                addAlarm()
+            } else {
+                updateAlarm();
+            }
         }
     }
 
+    fun loadAlarmData() {
+        val alarm: MyAlarm = realm.where(MyAlarm::class.java).equalTo(MyAlarm.FIELD_ID, id).findFirst()
+        alarmToThis(alarm)
+    }
+
+    fun alarmToThis(alarm: MyAlarm) {
+        endTime.set(alarm.completedAt)
+
+        friDay.set(alarm.friDay ?: false)
+        monDay.set(alarm.friDay ?: false)
+        tuesDay.set(alarm.friDay ?: false)
+        wednesDay.set(alarm.friDay ?: false)
+        thursDay.set(alarm.friDay ?: false)
+        saturDay.set(alarm.friDay ?: false)
+        sunDay.set(alarm.friDay ?: false)
+
+        vibration.set(alarm.vibration ?: false)
+        sound.set(alarm.media ?: false)
+
+        snooze.set(alarm.snooze ?: false)
+        snoozeInterval.set(alarm.snoozeInterval ?: 0)
+        snoozeCount.set(alarm.snoozeCount ?: 0)
+    }
+
+    fun thisToAlarm(alarm: MyAlarm) {
+        alarm.createdAt = Date()
+        alarm.completedAt = endTime.get()
+
+        alarm.repeat = repeat.get()
+        alarm.monday = monDay.get()
+        alarm.tuesDay = tuesDay.get()
+        alarm.wednesDay = wednesDay.get()
+        alarm.thurseDay = thursDay.get()
+        alarm.friDay = friDay.get()
+        alarm.saturDay = saturDay.get()
+        alarm.sunDay = sunDay.get()
+
+        alarm.snooze = snooze.get()
+        alarm.snoozeInterval = snoozeInterval.get()
+        alarm.snoozeCount = snoozeCount.get()
+
+        alarm.mediaSrc = mediaSrc.get()
+        alarm.media = sound.get()
+        alarm.vibration = vibration.get()
+
+        alarm.enable = true
+    }
+
     fun addAlarm() {
-        saveAlarm()
+        saveAlarmInDB()
+        bus.post(AddAlarmEvent())
+        closeView()
+    }
+    
+    fun updateAlarm() {
+        updateAlarmInDB()
+        bus.post(updateAlarm())
         closeView()
     }
 
-    fun saveAlarm() {
+    fun updateAlarmInDB() {
+        realm.executeTransaction {
+            val alarm: MyAlarm = realm.where(MyAlarm::class.java).equalTo(MyAlarm.FIELD_ID, id).findFirst()
+            thisToAlarm(alarm)
+        }
+    }
+
+    fun saveAlarmInDB() {
         realm.executeTransaction {
             val currentIdNum = realm.where(MyAlarm::class.java).max(MyAlarm.FIELD_ID)
 
             val newAlarm = realm.createObject(MyAlarm::class.java, currentIdNum?.toInt()?.plus(1) ?: 0)
-            newAlarm.createdAt = Date()
-            newAlarm.completedAt = endTime.get()
-
-            newAlarm.monday = monDay.get()
-            newAlarm.tuesDay = tuesDay.get()
-            newAlarm.wednesDay = wednesDay.get()
-            newAlarm.thurseDay = thursDay.get()
-            newAlarm.friDay = friDay.get()
-            newAlarm.saturDay = saturDay.get()
-            newAlarm.sunDay = sunDay.get()
-
-            newAlarm.snoozeInterval = snoozeInterval.get()
-            newAlarm.snoozeCount = snoozeCount.get()
-
-            newAlarm.mediaSrc = mediaSrc.get()
-
-            newAlarm.enable = true
+            thisToAlarm(newAlarm)
+//            newAlarm.createdAt = Date()
+//            newAlarm.completedAt = endTime.get()
+//
+//            newAlarm.repeat = repeat.get()
+//            newAlarm.monday = monDay.get()
+//            newAlarm.tuesDay = tuesDay.get()
+//            newAlarm.wednesDay = wednesDay.get()
+//            newAlarm.thurseDay = thursDay.get()
+//            newAlarm.friDay = friDay.get()
+//            newAlarm.saturDay = saturDay.get()
+//            newAlarm.sunDay = sunDay.get()
+//
+//            newAlarm.snooze = snooze.get()
+//            newAlarm.snoozeInterval = snoozeInterval.get()
+//            newAlarm.snoozeCount = snoozeCount.get()
+//
+//            newAlarm.mediaSrc = mediaSrc.get()
+//            newAlarm.media = sound.get()
+//            newAlarm.vibration = vibration.get()
+//
+//            newAlarm.enable = true
         }
     }
 

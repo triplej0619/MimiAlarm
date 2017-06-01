@@ -1,5 +1,6 @@
 package com.mimi.mimialarm.android.presentation.view
 
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.support.v7.app.AppCompatActivity
 import android.widget.TimePicker
@@ -9,9 +10,12 @@ import com.mimi.mimialarm.android.presentation.ActivityComponent
 import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
+import com.mimi.mimialarm.android.utils.BundleKey
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmDetailViewModel
 import com.mimi.mimialarm.databinding.ActivityAlarmDetailBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.activity_alarm_detail.view.*
+import kotlinx.android.synthetic.main.activity_alarm_on.view.*
 import java.util.*
 import javax.inject.Inject
 
@@ -37,7 +41,20 @@ class AlarmDetailActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_detail)
         binding.alarmDetailViewModel = viewModel
 
-        init();
+        init()
+        getBundleData()
+    }
+
+    fun getBundleData() {
+        if(intent.hasExtra(BundleKey.ALARM_ID.key)) {
+            viewModel.id = intent.getIntExtra(BundleKey.ALARM_ID.key, 0)
+            viewModel.loadAlarmData()
+
+            val calendar: GregorianCalendar = GregorianCalendar()
+            calendar.time = viewModel.endTime.get()
+            binding.timePicker.currentHour = calendar.get(GregorianCalendar.HOUR_OF_DAY)
+            binding.timePicker.currentMinute = calendar.get(GregorianCalendar.MINUTE)
+        }
     }
 
     fun init() {

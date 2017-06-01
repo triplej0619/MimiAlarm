@@ -4,13 +4,12 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
-import com.mimi.mimialarm.android.infrastructure.FinishForegroundActivityEvent
-import com.mimi.mimialarm.android.infrastructure.StartAlarmDetailActivityEvent
 import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.android.presentation.view.AlarmDetailActivity
+import com.mimi.mimialarm.android.utils.BundleKey
 import com.mimi.mimialarm.core.infrastructure.UIManager
+import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
 import com.squareup.otto.Bus
-import com.squareup.otto.Subscribe
 import javax.inject.Inject
 
 /**
@@ -49,28 +48,41 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
     override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
     }
 
-    fun <T> startActivityWithoutExtras(afterActivityClass: Class<T>) {
+    fun <T> startActivity(afterActivityClass: Class<T>) {
         currentActivity?.let {
             val intent = Intent(currentActivity, afterActivityClass)
             currentActivity?.startActivity(intent)
         }
     }
 
-//    @Subscribe
-//    fun answerStartAlarmDetailActivity(event: StartAlarmDetailActivityEvent) {
-//        startActivityWithoutExtras<AlarmDetailActivity>(AlarmDetailActivity::class.java)
-//    }
-//
-//    @Subscribe
-//    fun answerFinishForegroundActivity(event: FinishForegroundActivityEvent) {
-//        currentActivity?.finish()
-//    }
+    fun <T> startActivityWithExtras(afterActivityClass: Class<T>, bundle: Bundle) {
+        currentActivity?.let {
+            val intent = Intent(currentActivity, afterActivityClass)
+            intent.putExtras(bundle)
+            currentActivity?.startActivity(intent)
+        }
+    }
+
+    fun <T> startActivityWithoutExtrasForResult(afterActivityClass: Class<T>, requestCode: Int) {
+        currentActivity?.let {
+            val intent = Intent(currentActivity, afterActivityClass)
+            currentActivity?.startActivityForResult(intent, requestCode)
+        }
+    }
 
     override fun finishForegroundActivity() {
         currentActivity?.finish()
     }
 
-    override fun startAlarmDetailActivity() {
-        startActivityWithoutExtras<AlarmDetailActivity>(AlarmDetailActivity::class.java)
+    override fun startAlarmDetailActivityForNew() {
+        startActivity<AlarmDetailActivity>(AlarmDetailActivity::class.java)
+    }
+
+    override fun startAlarmDetailActivityForUpdate(alarmId: Int?) {
+        if(alarmId != null) {
+            val bundle: Bundle = Bundle()
+            bundle.putInt(BundleKey.ALARM_ID.key, alarmId)
+            startActivityWithExtras<AlarmDetailActivity>(AlarmDetailActivity::class.java, bundle)
+        }
     }
 }

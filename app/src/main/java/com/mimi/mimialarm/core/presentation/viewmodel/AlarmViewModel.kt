@@ -54,15 +54,14 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
     }
 
     fun showAddAlarmView() {
-        uiManager.startAlarmDetailActivity()
+        uiManager.startAlarmDetailActivityForNew()
     }
 
     fun clickListItem(position: Int) {
-        showAlarmDetailView()
+        showAlarmDetailView(position)
     }
 
-    fun showAlarmDetailView() {
-//        bus.post(StartAlarmDetailActivityEvent())
-        uiManager.startAlarmDetailActivity()
+    fun showAlarmDetailView(position: Int) {
+        uiManager.startAlarmDetailActivityForUpdate(alarmList[position].id)
     }
 }
