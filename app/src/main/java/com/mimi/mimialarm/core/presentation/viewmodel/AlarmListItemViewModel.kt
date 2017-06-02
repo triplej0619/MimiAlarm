@@ -40,6 +40,9 @@ class AlarmListItemViewModel : BaseViewModel() {
         }
     }
 
+    var deleteMode: ObservableBoolean = ObservableBoolean(false)
+    var selectForDelete: ObservableBoolean = ObservableBoolean(false)
+
     var id: Int? = null
     var monDay: ObservableBoolean = ObservableBoolean(false)
     var tuesDay: ObservableBoolean = ObservableBoolean(false)

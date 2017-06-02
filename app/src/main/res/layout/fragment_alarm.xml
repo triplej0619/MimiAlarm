@@ -20,6 +20,7 @@
             tools:visibility="gone"
             android:id="@+id/list"
             android:visibility="@{alarmViewModel.alarmCount > 0 ? View.VISIBLE : View.GONE}"
+            android:longClickable="true"
             android:layout_marginBottom="72dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -38,11 +39,40 @@
             app:clickEvent="@{alarmViewModel.addAlarmCommand}"
             app:rippleColor="#FFF"
             android:id="@+id/addBtn"
+            android:visibility="@{alarmViewModel.deleteMode ? View.GONE : View.VISIBLE}"
             android:src="@drawable/icn_add"
             android:clickable="true"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="20dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.support.design.widget.FloatingActionButton
+            app:clickEvent="@{alarmViewModel.cancelDeleteModeCommand}"
+            app:rippleColor="#FFF"
+            android:id="@+id/cancelDeleteMode"
+            android:visibility="@{alarmViewModel.deleteMode ? View.VISIBLE : View.GONE}"
+            android:src="@drawable/icn_back"
+            android:clickable="true"
+            android:layout_marginLeft="24dp"
+            android:layout_margin="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.support.design.widget.FloatingActionButton
+            app:clickEvent="@{alarmViewModel.deleteAlarmsCommand}"
+            app:rippleColor="#FFF"
+            android:id="@+id/delete"
+            android:visibility="@{alarmViewModel.deleteMode ? View.VISIBLE : View.GONE}"
+            android:src="@drawable/icn_x"
+            android:clickable="true"
+            android:layout_marginRight="24dp"
+            android:layout_margin="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>

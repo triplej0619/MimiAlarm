@@ -59,31 +59,29 @@ class AlarmFragment : Fragment() {
         viewModel.loadAlarmList()
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        when(requestCode) {
-//            ActivityRequestCode.ALARM_DETAIL.code -> {
-//                if(resultCode == Activity.RESULT_OK) {
-//                    viewModel.loadAlarmList()
-//                    listAdapter?.addItems()
-//                    binding?.list?.smoothScrollToPosition(100)
-//                }
-//            }
-//        }
-//    }
-
     fun initListView() {
         binding?.list?.layoutManager = LinearLayoutManager(activity)
         listAdapter = AlarmListAdapter(viewModel.alarmList, R.layout.list_item_alarm, object : IListItemClick {
             override fun clickEvent(v: View, pos: Int) {
                 viewModel.clickListItem(pos)
             }
+        }, object : IListItemClick {
+            override fun clickEvent(v: View, pos: Int) {
+                viewModel.startDeleteModeCommand.execute(Unit)
+            }
         })
+
         binding?.list?.adapter = listAdapter
+//        binding?.list?.setOnLongClickListener(object : View.OnLongClickListener {
+//            override fun onLongClick(v: View?): Boolean {
+//                viewModel.startDeleteModeCommand.execute(Unit)
+//                return true
+//            }
+//        })
     }
 
-    protected inner class AlarmListAdapter(items: List<AlarmListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick)
-        : CustomRecyclerViewAdapter<AlarmListItemViewModel>(items, layoutId, itemClickEvent) {
+    protected inner class AlarmListAdapter(items: List<AlarmListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick, longClick: IListItemClick)
+        : CustomRecyclerViewAdapter<AlarmListItemViewModel>(items, layoutId, itemClickEvent, longClick) {
 
         override fun setViewModel(holder: CustomRecyclerViewHolder, item: AlarmListItemViewModel) {
             if(holder.binding is ListItemAlarmBinding) {

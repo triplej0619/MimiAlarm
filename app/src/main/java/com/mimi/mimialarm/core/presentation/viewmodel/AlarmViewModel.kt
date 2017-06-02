@@ -1,5 +1,6 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.MyAlarm
@@ -15,12 +16,33 @@ import kotlin.properties.Delegates
 
 class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : BaseViewModel() {
 
+    var deleteMode: ObservableBoolean = ObservableBoolean(false)
     var alarmCount: ObservableInt = ObservableInt(0)
     var alarmList: MutableList<AlarmListItemViewModel> = ArrayList<AlarmListItemViewModel>()
 
     val addAlarmCommand: Command = object : Command {
         override fun execute(arg: Any) {
             showAddAlarmView()
+        }
+    }
+
+    val startDeleteModeCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            deleteMode.set(true)
+            setDeleteMode(true)
+        }
+    }
+
+    val cancelDeleteModeCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            deleteMode.set(false)
+            setDeleteMode(false)
+        }
+    }
+
+    val deleteAlarmsCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            deleteAlarms()
         }
     }
 
@@ -63,5 +85,15 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
 
     fun showAlarmDetailView(position: Int) {
         uiManager.startAlarmDetailActivityForUpdate(alarmList[position].id)
+    }
+
+    fun setDeleteMode(mode: Boolean) {
+        for(listItem in alarmList) {
+            listItem.deleteMode.set(mode)
+        }
+    }
+
+    fun deleteAlarms() {
+
     }
 }

@@ -188,9 +188,20 @@
             </LinearLayout>
 
             <android.support.v7.widget.SwitchCompat
+                android:visibility="@{alarmListItemViewModel.deleteMode ? View.GONE : View.VISIBLE}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="@{alarmListItemViewModel.isEnable()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                style="@style/CustomCheckBox"
+                android:visibility="@{alarmListItemViewModel.deleteMode ? View.VISIBLE : View.GONE}"
+                android:checked="@{alarmListItemViewModel.selectForDelete}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />

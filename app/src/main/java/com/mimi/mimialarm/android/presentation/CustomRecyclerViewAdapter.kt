@@ -12,6 +12,7 @@ abstract class CustomRecyclerViewAdapter<T> : RecyclerView.Adapter<CustomRecycle
     private val layoutId: Int
     private var items: List<T>? = null
     private var itemClick: IListItemClick? = null
+    private var longClick: IListItemClick? = null
 
     constructor(items: List<T>?, layoutId: Int) {
         this.items = items
@@ -24,10 +25,17 @@ abstract class CustomRecyclerViewAdapter<T> : RecyclerView.Adapter<CustomRecycle
         this.itemClick = itemClick
     }
 
+    constructor(items: List<T>?, layoutId: Int, itemClick: IListItemClick, longClick: IListItemClick) {
+        this.items = items
+        this.layoutId = layoutId
+        this.itemClick = itemClick
+        this.longClick = longClick
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomRecyclerViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
 
-        return CustomRecyclerViewHolder(itemView, itemClick)
+        return CustomRecyclerViewHolder(itemView, itemClick, longClick)
     }
 
     override fun onBindViewHolder(holder: CustomRecyclerViewHolder, position: Int) {
