@@ -1,44 +1,67 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
-import android.databinding.ObservableBoolean
-import com.mimi.mimialarm.android.infrastructure.StartAlarmDetailActivityEvent
-import com.squareup.otto.Bus
+import android.databinding.ObservableInt
+import com.mimi.mimialarm.core.infrastructure.UIManager
+import com.mimi.mimialarm.core.model.MyAlarm
+import com.mimi.mimialarm.core.utils.Command
+import io.realm.Realm
+import io.realm.RealmResults
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 /**
  * Created by MihyeLee on 2017. 5. 24..
  */
 
-class AlarmViewModel @Inject constructor(private val bus: Bus) : BaseViewModel() {
+class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : BaseViewModel() {
 
-    var alarmList: MutableList<AlarmListItemViewModel> = ArrayList()
+    var alarmCount: ObservableInt = ObservableInt(0)
+    var alarmList: MutableList<AlarmListItemViewModel> = ArrayList<AlarmListItemViewModel>()
+
+    val addAlarmCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            showAddAlarmView()
+        }
+    }
+
+    var realm: Realm by Delegates.notNull()
 
     init {
-        alarmList.add(AlarmListItemViewModel())
-        alarmList.add(AlarmListItemViewModel())
-        alarmList.add(AlarmListItemViewModel())
-
-        alarmList.get(0).friDay = ObservableBoolean(false)
-        alarmList.get(0).tuesDay = ObservableBoolean(false)
-        alarmList.get(2).monday = ObservableBoolean(false)
-        alarmList.get(2).tuesDay = ObservableBoolean(false)
-        alarmList.get(2).wednesDay = ObservableBoolean(false)
-        alarmList.get(2).thurseDay = ObservableBoolean(false)
+        realm = Realm.getDefaultInstance()
     }
 
     fun release() {
-//        bus.unregister(this)
+        realm.close()
+    }
+
+    fun loadAlarmList() {
+        val results: RealmResults<MyAlarm> = realm.where(MyAlarm::class.java).findAll()
+        for (result in results) {
+            updateOrInsertListItem(realm.copyFromRealm(result))
+        }
+        alarmCount.set(results.size)
+    }
+
+    fun updateOrInsertListItem(alarm: MyAlarm) {
+        for (item in alarmList) {
+            if (item.id?.equals(alarm.id) ?: false) {
+                item.copyFromAlarm(alarm)
+                return
+            }
+        }
+
+        alarmList.add(AlarmListItemViewModel.alarmDataToAlarmListItem(alarm))
+    }
+
+    fun showAddAlarmView() {
+        uiManager.startAlarmDetailActivityForNew()
     }
 
     fun clickListItem(position: Int) {
-        showAlarmDetailView()
+        showAlarmDetailView(position)
     }
 
-    fun showAlarmDetailView() {
-        bus.post(StartAlarmDetailActivityEvent())
-    }
-
-    init {
-//        this.bus.register(this)
+    fun showAlarmDetailView(position: Int) {
+        uiManager.startAlarmDetailActivityForUpdate(alarmList[position].id)
     }
 }

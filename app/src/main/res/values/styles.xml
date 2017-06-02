@@ -30,6 +30,19 @@
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>
 
+    <style name="CustomCheckBox" parent="Theme.AppCompat.Light">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="fontPath">fonts/NotoSansCJKkr-Regular.otf</item>
+        <item name="buttonTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="CustomSpinner" parent="Widget.AppCompat.Spinner.Underlined">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/dayOfWeek</item>
+        <item name="fontPath">fonts/NotoSansCJKkr-Regular.otf</item>
+        <item name="backgroundTint">?attr/colorAccent</item>
+    </style>
 
 
 </resources>

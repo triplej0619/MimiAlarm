@@ -13,7 +13,7 @@
 
         <TextView
             tools:text="8시간 20분 설정"
-            style="@style/NotoSans.Regula.13.Accent"
+            style="@style/NotoSans.Regular.13.Accent"
             android:id="@+id/settedTime"
             android:layout_marginTop="11dp"
             android:layout_width="wrap_content"

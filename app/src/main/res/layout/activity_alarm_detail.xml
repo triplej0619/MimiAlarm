@@ -4,6 +4,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <import type="android.view.View" />
+        <import type="java.lang.Boolean" />
+        <variable
+            name="alarmDetailViewModel"
+            type="com.mimi.mimialarm.core.presentation.viewmodel.AlarmDetailViewModel" />
+    </data>
+
     <RelativeLayout
         android:background="?attr/colorBg"
         android:layout_width="match_parent"
@@ -15,36 +23,213 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <TimePicker
-            android:id="@+id/timePicker"
-            android:headerBackground="@android:color/transparent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <LinearLayout
-            android:background="@android:color/white"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="60dp"
+        <ScrollView
+            android:layout_marginBottom="80dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RelativeLayout
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="88dp">
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="64dp">
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="64dp">
-            </RelativeLayout>
-        </LinearLayout>
+                android:layout_height="wrap_content">
 
+                <TimePicker
+                    tools:visibility="gone"
+                    android:id="@+id/timePicker"
+                    android:numbersTextColor="@android:color/white"
+                    android:numbersBackgroundColor="#15000000"
+                    android:headerBackground="@android:color/transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:layout_marginTop="32dp"
+                    android:background="@android:color/white"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:paddingTop="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="104dp">
+                        <CheckBox
+                            style="@style/CustomCheckBox"
+                            android:checked="@{alarmDetailViewModel.repeat}"
+                            android:text="@string/repeat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <LinearLayout
+                            android:layout_marginBottom="16dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <include layout="@layout/btn_day_of_week"
+                                android:id="@+id/mondayBtn"
+                                app:text="@{@string/monday}"
+                                app:isChecked="@{alarmDetailViewModel.monDay}"
+                                app:onClick="@{alarmDetailViewModel.changeMondayStatus}"
+                                />
+                            <include layout="@layout/btn_day_of_week"
+                                app:text="@{@string/tuesday}"
+                                app:isChecked="@{alarmDetailViewModel.tuesDay}"
+                                app:onClick="@{alarmDetailViewModel.changeTuesDayStatus}"
+                                />
+                            <include layout="@layout/btn_day_of_week"
+                                app:text="@{@string/wednesday}"
+                                app:isChecked="@{alarmDetailViewModel.wednesDay}"
+                                app:onClick="@{alarmDetailViewModel.changeWednesDayStatus}"
+                                />
+                            <include layout="@layout/btn_day_of_week"
+                                app:text="@{@string/thursday}"
+                                app:isChecked="@{alarmDetailViewModel.thursDay}"
+                                app:onClick="@{alarmDetailViewModel.changeThursDayStatus}"
+                                />
+                            <include layout="@layout/btn_day_of_week"
+                                app:text="@{@string/friday}"
+                                app:isChecked="@{alarmDetailViewModel.friDay}"
+                                app:onClick="@{alarmDetailViewModel.changeFriDayStatus}"
+                                />
+                            <include layout="@layout/btn_day_of_week"
+                                app:text="@{@string/saturday}"
+                                app:isChecked="@{alarmDetailViewModel.saturDay}"
+                                app:onClick="@{alarmDetailViewModel.changeSaturDayStatus}"
+                                />
+                            <include layout="@layout/btn_day_of_week"
+                                app:text="@{@string/sunday}"
+                                app:isChecked="@{alarmDetailViewModel.sunDay}"
+                                app:onClick="@{alarmDetailViewModel.changeSunDayStatus}"
+                                />
+                        </LinearLayout>
+                        <View
+                            android:layout_alignParentBottom="true"
+                            android:background="?attr/colorListDivider"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:paddingTop="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="104dp">
+                        <CheckBox
+                            style="@style/CustomCheckBox"
+                            android:checked="@{alarmDetailViewModel.snooze}"
+                            android:id="@+id/snoozeCheck"
+                            android:text="@string/snooze"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <Spinner
+                            style="@style/CustomSpinner"
+                            android:id="@+id/snoozeInterval"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="16dp"
+                            android:textAlignment="center"
+                            android:layout_toLeftOf="@+id/icnX"
+                            android:entries="@array/snoozeTimeInterval"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:id="@+id/icnX"
+                            android:src="@drawable/icn_x"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="16dp"
+                            android:layout_toLeftOf="@+id/snoozeCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <Spinner
+                            style="@style/CustomSpinner"
+                            android:id="@+id/snoozeCount"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="16dp"
+                            android:textAlignment="center"
+                            android:entries="@array/snoozeCount"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <View
+                            android:layout_alignParentBottom="true"
+                            android:background="?attr/colorListDivider"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:paddingTop="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp">
+                        <CheckBox
+                            style="@style/CustomCheckBox"
+                            android:checked="@{alarmDetailViewModel.sound}"
+                            android:text="@string/sound"
+                            android:layout_centerVertical="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <Spinner
+                            style="@style/CustomSpinner"
+                            android:id="@+id/soundSpinner"
+                            android:entries="@array/snoozeTimeInterval"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content" />
+                        <View
+                            android:layout_alignParentBottom="true"
+                            android:background="?attr/colorListDivider"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp" />
+                    </RelativeLayout>
+                    <CheckBox
+                        style="@style/CustomCheckBox"
+                        android:checked="@{alarmDetailViewModel.vibration}"
+                        android:id="@+id/vibration"
+                        android:text="@string/vibration"
+                        android:layout_marginLeft="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+        <Button
+            style="@style/NotoSans.Regular.16.White"
+            app:layout_constraintRight_toLeftOf="@+id/save"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:clickEvent="@{alarmDetailViewModel.finishViewCommand}"
+            android:id="@+id/cancel"
+            android:background="@drawable/selector_delete_btn"
+            android:stateListAnimator="@null"
+            android:text="@string/cancel"
+            android:layout_width="136dp"
+            android:layout_height="56dp" />
+
+        <Button
+            style="@style/NotoSans.Regular.16.White"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/cancel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:clickEvent="@{alarmDetailViewModel.addOrUpdateAlarmCommand}"
+            android:id="@+id/save"
+            android:background="@drawable/selector_btn_rounded_rect_accent"
+            android:stateListAnimator="@null"
+            android:text="@string/save"
+            android:layout_width="136dp"
+            android:layout_height="56dp" />
+        </android.support.constraint.ConstraintLayout>
     </RelativeLayout>
 
 </layout>
