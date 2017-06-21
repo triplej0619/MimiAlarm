@@ -198,6 +198,7 @@
 
             <android.support.v7.widget.AppCompatCheckBox
                 style="@style/CustomCheckBox"
+                app:clickEvent="@{alarmListItemViewModel.changeSelectStatusCommand}"
                 android:visibility="@{alarmListItemViewModel.deleteMode ? View.VISIBLE : View.GONE}"
                 android:checked="@{alarmListItemViewModel.selectForDelete}"
                 android:layout_width="wrap_content"

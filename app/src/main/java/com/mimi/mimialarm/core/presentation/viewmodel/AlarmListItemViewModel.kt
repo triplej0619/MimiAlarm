@@ -2,6 +2,7 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.databinding.*
 import com.mimi.mimialarm.core.model.MyAlarm
+import com.mimi.mimialarm.core.utils.Command
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -75,6 +76,12 @@ class AlarmListItemViewModel : BaseViewModel() {
     var snoozeCount: ObservableInt = ObservableInt(0)
 
     var isEnable: ObservableBoolean = ObservableBoolean(true)
+
+    val changeSelectStatusCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            selectForDelete.set(!selectForDelete.get())
+        }
+    }
 
     fun copyFromAlarm(alarm: MyAlarm) {
         alarmDataToAlarmListItem(alarm, this)

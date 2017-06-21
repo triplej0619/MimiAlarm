@@ -104,7 +104,7 @@ class AlarmFragment : Fragment() {
     @Subscribe
     fun answerBackPressed(event: BackPressedEvent) {
         if(viewModel.deleteMode.get()) {
-            viewModel.deleteMode.set(false)
+            viewModel.cancelDeleteModeCommand.execute(Unit)
         } else {
             event.callback?.execute(Unit)
         }

@@ -2,13 +2,17 @@ package com.mimi.mimialarm.android.presentation.service
 
 import android.app.Activity
 import android.app.Application
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
+import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.android.presentation.view.AlarmDetailActivity
 import com.mimi.mimialarm.android.utils.BundleKey
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
+import com.mimi.mimialarm.core.utils.Command
 import com.squareup.otto.Bus
 import javax.inject.Inject
 
@@ -83,6 +87,28 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
             val bundle: Bundle = Bundle()
             bundle.putInt(BundleKey.ALARM_ID.key, alarmId)
             startActivityWithExtras<AlarmDetailActivity>(AlarmDetailActivity::class.java, bundle)
+        }
+    }
+
+    override fun showAlertDialog(msg: String, title: String, cancelable: Boolean) {
+        showAlertDialog(msg, title, cancelable, null, null)
+    }
+
+    override fun showAlertDialog(msg: String, title: String, cancelable: Boolean, okCallback: Command?, cancelCallback: Command?) {
+        if(currentActivity != null) {
+            val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(currentActivity!!)
+            if(title.isNotEmpty()) {
+                alertDialogBuilder.setTitle(title)
+            }
+            alertDialogBuilder.setMessage(msg)
+            alertDialogBuilder.setCancelable(cancelable)
+            okCallback.let {
+                alertDialogBuilder.setPositiveButton(R.string.ok) { dialog, which -> okCallback?.execute(Unit) }
+            }
+            cancelCallback.let {
+                alertDialogBuilder.setNegativeButton(R.string.cancel) { dialog, which -> cancelCallback?.execute(Unit) }
+            }
+            alertDialogBuilder.create().show()
         }
     }
 }
