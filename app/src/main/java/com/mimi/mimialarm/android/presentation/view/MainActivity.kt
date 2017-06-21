@@ -7,19 +7,37 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
 import com.mimi.mimialarm.R
+import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
+import com.mimi.mimialarm.android.presentation.ActivityComponent
+import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
+import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
+import com.mimi.mimialarm.android.presentation.ViewModelModule
+import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.databinding.ActivityMainBinding
+import com.squareup.otto.Bus
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-
-
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
 
+
+    @Inject
+    lateinit var bus: Bus
+
     var viewPagerAdapter: CustomViewPagerAdapter? = null
     var binding: ActivityMainBinding? = null
 
+    fun buildComponent(): ActivityComponent {
+        return DaggerActivityComponent.builder()
+                .applicationComponent((application as MimiAlarmApplication).component)
+                .viewModelModule(ViewModelModule())
+                .build()
+    }
+
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
+        buildComponent().inject(this)
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
         init()
@@ -53,6 +71,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+    }
+
+    override fun onBackPressed() {
+        if(binding!!.viewpager.currentItem == 0) {
+            bus.post(BackPressedEvent(object : Command {
+                override fun execute(arg: Any) {
+                    this@MainActivity.finish()
+                }
+            }))
+        } else {
+            super.onBackPressed()
+        }
     }
 
     class CustomViewPagerAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {

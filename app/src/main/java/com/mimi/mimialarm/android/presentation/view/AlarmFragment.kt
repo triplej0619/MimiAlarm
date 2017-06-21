@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.infrastructure.AddAlarmEvent
+import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
 import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.android.utils.ActivityRequestCode
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
@@ -34,7 +35,10 @@ class AlarmFragment : Fragment() {
     lateinit var bus: Bus
 
     fun buildComponent(): ActivityComponent {
-        return DaggerActivityComponent.builder().applicationComponent((activity.application as MimiAlarmApplication).component).viewModelModule(ViewModelModule()).build()
+        return DaggerActivityComponent.builder()
+                .applicationComponent((activity.application as MimiAlarmApplication).component)
+                .viewModelModule(ViewModelModule())
+                .build()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -95,5 +99,14 @@ class AlarmFragment : Fragment() {
         viewModel.loadAlarmList()
         listAdapter?.addItem(listAdapter!!.itemCount - 1)
         binding?.list?.smoothScrollToPosition(listAdapter!!.itemCount - 1)
+    }
+
+    @Subscribe
+    fun answerBackPressed(event: BackPressedEvent) {
+        if(viewModel.deleteMode.get()) {
+            viewModel.deleteMode.set(false)
+        } else {
+            event.callback?.execute(Unit)
+        }
     }
 }
