@@ -100,7 +100,11 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
     }
 
     fun clickListItem(position: Int) {
-        showAlarmDetailView(position)
+        if(!deleteMode.get()) {
+            showAlarmDetailView(position)
+        } else {
+            alarmList[position].selectForDelete.set(!alarmList[position].selectForDelete.get())
+        }
     }
 
     fun showAlarmDetailView(position: Int) {
