@@ -23,9 +23,6 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
     var alarmList: ArrayList<AlarmListItemViewModel> = ArrayList<AlarmListItemViewModel>()
     var realm: Realm by Delegates.notNull()
 
-    init {
-    }
-
     val addAlarmCommand: Command = object : Command {
         override fun execute(arg: Any) {
             showAddAlarmView()

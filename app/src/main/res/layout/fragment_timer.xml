@@ -4,6 +4,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="timerViewModel"
+            type="com.mimi.mimialarm.core.presentation.viewmodel.TimerViewModel" />
+    </data>
+
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -21,7 +29,8 @@
                 android:id="@+id/hour"
                 android:textColor="@drawable/selector_text_focus_color"
                 android:inputType="number"
-                android:text="00"
+                android:text="@={timerViewModel.hour}"
+                android:minWidth="70dp"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:maxLength="2"
@@ -34,7 +43,8 @@
                 android:id="@+id/minute"
                 android:textColor="@drawable/selector_text_focus_color"
                 android:inputType="number"
-                android:text="10"
+                android:text="@={timerViewModel.minute}"
+                android:minWidth="70dp"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:maxLength="2"
@@ -47,20 +57,21 @@
                 android:id="@+id/second"
                 android:textColor="@drawable/selector_text_focus_color"
                 android:inputType="number"
-                android:text="00"
+                android:text="@={timerViewModel.second}"
+                android:minWidth="70dp"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:maxLength="2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <ImageButton
+            <android.support.design.widget.FloatingActionButton
+                app:clickEvent="@{timerViewModel.addTimerCommand}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/second"
                 app:layout_constraintRight_toRightOf="parent"
                 android:id="@+id/addTimer"
                 android:elevation="6dp"
-                android:background="@drawable/round_btn"
                 android:src="@drawable/icn_add"
                 android:layout_width="56dp"
                 android:layout_height="56dp" />
@@ -97,6 +108,7 @@
             style="@style/Roboto.Regular.15.Gray1"
             tools:visibility="gone"
             android:id="@+id/text1"
+            android:visibility="@{timerViewModel.timerCount > 0 ? View.GONE : View.VISIBLE}"
             android:gravity="center"
             android:background="?attr/colorBg"
             android:layout_centerInParent="true"
@@ -108,7 +120,7 @@
             tools:visibility="visible"
             tools:listitem="@layout/list_item_timer"
             android:id="@+id/list"
-            android:visibility="gone"
+            android:visibility="@{timerViewModel.timerCount > 0 ? View.VISIBLE : View.GONE}"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
