@@ -1,6 +1,8 @@
 package com.mimi.mimialarm.android.presentation.view
 
 import android.app.Activity
+import android.arch.lifecycle.LifecycleFragment
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -25,7 +27,7 @@ import javax.inject.Inject
 /**
  * Created by MihyeLee on 2017. 5. 22..
  */
-class AlarmFragment : Fragment() {
+class AlarmFragment : LifecycleFragment() {
 
     private var listAdapter: AlarmListAdapter? = null
     var binding: FragmentAlarmBinding? = null
@@ -39,6 +41,16 @@ class AlarmFragment : Fragment() {
                 .applicationComponent((activity.application as MimiAlarmApplication).component)
                 .viewModelModule(ViewModelModule())
                 .build()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.alarmListLive.observe(this, object : Observer<ArrayList<AlarmListItemViewModel>> {
+            override fun onChanged(t: ArrayList<AlarmListItemViewModel>?) {
+                listAdapter?.clear()
+            }
+
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

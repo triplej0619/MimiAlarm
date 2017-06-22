@@ -1,5 +1,6 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
+import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import com.mimi.mimialarm.core.infrastructure.UIManager
@@ -18,7 +19,12 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
 
     var deleteMode: ObservableBoolean = ObservableBoolean(false)
     var alarmCount: ObservableInt = ObservableInt(0)
-    var alarmList: MutableList<AlarmListItemViewModel> = ArrayList<AlarmListItemViewModel>()
+    var alarmListLive: MutableLiveData<ArrayList<AlarmListItemViewModel>> = MutableLiveData()
+    var alarmList: ArrayList<AlarmListItemViewModel> = ArrayList<AlarmListItemViewModel>()
+    var realm: Realm by Delegates.notNull()
+
+    init {
+    }
 
     val addAlarmCommand: Command = object : Command {
         override fun execute(arg: Any) {
@@ -50,8 +56,6 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
         }
     }
 
-    var realm: Realm by Delegates.notNull()
-
     init {
         realm = Realm.getDefaultInstance()
     }
@@ -63,6 +67,7 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
     fun clear() {
         alarmList.clear()
         alarmCount.set(0)
+        alarmListLive.postValue(alarmList)
     }
 
     fun reLoadAlarmList() {
@@ -75,6 +80,7 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
         for (result in results) {
             updateOrInsertListItem(realm.copyFromRealm(result))
         }
+        alarmListLive.postValue(alarmList)
         alarmCount.set(results.size)
     }
 
