@@ -42,7 +42,7 @@
                 style="@style/CustomEditInTimer"
                 app:layout_constraintLeft_toRightOf="@+id/hour"
                 app:layout_constraintRight_toLeftOf="@+id/second"
-                app:textChanger="@{timerViewmodel.timeTextChanger}"
+                app:textChanger="@{timerViewModel.timeTextChanger}"
                 android:id="@+id/minute"
                 android:textColor="@drawable/selector_text_focus_color"
                 android:inputType="number"
@@ -58,7 +58,7 @@
                 style="@style/CustomEditInTimer"
                 app:layout_constraintLeft_toRightOf="@+id/minute"
                 app:layout_constraintRight_toRightOf="@+id/addTimer"
-                app:textChanger="@{timerViewmodel.timeTextChanger}"
+                app:textChanger="@{timerViewModel.timeTextChanger}"
                 android:id="@+id/second"
                 android:textColor="@drawable/selector_text_focus_color"
                 android:inputType="number"
@@ -78,6 +78,7 @@
                 android:id="@+id/addTimer"
                 android:elevation="6dp"
                 android:src="@drawable/icn_add"
+                android:backgroundTint="@drawable/selector_floating_btn_color"
                 android:layout_width="56dp"
                 android:layout_height="56dp" />
 
