@@ -14,4 +14,6 @@ interface UIManager {
 
     fun showAlertDialog(msg: String, title: String, cancelable: Boolean)
     fun showAlertDialog(msg: String, title: String, cancelable: Boolean, okCallback: Command?, cancelCallback: Command?)
+
+    fun showToast(msg: String)
 }

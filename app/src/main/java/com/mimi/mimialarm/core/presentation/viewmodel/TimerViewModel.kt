@@ -34,6 +34,13 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
     var realm: Realm by Delegates.notNull()
 
     val timeTextChanger: TextChanger = object : TextChanger {
+        override fun isNeedChange(oldText: String): Boolean {
+            if(oldText.isNotEmpty() && oldText.toInt() > 59) {
+                return true
+            }
+            return false
+        }
+
         override fun getChangedText(oldText: String): String {
             var changedTime: String = ""
             if(oldText.isNotEmpty() && oldText.toInt() > 59) {
@@ -82,27 +89,49 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
     fun addTimer() {
         realm.executeTransaction {
             val currentIdNum = realm.where(MyTimer::class.java).max(MyTimer.FIELD_ID)
-            val timer: MyTimer = thisToTimer(currentIdNum?.toInt()?.plus(1) ?: 0)
-            timerList.add(TimerListItemViewModel.Companion.timerDataToTimerListItem(timer))
-            realm.insert(timer)
+            val timer: MyTimer? = thisToTimer(currentIdNum?.toInt()?.plus(1) ?: 0)
+            if(timer != null) {
+                addTimerListItem(timer)
+                realm.insert(timer)
+            }
         }
+    }
+
+    fun addTimerListItem(timer: MyTimer) {
+        timerList.add(TimerListItemViewModel.Companion.timerDataToTimerListItem(timer))
         timerCount.set(timerCount.get() + 1)
         timerListLive.postValue(timerList)
 
         bus.post(AddTimerEvent())
     }
 
-    fun thisToTimer(id: Int) : MyTimer {
+    fun thisToTimer(id: Int) : MyTimer? {
         val timer: MyTimer = MyTimer()
         timer.id = id
         timer.createdAt = Date()
-        timer.seconds = (hour.get().toInt() * HOUR_IN_SECONDS) + (minute.get().toInt() * MINUTE_IN_SECONDS) + second.get().toInt()
+
+        var hourInt: Int = 0
+        var minInt: Int = 0
+        var secInt: Int = 0
+        if(!hour.get().isEmpty()) {
+            hourInt = hour.get().toInt()
+        }
+        if(!minute.get().isEmpty()) {
+            minInt = minute.get().toInt()
+        }
+        if(!second.get().isEmpty()) {
+            secInt = second.get().toInt()
+        }
+        timer.seconds = (hourInt * HOUR_IN_SECONDS) + (minInt * MINUTE_IN_SECONDS) + secInt
+        if(timer.seconds == 0) {
+            return null;
+        }
 
         val calendar: GregorianCalendar = GregorianCalendar()
         calendar.time = timer.createdAt
-        calendar.add(GregorianCalendar.HOUR, hour.get().toInt())
-        calendar.add(GregorianCalendar.MINUTE, minute.get().toInt())
-        calendar.add(GregorianCalendar.SECOND, second.get().toInt())
+        calendar.add(GregorianCalendar.HOUR, hourInt)
+        calendar.add(GregorianCalendar.MINUTE, minInt)
+        calendar.add(GregorianCalendar.SECOND, secInt)
         timer.completedAt = calendar.time
 
         timer.activated = false

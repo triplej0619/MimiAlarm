@@ -30,10 +30,12 @@ class BindingUtils {
                     }
 
                     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                        view.text = textChanger.getChangedText(s.toString())
                     }
 
                     override fun afterTextChanged(s: Editable?) {
+                        if (textChanger.isNeedChange(s.toString())) {
+                            s?.replace(0, s.length, textChanger.getChangedText(s.toString()))
+                        }
                     }
                 })
             }

@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.widget.Toast
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.android.presentation.view.AlarmDetailActivity
@@ -109,6 +110,12 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
                 alertDialogBuilder.setNegativeButton(R.string.cancel) { dialog, which -> cancelCallback?.execute(Unit) }
             }
             alertDialogBuilder.create().show()
+        }
+    }
+
+    override fun showToast(msg: String) {
+        if(currentActivity != null) {
+            Toast.makeText(currentActivity, msg, Toast.LENGTH_SHORT).show()
         }
     }
 }

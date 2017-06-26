@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.infrastructure.AddTimerEvent
 import com.mimi.mimialarm.android.presentation.*
@@ -19,6 +21,8 @@ import com.mimi.mimialarm.databinding.FragmentTimerBinding
 import com.mimi.mimialarm.databinding.ListItemTimerBinding
 import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
+import io.reactivex.Observable
+import io.reactivex.functions.Function3
 import javax.inject.Inject
 
 /**
@@ -57,6 +61,7 @@ class TimerFragment : LifecycleFragment() {
 
         bus.register(this)
         initListView()
+        initEditView()
 
         return binding?.root
     }
@@ -74,6 +79,25 @@ class TimerFragment : LifecycleFragment() {
         })
 
         binding?.list?.adapter = listAdapter
+    }
+
+    fun initEditView() {
+        Observable.combineLatest(RxTextView.textChanges(binding?.hour as TextView),
+                RxTextView.textChanges(binding?.minute as TextView),
+                RxTextView.textChanges(binding?.second as TextView),
+                Function3<CharSequence, CharSequence, CharSequence, Boolean> { t1, t2, t3 ->
+                    var isEnabled: Boolean = false
+                    if(!t1.isNullOrEmpty() && !t2.isNullOrEmpty() && !t3.isNullOrEmpty()) {
+                        if(Integer.parseInt(t1.toString()) > 0 ||
+                                Integer.parseInt(t2.toString()) > 0 ||
+                                Integer.parseInt(t3.toString()) > 0) {
+                            isEnabled = true
+                        }
+                    }
+                    binding?.addTimer?.isEnabled = isEnabled
+                    false
+                }
+            ).subscribe()
     }
 
     override fun onDestroyView() {
