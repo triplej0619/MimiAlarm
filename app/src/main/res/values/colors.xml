@@ -25,4 +25,5 @@
     <color name="dayOfWeek">#383643</color>
     <color name="dayOfWeekNegative">#b0b0b0</color>
     <color name="scrollbarVertical">#2a000000</color>
+    <color name="selectedListItem">#13000000</color>
 </resources>

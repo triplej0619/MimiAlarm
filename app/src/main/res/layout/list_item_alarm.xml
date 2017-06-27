@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <android.support.constraint.ConstraintLayout
-            android:background="@android:color/white"
+            android:background="@{alarmListItemViewModel.selectForDelete ? @color/selectedListItem : @android:color/white}"
             android:paddingTop="11dp"
             android:paddingLeft="24dp"
             android:paddingRight="24dp"

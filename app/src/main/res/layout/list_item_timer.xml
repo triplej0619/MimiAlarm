@@ -13,7 +13,7 @@
 
 
     <RelativeLayout
-        android:background="@android:color/white"
+        android:background="@{timerListItemViewModel.selectForDelete ? @color/selectedListItem : @android:color/white}"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:layout_width="match_parent"

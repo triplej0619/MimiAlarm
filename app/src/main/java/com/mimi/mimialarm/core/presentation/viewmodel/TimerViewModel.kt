@@ -179,14 +179,11 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
     fun setDeleteMode(mode: Boolean) {
         for(listItem in timerList) {
             listItem.deleteMode.set(mode)
-            if(mode) {
-                listItem.selectForDelete.set(false)
-            }
+            listItem.selectForDelete.set(false)
         }
     }
 
     fun deleteTimers() {
-        cancelDeleteModeCommand.execute(Unit)
         for (item in timerList) {
             if(item.selectForDelete.get()) {
                 realm.executeTransaction {

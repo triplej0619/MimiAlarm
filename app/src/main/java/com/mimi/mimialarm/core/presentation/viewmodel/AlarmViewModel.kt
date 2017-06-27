@@ -111,14 +111,11 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
     fun setDeleteMode(mode: Boolean) {
         for(listItem in alarmList) {
             listItem.deleteMode.set(mode)
-            if(mode) {
-                listItem.selectForDelete.set(false)
-            }
+            listItem.selectForDelete.set(false)
         }
     }
 
     fun deleteAlarms() {
-        cancelDeleteModeCommand.execute(Unit)
         for (item in alarmList) {
             if(item.selectForDelete.get()) {
                 realm.executeTransaction {
