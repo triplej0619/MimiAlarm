@@ -13,6 +13,7 @@ import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
 import com.mimi.mimialarm.core.utils.Command
+import com.mimi.mimialarm.core.utils.Enums
 import com.mimi.mimialarm.databinding.ActivityMainBinding
 import com.squareup.otto.Bus
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -74,8 +75,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(binding!!.viewpager.currentItem == 0) {
-            bus.post(BackPressedEvent(object : Command {
+        if(binding!!.viewpager.currentItem < 2) {
+            bus.post(BackPressedEvent(Enums.MAIN_TAB.valueOf(binding!!.viewpager.currentItem),
+                object : Command {
                 override fun execute(arg: Any) {
                     this@MainActivity.finish()
                 }

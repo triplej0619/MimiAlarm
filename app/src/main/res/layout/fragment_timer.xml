@@ -110,25 +110,60 @@
                 android:layout_height="wrap_content" />
         </android.support.constraint.ConstraintLayout>
 
-        <TextView
-            style="@style/Roboto.Regular.15.Gray1"
-            tools:visibility="gone"
-            android:id="@+id/text1"
-            android:visibility="@{timerViewModel.timerCount > 0 ? View.GONE : View.VISIBLE}"
-            android:gravity="center"
-            android:background="?attr/colorBg"
-            android:layout_centerInParent="true"
-            android:text="@string/msg_no_timer"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            tools:visibility="visible"
-            tools:listitem="@layout/list_item_timer"
-            android:id="@+id/list"
-            android:visibility="@{timerViewModel.timerCount > 0 ? View.VISIBLE : View.GONE}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <TextView
+                style="@style/Roboto.Regular.15.Gray1"
+                tools:visibility="gone"
+                android:id="@+id/text1"
+                android:visibility="@{timerViewModel.timerCount > 0 ? View.GONE : View.VISIBLE}"
+                android:gravity="center"
+                android:background="?attr/colorBg"
+                android:layout_centerInParent="true"
+                android:text="@string/msg_no_timer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.RecyclerView
+                tools:visibility="visible"
+                tools:listitem="@layout/list_item_timer"
+                android:id="@+id/list"
+                android:visibility="@{timerViewModel.timerCount > 0 ? View.VISIBLE : View.GONE}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+            <android.support.design.widget.FloatingActionButton
+                app:clickEvent="@{timerViewModel.cancelDeleteModeCommand}"
+                app:rippleColor="#FFF"
+                android:id="@+id/cancelDeleteMode"
+                android:visibility="@{timerViewModel.deleteMode ? View.VISIBLE : View.GONE}"
+                android:src="@drawable/icn_back"
+                android:clickable="true"
+                android:layout_marginLeft="24dp"
+                android:layout_margin="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <android.support.design.widget.FloatingActionButton
+                app:clickEvent="@{timerViewModel.deleteTimersCommand}"
+                app:rippleColor="#FFF"
+                android:id="@+id/delete"
+                android:visibility="@{timerViewModel.deleteMode ? View.VISIBLE : View.GONE}"
+                android:src="@drawable/icn_x"
+                android:clickable="true"
+                android:layout_marginRight="24dp"
+                android:layout_margin="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
     </LinearLayout>
 
 </layout>

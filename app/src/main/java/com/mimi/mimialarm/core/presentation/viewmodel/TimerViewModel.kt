@@ -2,6 +2,7 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.databinding.Bindable
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.mimi.mimialarm.BR
@@ -25,6 +26,7 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
     val MINUTE_IN_SECONDS: Int = 60
     val HOUR_IN_SECONDS: Int = MINUTE_IN_SECONDS * 60
 
+    var deleteMode: ObservableBoolean = ObservableBoolean(false)
     var timerCount: ObservableInt = ObservableInt(0)
     var hour: ObservableField<String> = ObservableField<String>("00")
     var minute: ObservableField<String> = ObservableField<String>("10")
@@ -58,12 +60,47 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
         }
     }
 
+    val startDeleteModeCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            deleteMode.set(true)
+            setDeleteMode(true)
+        }
+    }
+
+    val cancelDeleteModeCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            deleteMode.set(false)
+            setDeleteMode(false)
+        }
+    }
+
+    val deleteTimersCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            uiManager.showAlertDialog("정말 삭제하시겠습니까?", "", true, object: Command { // TODO text -> resource
+                override fun execute(arg: Any) {
+                    deleteTimers()
+                }
+            }, null)
+        }
+    }
+
     init {
         realm = Realm.getDefaultInstance()
     }
 
     fun release() {
         realm.close()
+    }
+
+    fun clear() {
+        timerList.clear()
+        timerCount.set(0)
+        timerListLive.postValue(timerList)
+    }
+
+    fun reLoadTimerList() {
+        clear()
+        loadTimerList()
     }
 
     fun loadTimerList() {
@@ -137,6 +174,34 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
         timer.activated = false
 
         return timer
+    }
+
+    fun setDeleteMode(mode: Boolean) {
+        for(listItem in timerList) {
+            listItem.deleteMode.set(mode)
+            if(mode) {
+                listItem.selectForDelete.set(false)
+            }
+        }
+    }
+
+    fun deleteTimers() {
+        cancelDeleteModeCommand.execute(Unit)
+        for (item in timerList) {
+            if(item.selectForDelete.get()) {
+                realm.executeTransaction {
+                    val alarm: MyTimer = realm.where(MyTimer::class.java).equalTo(MyTimer.FIELD_ID, item.id).findFirst()
+                    alarm.deleteFromRealm()
+                }
+            }
+        }
+        reLoadTimerList()
+    }
+
+    fun clickListItem(position: Int) {
+        if(deleteMode.get()) {
+            timerList[position].selectForDelete.set(!timerList[position].selectForDelete.get())
+        }
     }
 
 }

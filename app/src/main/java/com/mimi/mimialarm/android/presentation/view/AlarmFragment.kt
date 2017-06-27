@@ -18,6 +18,7 @@ import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.android.utils.ActivityRequestCode
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmViewModel
+import com.mimi.mimialarm.core.utils.Enums
 import com.mimi.mimialarm.databinding.FragmentAlarmBinding
 import com.mimi.mimialarm.databinding.ListItemAlarmBinding
 import com.squareup.otto.Bus
@@ -115,10 +116,12 @@ class AlarmFragment : LifecycleFragment() {
 
     @Subscribe
     fun answerBackPressed(event: BackPressedEvent) {
-        if(viewModel.deleteMode.get()) {
-            viewModel.cancelDeleteModeCommand.execute(Unit)
-        } else {
-            event.callback?.execute(Unit)
+        if(event.tabType == Enums.MAIN_TAB.MAIN_ALARM) {
+            if (viewModel.deleteMode.get()) {
+                viewModel.cancelDeleteModeCommand.execute(Unit)
+            } else {
+                event.callback?.execute(Unit)
+            }
         }
     }
 }

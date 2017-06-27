@@ -38,17 +38,39 @@
             android:layout_below="@id/settedTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        
-        <Button
-            style="@style/NotoSans.Regular.16.White"
-            android:text="@string/delete"
-            android:background="@drawable/selector_delete_btn"
+
+        <RelativeLayout
+            android:visibility="@{timerListItemViewModel.deleteMode ? View.GONE : View.VISIBLE}"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:includeFontPadding="false"
-            android:stateListAnimator="@null"
-            android:layout_width="60dp"
-            android:layout_height="40dp" />
+            android:layout_marginRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/pause"
+                android:src="@drawable/icn_stop"
+                android:visibility="@{!timerListItemViewModel.stop &amp;&amp; !timerListItemViewModel.paused ? View.VISIBLE : View.GONE}"
+                android:background="@drawable/selector_btn_accent"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+            <ImageButton
+                android:id="@+id/start"
+                android:src="@drawable/icn_start"
+                android:visibility="@{timerListItemViewModel.stop || timerListItemViewModel.paused ? View.VISIBLE : View.GONE}"
+                android:background="@drawable/selector_btn_accent"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.AppCompatCheckBox
+            style="@style/CustomCheckBox"
+            app:clickEvent="@{timerListItemViewModel.changeSelectStatusCommand}"
+            android:visibility="@{timerListItemViewModel.deleteMode ? View.VISIBLE : View.GONE}"
+            android:checked="@{timerListItemViewModel.selectForDelete}"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

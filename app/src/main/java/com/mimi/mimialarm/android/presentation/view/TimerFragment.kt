@@ -14,9 +14,11 @@ import android.widget.TextView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.infrastructure.AddTimerEvent
+import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
 import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerListItemViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerViewModel
+import com.mimi.mimialarm.core.utils.Enums
 import com.mimi.mimialarm.databinding.FragmentTimerBinding
 import com.mimi.mimialarm.databinding.ListItemTimerBinding
 import com.squareup.otto.Bus
@@ -70,11 +72,11 @@ class TimerFragment : LifecycleFragment() {
         binding?.list?.layoutManager = LinearLayoutManager(activity)
         listAdapter = TimerListAdapter(viewModel.timerList, R.layout.list_item_timer, object : IListItemClick {
             override fun clickEvent(v: View, pos: Int) {
-//                viewModel.clickListItem(pos)
+                viewModel.clickListItem(pos)
             }
         }, object : IListItemClick {
             override fun clickEvent(v: View, pos: Int) {
-//                viewModel.startDeleteModeCommand.execute(Unit)
+                viewModel.startDeleteModeCommand.execute(Unit)
             }
         })
 
@@ -129,6 +131,16 @@ class TimerFragment : LifecycleFragment() {
     fun keyboardHide() {
         val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding?.list?.windowToken, 0)
-//        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, InputMethodManager.HIDE_NOT_ALWAYS)
+    }
+
+    @Subscribe
+    fun answerBackPressed(event: BackPressedEvent) {
+        if(event.tabType == Enums.MAIN_TAB.MAIN_TIMER) {
+            if (viewModel.deleteMode.get()) {
+                viewModel.cancelDeleteModeCommand.execute(Unit)
+            } else {
+                event.callback.execute(Unit)
+            }
+        }
     }
 }
