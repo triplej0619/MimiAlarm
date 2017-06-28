@@ -58,7 +58,7 @@
                         android:layout_height="104dp">
                         <CheckBox
                             style="@style/CustomCheckBox"
-                            android:checked="@{alarmDetailViewModel.repeat}"
+                            android:checked="@={alarmDetailViewModel.repeat}"
                             android:text="@string/repeat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -76,31 +76,37 @@
                                 app:onClick="@{alarmDetailViewModel.changeMondayStatus}"
                                 />
                             <include layout="@layout/btn_day_of_week"
+                                android:id="@+id/tuesdayBtn"
                                 app:text="@{@string/tuesday}"
                                 app:isChecked="@{alarmDetailViewModel.tuesDay}"
                                 app:onClick="@{alarmDetailViewModel.changeTuesDayStatus}"
                                 />
                             <include layout="@layout/btn_day_of_week"
+                                android:id="@+id/wednesdayBtn"
                                 app:text="@{@string/wednesday}"
                                 app:isChecked="@{alarmDetailViewModel.wednesDay}"
                                 app:onClick="@{alarmDetailViewModel.changeWednesDayStatus}"
                                 />
                             <include layout="@layout/btn_day_of_week"
+                                android:id="@+id/thursdayBtn"
                                 app:text="@{@string/thursday}"
                                 app:isChecked="@{alarmDetailViewModel.thursDay}"
                                 app:onClick="@{alarmDetailViewModel.changeThursDayStatus}"
                                 />
                             <include layout="@layout/btn_day_of_week"
+                                android:id="@+id/fridayBtn"
                                 app:text="@{@string/friday}"
                                 app:isChecked="@{alarmDetailViewModel.friDay}"
                                 app:onClick="@{alarmDetailViewModel.changeFriDayStatus}"
                                 />
                             <include layout="@layout/btn_day_of_week"
+                                android:id="@+id/saturdayBtn"
                                 app:text="@{@string/saturday}"
                                 app:isChecked="@{alarmDetailViewModel.saturDay}"
                                 app:onClick="@{alarmDetailViewModel.changeSaturDayStatus}"
                                 />
                             <include layout="@layout/btn_day_of_week"
+                                android:id="@+id/sundayBtn"
                                 app:text="@{@string/sunday}"
                                 app:isChecked="@{alarmDetailViewModel.sunDay}"
                                 app:onClick="@{alarmDetailViewModel.changeSunDayStatus}"
@@ -120,7 +126,7 @@
                         android:layout_height="104dp">
                         <CheckBox
                             style="@style/CustomCheckBox"
-                            android:checked="@{alarmDetailViewModel.snooze}"
+                            android:checked="@={alarmDetailViewModel.snooze}"
                             android:id="@+id/snoozeCheck"
                             android:text="@string/snooze"
                             android:layout_width="wrap_content"
@@ -167,19 +173,28 @@
                         android:layout_height="64dp">
                         <CheckBox
                             style="@style/CustomCheckBox"
-                            android:checked="@{alarmDetailViewModel.sound}"
+                            android:checked="@={alarmDetailViewModel.sound}"
                             android:text="@string/sound"
                             android:layout_centerVertical="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
-                        <Spinner
+                        <!--<Spinner-->
+                            <!--style="@style/CustomSpinner"-->
+                            <!--android:id="@+id/soundSpinner"-->
+                            <!--android:spinnerMode="dialog"-->
+                            <!--android:layout_alignParentRight="true"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:layout_width="200dp"-->
+                            <!--android:layout_height="wrap_content" />-->
+                        <TextView
                             style="@style/CustomSpinner"
-                            android:id="@+id/soundSpinner"
-                            android:entries="@array/snoozeTimeInterval"
+                            android:id="@+id/selectedSound"
+                            android:text="testtesttest"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
+                            android:gravity="center"
                             android:layout_width="200dp"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="80dp" />
                         <View
                             android:layout_alignParentBottom="true"
                             android:background="?attr/colorListDivider"
@@ -188,7 +203,7 @@
                     </RelativeLayout>
                     <CheckBox
                         style="@style/CustomCheckBox"
-                        android:checked="@{alarmDetailViewModel.vibration}"
+                        android:checked="@={alarmDetailViewModel.vibration}"
                         android:id="@+id/vibration"
                         android:text="@string/vibration"
                         android:layout_marginLeft="8dp"

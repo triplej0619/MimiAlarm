@@ -1,7 +1,11 @@
 package com.mimi.mimialarm.android.presentation.view
 
-import android.content.Intent
+import android.arch.lifecycle.LifecycleActivity
+import android.arch.lifecycle.Observer
+import android.content.Context
 import android.databinding.DataBindingUtil
+import android.media.AudioAttributes
+import android.media.AudioManager
 import android.support.v7.app.AppCompatActivity
 import android.widget.TimePicker
 import com.jakewharton.rxbinding2.widget.RxAdapterView
@@ -18,15 +22,27 @@ import kotlinx.android.synthetic.main.activity_alarm_detail.view.*
 import kotlinx.android.synthetic.main.activity_alarm_on.view.*
 import java.util.*
 import javax.inject.Inject
+import android.media.RingtoneManager
+import android.net.Uri
+import android.support.v7.app.AlertDialog
+import kotlin.collections.HashMap
+import android.media.Ringtone
+import android.os.Build
+
 
 /**
  * Created by MihyeLee on 2017. 5. 24..
  */
 
-class AlarmDetailActivity : AppCompatActivity() {
+class AlarmDetailActivity : LifecycleActivity() {
 
     lateinit var binding: ActivityAlarmDetailBinding
     @Inject lateinit var viewModel: AlarmDetailViewModel
+
+    val ringtones: MutableMap<String, Uri> = HashMap<String, Uri>()
+    var selectedRingtone: Ringtone? = null
+    var ringtoneIndex: Int = 0
+    var ringtoneIndexPrev: Int = 0
 
     fun buildComponent(): ActivityComponent {
         return DaggerActivityComponent.builder()
@@ -42,6 +58,7 @@ class AlarmDetailActivity : AppCompatActivity() {
         binding.alarmDetailViewModel = viewModel
 
         init()
+        observeData()
         getBundleData()
     }
 
@@ -77,15 +94,6 @@ class AlarmDetailActivity : AppCompatActivity() {
                     }
                 })
 
-//        binding.soundSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//            }
-//
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                viewModel.mediaIndex.set(position)
-//            }
-//        }
-
         binding.timePicker?.setOnTimeChangedListener(object : TimePicker.OnTimeChangedListener {
             override fun onTimeChanged(view: TimePicker?, hourOfDay: Int, minute: Int) {
                 val calendar: GregorianCalendar = GregorianCalendar()
@@ -95,10 +103,96 @@ class AlarmDetailActivity : AppCompatActivity() {
                 viewModel.endTime.set(calendar.time)
             }
         })
+
+        loadRingtones()
+        binding.selectedSound.setOnClickListener {
+            createRingtoneListDlg()
+        }
+    }
+
+    fun observeData() {
+//        viewModel.repeatLive.observe(this, Observer<Boolean> { t ->
+//            if(t != null) {
+//                binding.mondayBtn.root.isEnabled = t
+//                binding.tuesdayBtn.root.isEnabled = t
+//                binding.wednesdayBtn.root.isEnabled = t
+//                binding.thursdayBtn.root.isEnabled = t
+//                binding.fridayBtn.root.isEnabled = t
+//                binding.saturdayBtn.root.isEnabled = t
+//                binding.sundayBtn.root.isEnabled = t
+//            }
+//        })
     }
 
     override fun onDestroy() {
         super.onDestroy()
         viewModel.release()
+    }
+
+    fun loadRingtones() {
+        val manager = RingtoneManager(this)
+        manager.setType(RingtoneManager.TYPE_ALARM)
+        val cursor = manager.cursor
+        while (cursor.moveToNext()) {
+            val title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX)
+            val ringtoneURI = manager.getRingtoneUri(cursor.position)
+            ringtones.put(title, ringtoneURI)
+        }
+        setSoundInfo(ringtoneIndex)
+    }
+
+    fun setSoundInfo(index: Int) {
+        viewModel.mediaSrc = ringtones[ringtones.keys.toList()[index]].toString()
+        binding.selectedSound.text = ringtones.keys.toList()[index]
+    }
+
+    fun createRingtoneListDlg() {
+        ringtoneIndexPrev = ringtoneIndex
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.title_select_sound))
+        builder.setSingleChoiceItems(ringtones.keys.toTypedArray(), ringtoneIndex, { dialog, which ->
+            ringtoneIndex = which
+            stopRingtone()
+            playRingtone(ringtones[ringtones.keys.toList()[which]])
+        })
+        builder.setPositiveButton(R.string.ok, { dialog, which ->
+            ringtoneIndexPrev = ringtoneIndex
+            stopRingtone()
+            setSoundInfo(ringtoneIndex)
+        })
+        builder.setNegativeButton(R.string.cancel, { dialog, which ->
+            ringtoneIndex = ringtoneIndexPrev
+            stopRingtone()
+        })
+
+        if (!this.isFinishing) {
+            builder.create().show()
+        }
+    }
+
+    fun playRingtone(uri: Uri?) {
+        if(uri != null) {
+            try {
+                selectedRingtone = RingtoneManager.getRingtone(this, uri)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    selectedRingtone?.audioAttributes = AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_ALARM)
+                            .build()
+                } else {
+                    selectedRingtone?.streamType = AudioManager.STREAM_ALARM
+                }
+                val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+//                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0)
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, 2, 0) // TODO test
+                selectedRingtone?.play()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun stopRingtone() {
+        selectedRingtone?.stop()
     }
 }

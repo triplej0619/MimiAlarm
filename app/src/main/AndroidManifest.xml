@@ -2,9 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mimi.mimialarm">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".android.presentation.MimiAlarmApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/icn"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -26,6 +29,13 @@
             android:screenOrientation="portrait"
             android:label="@string/title_alarm_detail">
         </activity>
+
+        <receiver android:name=".android.infrastructure.BootCompleteReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

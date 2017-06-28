@@ -1,5 +1,7 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
@@ -25,12 +27,12 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
 
     var endTime: ObservableField<Date> = ObservableField<Date>(Date())
     var repeat: ObservableBoolean = ObservableBoolean(true)
+    val repeatLive: LiveData<Boolean> = MutableLiveData()
     var snooze: ObservableBoolean = ObservableBoolean(true)
     var snoozeInterval: ObservableInt = ObservableInt(0)
     var snoozeCount: ObservableInt = ObservableInt(0)
 
-    var mediaIndex: ObservableInt = ObservableInt(0)
-    var mediaSrc: ObservableField<String> = ObservableField<String>("")
+    var mediaSrc: String = ""
     var sound: ObservableBoolean = ObservableBoolean(true)
     var vibration: ObservableBoolean = ObservableBoolean(true)
 
@@ -160,7 +162,7 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
         alarm.snoozeInterval = snoozeInterval.get()
         alarm.snoozeCount = snoozeCount.get()
 
-        alarm.mediaSrc = mediaSrc.get()
+        alarm.mediaSrc = mediaSrc
         alarm.media = sound.get()
         alarm.vibration = vibration.get()
 

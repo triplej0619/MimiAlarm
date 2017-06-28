@@ -21,4 +21,20 @@ class Enums {
             }
         }
     }
+
+    enum class SETTINGS_ALARM_CLOSE_METHOD(val method: Int) {
+        IN_WINDOW(0),
+        IN_APP(1),
+        UNKNOWN(999);
+
+        companion object {
+            fun valueOf(value: Int): SETTINGS_ALARM_CLOSE_METHOD {
+                when (value) {
+                    0 -> return IN_WINDOW
+                    1 -> return IN_APP
+                    else -> return UNKNOWN
+                }
+            }
+        }
+    }
 }

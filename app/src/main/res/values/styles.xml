@@ -8,6 +8,7 @@
         <item name="colorPrimary">@color/colorPrimary1</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark1</item>
         <item name="colorAccent">@color/colorAccent1</item>
+        <item name="colorControlNormal">@color/colorAccent1</item>
         <item name="colorGradientEnd">@color/gradientEnd1</item>
         <item name="colorGradientMid">@color/gradientMid1</item>
         <item name="colorBg">@color/bg1</item>
@@ -18,6 +19,7 @@
         <item name="colorPrimary">@color/colorPrimary2</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark2</item>
         <item name="colorAccent">@color/colorAccent2</item>
+        <item name="colorControlNormal">@color/colorAccent2</item>
         <item name="colorGradientEnd">@color/gradientEnd2</item>
         <item name="colorGradientMid">@color/gradientMid2</item>
         <item name="colorBg">@color/bg2</item>

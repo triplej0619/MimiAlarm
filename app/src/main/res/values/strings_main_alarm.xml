@@ -11,4 +11,5 @@
     <string name="sunday">일</string>
 
     <string name="count">회</string>
+    <string name="title_select_sound">알람음 선택</string>
 </resources>
