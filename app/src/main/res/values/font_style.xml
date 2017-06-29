@@ -75,6 +75,11 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
+    <style name="Roboto.Light.18.White" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
     <style name="NotoSans.Thin.14.White" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@android:color/white</item>
