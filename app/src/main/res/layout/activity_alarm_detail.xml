@@ -52,12 +52,11 @@
                     android:layout_height="wrap_content">
                     <RelativeLayout
                         android:paddingTop="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:layout_width="match_parent"
                         android:layout_height="104dp">
                         <CheckBox
                             style="@style/CustomCheckBox"
+                            android:layout_marginLeft="8dp"
                             android:checked="@={alarmDetailViewModel.repeat}"
                             android:text="@string/repeat"
                             android:layout_width="wrap_content"
@@ -120,12 +119,11 @@
                     </RelativeLayout>
                     <RelativeLayout
                         android:paddingTop="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:layout_width="match_parent"
                         android:layout_height="104dp">
                         <CheckBox
                             style="@style/CustomCheckBox"
+                            android:layout_marginLeft="8dp"
                             android:checked="@={alarmDetailViewModel.snooze}"
                             android:id="@+id/snoozeCheck"
                             android:text="@string/snooze"
@@ -152,6 +150,7 @@
                         <Spinner
                             style="@style/CustomSpinner"
                             android:id="@+id/snoozeCount"
+                            android:layout_marginRight="16dp"
                             android:layout_alignParentBottom="true"
                             android:layout_marginBottom="16dp"
                             android:textAlignment="center"
@@ -167,12 +166,11 @@
                     </RelativeLayout>
                     <RelativeLayout
                         android:paddingTop="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <CheckBox
                             style="@style/CustomCheckBox"
+                            android:layout_marginLeft="8dp"
                             android:checked="@={alarmDetailViewModel.sound}"
                             android:text="@string/sound"
                             android:layout_width="wrap_content"
@@ -180,6 +178,7 @@
                         <TextView
                             style="@style/CustomSpinner"
                             android:id="@+id/selectedSound"
+                            android:layout_marginRight="16dp"
                             android:layout_alignParentRight="true"
                             android:gravity="center"
                             android:layout_width="200dp"
@@ -191,6 +190,7 @@
                             android:layout_below="@id/selectedSound"
                             android:max="100"
                             android:progress="@{alarmDetailViewModel.soundVolume}"
+                            android:layout_marginRight="8dp"
                             android:layout_marginTop="24dp"
                             android:layout_marginBottom="24dp"
                             android:layout_width="220dp"
