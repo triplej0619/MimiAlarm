@@ -28,13 +28,20 @@ import android.support.v7.app.AlertDialog
 import kotlin.collections.HashMap
 import android.media.Ringtone
 import android.os.Build
+import android.support.v7.widget.AppCompatSeekBar
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.SeekBar
 
 
 /**
  * Created by MihyeLee on 2017. 5. 24..
  */
 
-class AlarmDetailActivity : LifecycleActivity() {
+class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
 
     lateinit var binding: ActivityAlarmDetailBinding
     @Inject lateinit var viewModel: AlarmDetailViewModel
@@ -108,6 +115,49 @@ class AlarmDetailActivity : LifecycleActivity() {
         binding.selectedSound.setOnClickListener {
             createRingtoneListDlg()
         }
+
+        binding.soundVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                stopRingtone()
+                viewModel.soundVolume.set(binding.soundVolume.progress)
+                playRingtone(ringtones[ringtones.keys.toList()[ringtoneIndex]], binding.soundVolume.progress)
+            }
+
+        })
+
+        setStopSoundListener()
+    }
+
+    fun setStopSoundListener() {
+        binding.root.setOnTouchListener(this)
+        setStopSoundListenerToChild(binding.root)
+    }
+
+    fun setStopSoundListenerToChild(view: View) {
+        if(view is ViewGroup) {
+            val viewGroup: ViewGroup = view
+            (0..viewGroup.childCount)
+                    .filter { viewGroup.getChildAt(it) !is AppCompatSeekBar }
+                    .forEach {
+                        if(viewGroup.getChildAt(it) != null) {
+                            viewGroup.getChildAt(it).setOnTouchListener(this)
+                            setStopSoundListenerToChild(viewGroup.getChildAt(it))
+                        }
+                    }
+        }
+    }
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        if(v != null && v != binding.soundVolume) {
+            stopRingtone()
+        }
+        return false;
     }
 
     fun observeData() {
@@ -126,6 +176,7 @@ class AlarmDetailActivity : LifecycleActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        stopRingtone()
         viewModel.release()
     }
 
@@ -162,7 +213,7 @@ class AlarmDetailActivity : LifecycleActivity() {
         builder.setSingleChoiceItems(ringtones.keys.toTypedArray(), ringtoneIndex, { dialog, which ->
             ringtoneIndex = which
             stopRingtone()
-            playRingtone(ringtones[ringtones.keys.toList()[which]])
+            playRingtone(ringtones[ringtones.keys.toList()[which]], viewModel.soundVolume.get())
         })
         builder.setPositiveButton(R.string.ok, { dialog, which ->
             ringtoneIndexPrev = ringtoneIndex
@@ -179,7 +230,7 @@ class AlarmDetailActivity : LifecycleActivity() {
         }
     }
 
-    fun playRingtone(uri: Uri?) {
+    fun playRingtone(uri: Uri?, volume: Int) {
         if(uri != null) {
             try {
                 selectedRingtone = RingtoneManager.getRingtone(this, uri)
@@ -191,8 +242,8 @@ class AlarmDetailActivity : LifecycleActivity() {
                     selectedRingtone?.streamType = AudioManager.STREAM_ALARM
                 }
                 val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-//                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0)
-                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, 2, 0) // TODO test
+                val calculatedVolume: Float = volume.toFloat() / 100.0f * audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM).toFloat()
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, calculatedVolume.toInt(), 0)
                 selectedRingtone?.play()
             } catch (e: Exception) {
                 e.printStackTrace()

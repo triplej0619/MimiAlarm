@@ -25,6 +25,7 @@ open class MyAlarm : RealmObject() {
     var vibration: Boolean? = null
     var media: Boolean? = null
     var mediaSrc: String? = null
+    var volume: Int? = null
 
     var snooze: Boolean? = null
     var snoozeInterval: Int? = null

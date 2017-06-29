@@ -170,31 +170,31 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:layout_width="match_parent"
-                        android:layout_height="64dp">
+                        android:layout_height="wrap_content">
                         <CheckBox
                             style="@style/CustomCheckBox"
                             android:checked="@={alarmDetailViewModel.sound}"
                             android:text="@string/sound"
-                            android:layout_centerVertical="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
-                        <!--<Spinner-->
-                            <!--style="@style/CustomSpinner"-->
-                            <!--android:id="@+id/soundSpinner"-->
-                            <!--android:spinnerMode="dialog"-->
-                            <!--android:layout_alignParentRight="true"-->
-                            <!--android:layout_centerVertical="true"-->
-                            <!--android:layout_width="200dp"-->
-                            <!--android:layout_height="wrap_content" />-->
                         <TextView
                             style="@style/CustomSpinner"
                             android:id="@+id/selectedSound"
-                            android:text="testtesttest"
                             android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
                             android:gravity="center"
                             android:layout_width="200dp"
-                            android:layout_height="80dp" />
+                            android:layout_height="50dp" />
+                        <android.support.v7.widget.AppCompatSeekBar
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:id="@+id/soundVolume"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@id/selectedSound"
+                            android:max="100"
+                            android:progress="@{alarmDetailViewModel.soundVolume}"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginBottom="24dp"
+                            android:layout_width="220dp"
+                            android:layout_height="wrap_content" />
                         <View
                             android:layout_alignParentBottom="true"
                             android:background="?attr/colorListDivider"

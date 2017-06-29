@@ -23,6 +23,8 @@ import kotlin.properties.Delegates
  */
 class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager, private val bus: Bus) : BaseViewModel() {
 
+    val DEFAULT_VOLUME: Int = 80
+
     var id: Int? = null
 
     var endTime: ObservableField<Date> = ObservableField<Date>(Date())
@@ -35,6 +37,7 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     var mediaSrc: String = ""
     var sound: ObservableBoolean = ObservableBoolean(true)
     var vibration: ObservableBoolean = ObservableBoolean(true)
+    var soundVolume: ObservableInt = ObservableInt(DEFAULT_VOLUME)
 
 //    var monDay: Boolean = true
 //    @Bindable get() = field
@@ -137,6 +140,7 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
         vibration.set(alarm.vibration ?: false)
         sound.set(alarm.media ?: false)
         mediaSrc = alarm.mediaSrc ?: ""
+        soundVolume.set(alarm.volume ?: DEFAULT_VOLUME)
 
         snooze.set(alarm.snooze ?: false)
         snoozeInterval.set(alarm.snoozeInterval ?: 0)
@@ -165,6 +169,7 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
 
         alarm.mediaSrc = mediaSrc
         alarm.media = sound.get()
+        alarm.volume = soundVolume.get()
         alarm.vibration = vibration.get()
 
         alarm.enable = true
