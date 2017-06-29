@@ -53,6 +53,16 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
         }
     }
 
+    val deleteAllCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            uiManager.showAlertDialog("전부 삭제하시겠습니까?", "", true, object: Command { // TODO text -> resource
+                override fun execute(arg: Any) {
+                    deleteAllAlarm()
+                }
+            }, null)
+        }
+    }
+
     init {
         realm = Realm.getDefaultInstance()
     }
@@ -117,7 +127,7 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
 
     fun deleteAlarms() {
         for (item in alarmList) {
-            if(item.selectForDelete.get()) {
+            if (item.selectForDelete.get()) {
                 realm.executeTransaction {
                     val alarm: MyAlarm = realm.where(MyAlarm::class.java).equalTo(MyAlarm.FIELD_ID, item.id).findFirst()
                     alarm.deleteFromRealm()
@@ -125,5 +135,15 @@ class AlarmViewModel @Inject constructor(private val uiManager: UIManager) : Bas
             }
         }
         reLoadAlarmList()
+        cancelDeleteModeCommand.execute(Unit)
+    }
+
+    fun deleteAllAlarm() {
+        realm.executeTransaction {
+            val alarm = realm.where(MyAlarm::class.java).findAll()
+            alarm.deleteAllFromRealm()
+        }
+        reLoadAlarmList()
+        cancelDeleteModeCommand.execute(Unit)
     }
 }

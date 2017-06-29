@@ -84,6 +84,16 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
         }
     }
 
+    val deleteAllCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            uiManager.showAlertDialog("전부 삭제하시겠습니까?", "", true, object: Command { // TODO text -> resource
+                override fun execute(arg: Any) {
+                    deleteAllTimer()
+                }
+            }, null)
+        }
+    }
+
     init {
         realm = Realm.getDefaultInstance()
     }
@@ -185,7 +195,7 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
 
     fun deleteTimers() {
         for (item in timerList) {
-            if(item.selectForDelete.get()) {
+            if (item.selectForDelete.get()) {
                 realm.executeTransaction {
                     val alarm: MyTimer = realm.where(MyTimer::class.java).equalTo(MyTimer.FIELD_ID, item.id).findFirst()
                     alarm.deleteFromRealm()
@@ -193,6 +203,16 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
             }
         }
         reLoadTimerList()
+        cancelDeleteModeCommand.execute(Unit)
+    }
+
+    fun deleteAllTimer() {
+        realm.executeTransaction {
+            val timer = realm.where(MyTimer::class.java).findAll()
+            timer.deleteAllFromRealm()
+        }
+        reLoadTimerList()
+        cancelDeleteModeCommand.execute(Unit)
     }
 
     fun clickListItem(position: Int) {
