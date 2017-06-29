@@ -136,6 +136,7 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
 
         vibration.set(alarm.vibration ?: false)
         sound.set(alarm.media ?: false)
+        mediaSrc = alarm.mediaSrc ?: ""
 
         snooze.set(alarm.snooze ?: false)
         snoozeInterval.set(alarm.snoozeInterval ?: 0)

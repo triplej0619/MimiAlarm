@@ -57,9 +57,9 @@ class AlarmDetailActivity : LifecycleActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_detail)
         binding.alarmDetailViewModel = viewModel
 
+        getBundleData()
         init()
         observeData()
-        getBundleData()
     }
 
     fun getBundleData() {
@@ -133,10 +133,18 @@ class AlarmDetailActivity : LifecycleActivity() {
         val manager = RingtoneManager(this)
         manager.setType(RingtoneManager.TYPE_ALARM)
         val cursor = manager.cursor
+        var selectedRingtoneTitle: String = ""
         while (cursor.moveToNext()) {
             val title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX)
             val ringtoneURI = manager.getRingtoneUri(cursor.position)
             ringtones.put(title, ringtoneURI)
+            if(ringtoneURI.toString() == viewModel.mediaSrc) {
+                selectedRingtoneTitle = title
+            }
+        }
+
+        if(selectedRingtoneTitle.isNotEmpty()) {
+            ringtoneIndex = ringtones.keys.toList().indexOf(selectedRingtoneTitle)
         }
         setSoundInfo(ringtoneIndex)
     }
