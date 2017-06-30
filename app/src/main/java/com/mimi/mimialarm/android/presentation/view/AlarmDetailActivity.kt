@@ -1,12 +1,10 @@
 package com.mimi.mimialarm.android.presentation.view
 
 import android.arch.lifecycle.LifecycleActivity
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.media.AudioAttributes
 import android.media.AudioManager
-import android.support.v7.app.AppCompatActivity
 import android.widget.TimePicker
 import com.jakewharton.rxbinding2.widget.RxAdapterView
 import com.mimi.mimialarm.R
@@ -32,8 +30,6 @@ import android.support.v7.widget.AppCompatSeekBar
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.SeekBar
 
 

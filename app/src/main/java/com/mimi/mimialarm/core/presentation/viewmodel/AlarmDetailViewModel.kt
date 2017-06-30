@@ -178,7 +178,7 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
 
     fun addAlarm() {
         saveAlarmInDB()
-        bus.post(AddAlarmEvent())
+        bus.post(AddAlarmEvent(id, 1000 * 5)) // TODO test code, 시간 계산 해서 스케쥴링 해야 함
         closeView()
     }
     
@@ -198,7 +198,8 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     fun saveAlarmInDB() {
         realm.executeTransaction {
             val currentIdNum = realm.where(MyAlarm::class.java).max(MyAlarm.FIELD_ID)
-            val alarm: MyAlarm = thisToAlarm(currentIdNum?.toInt()?.plus(1) ?: 0)
+            id = currentIdNum?.toInt()?.plus(1)
+            val alarm: MyAlarm = thisToAlarm(id ?: 0)
             realm.insert(alarm)
         }
     }

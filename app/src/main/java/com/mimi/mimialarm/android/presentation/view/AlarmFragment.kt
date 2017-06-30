@@ -1,12 +1,12 @@
 package com.mimi.mimialarm.android.presentation.view
 
-import android.app.Activity
+import android.app.AlarmManager
 import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +15,6 @@ import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.infrastructure.AddAlarmEvent
 import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
 import com.mimi.mimialarm.android.presentation.*
-import com.mimi.mimialarm.android.utils.ActivityRequestCode
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmViewModel
 import com.mimi.mimialarm.core.utils.Enums
@@ -24,6 +23,10 @@ import com.mimi.mimialarm.databinding.ListItemAlarmBinding
 import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
 import javax.inject.Inject
+import android.os.Build
+import android.app.PendingIntent
+import com.mimi.mimialarm.android.infrastructure.service.AlarmOnBroadcastReceiver
+
 
 /**
  * Created by MihyeLee on 2017. 5. 22..
@@ -112,6 +115,10 @@ class AlarmFragment : LifecycleFragment() {
         viewModel.loadAlarmList()
         listAdapter?.addItem(listAdapter!!.itemCount - 1)
         binding?.list?.smoothScrollToPosition(listAdapter!!.itemCount - 1)
+
+        if(event.id != null && event.settedTime != null) {
+            startAlarm(event.id!!, event.settedTime!!)
+        }
     }
 
     @Subscribe
@@ -120,8 +127,23 @@ class AlarmFragment : LifecycleFragment() {
             if (viewModel.deleteMode.get()) {
                 viewModel.cancelDeleteModeCommand.execute(Unit)
             } else {
-                event.callback?.execute(Unit)
+                event.callback.execute(Unit)
             }
+        }
+    }
+
+    fun startAlarm(id: Int, time: Int) {
+        val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(context, AlarmOnBroadcastReceiver::class.java)
+        alarmIntent.putExtra(AlarmOnBroadcastReceiver.KEY_ALARM_ID, id)
+        val pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, 0)
+
+        // TODO repeat 여부 분기 필요
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, AlarmManager.INTERVAL_DAY, pendingIntent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
         }
     }
 }
