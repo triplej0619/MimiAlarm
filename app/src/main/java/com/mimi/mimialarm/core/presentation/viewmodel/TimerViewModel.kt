@@ -1,27 +1,28 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
-import android.databinding.Bindable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
-import com.mimi.mimialarm.BR
+import com.mimi.data.DBManager
+import com.mimi.data.model.MyTimer
 import com.mimi.mimialarm.android.infrastructure.AddTimerEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
-import com.mimi.mimialarm.core.model.MyTimer
+import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.TextChanger
 import com.squareup.otto.Bus
-import io.realm.Realm
-import io.realm.RealmResults
 import java.util.*
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 /**
  * Created by MihyeLee on 2017. 6. 22..
  */
-class TimerViewModel @Inject constructor(private val uiManager: UIManager, private val bus: Bus) : BaseViewModel() {
+class TimerViewModel @Inject constructor(
+        private val uiManager: UIManager,
+        private val bus: Bus,
+        private val dbManager: DBManager
+) : BaseViewModel() {
 
     val MINUTE_IN_SECONDS: Int = 60
     val HOUR_IN_SECONDS: Int = MINUTE_IN_SECONDS * 60
@@ -33,7 +34,6 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
     var second: ObservableField<String> = ObservableField<String>("00")
     var timerListLive: MutableLiveData<ArrayList<TimerListItemViewModel>> = MutableLiveData()
     var timerList: ArrayList<TimerListItemViewModel> = ArrayList<TimerListItemViewModel>()
-    var realm: Realm by Delegates.notNull()
 
     val timeTextChanger: TextChanger = object : TextChanger {
         override fun isNeedChange(oldText: String): Boolean {
@@ -94,12 +94,7 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
         }
     }
 
-    init {
-        realm = Realm.getDefaultInstance()
-    }
-
     fun release() {
-        realm.close()
     }
 
     fun clear() {
@@ -114,76 +109,39 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
     }
 
     fun loadTimerList() {
-        val results: RealmResults<MyTimer> = realm.where(MyTimer::class.java).findAll()
-        for (result in results) {
-            updateOrInsertListItem(realm.copyFromRealm(result))
+        val timers: List<MyTimer> = dbManager.findAllTimer()
+        for (timer in timers) {
+            updateOrInsertListItem(timer)
         }
         timerListLive.postValue(timerList)
-        timerCount.set(results.size)
+        timerCount.set(timers.size)
     }
 
     fun updateOrInsertListItem(timer: MyTimer) {
         for (item in timerList) {
             if (item.id?.equals(timer.id) ?: false) {
-                item.copyFromTimer(timer)
+                DataMapper.timerToListItemViewModel(timer, item)
                 return
             }
         }
 
-        timerList.add(TimerListItemViewModel.Companion.timerDataToTimerListItem(timer))
+        timerList.add(DataMapper.timerToListItemViewModel(timer))
     }
 
     fun addTimer() {
-        realm.executeTransaction {
-            val currentIdNum = realm.where(MyTimer::class.java).max(MyTimer.FIELD_ID)
-            val timer: MyTimer? = thisToTimer(currentIdNum?.toInt()?.plus(1) ?: 0)
-            if(timer != null) {
-                addTimerListItem(timer)
-                realm.insert(timer)
-            }
+        val timer: MyTimer? = DataMapper.viewModelToTimer(this, dbManager.getNextTimerId())
+        if(timer != null) {
+            dbManager.addTimer(timer)
+            addTimerListItem(timer)
         }
     }
 
     fun addTimerListItem(timer: MyTimer) {
-        timerList.add(TimerListItemViewModel.Companion.timerDataToTimerListItem(timer))
+        timerList.add(DataMapper.timerToListItemViewModel(timer))
         timerCount.set(timerCount.get() + 1)
         timerListLive.postValue(timerList)
 
         bus.post(AddTimerEvent())
-    }
-
-    fun thisToTimer(id: Int) : MyTimer? {
-        val timer: MyTimer = MyTimer()
-        timer.id = id
-        timer.createdAt = Date()
-
-        var hourInt: Int = 0
-        var minInt: Int = 0
-        var secInt: Int = 0
-        if(!hour.get().isEmpty()) {
-            hourInt = hour.get().toInt()
-        }
-        if(!minute.get().isEmpty()) {
-            minInt = minute.get().toInt()
-        }
-        if(!second.get().isEmpty()) {
-            secInt = second.get().toInt()
-        }
-        timer.seconds = (hourInt * HOUR_IN_SECONDS) + (minInt * MINUTE_IN_SECONDS) + secInt
-        if(timer.seconds == 0) {
-            return null;
-        }
-
-        val calendar: GregorianCalendar = GregorianCalendar()
-        calendar.time = timer.createdAt
-        calendar.add(GregorianCalendar.HOUR, hourInt)
-        calendar.add(GregorianCalendar.MINUTE, minInt)
-        calendar.add(GregorianCalendar.SECOND, secInt)
-        timer.completedAt = calendar.time
-
-        timer.activated = false
-
-        return timer
     }
 
     fun setDeleteMode(mode: Boolean) {
@@ -196,10 +154,7 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
     fun deleteTimers() {
         for (item in timerList) {
             if (item.selectForDelete.get()) {
-                realm.executeTransaction {
-                    val alarm: MyTimer = realm.where(MyTimer::class.java).equalTo(MyTimer.FIELD_ID, item.id).findFirst()
-                    alarm.deleteFromRealm()
-                }
+                dbManager.deleteTimerWithId(item.id)
             }
         }
         reLoadTimerList()
@@ -207,10 +162,7 @@ class TimerViewModel @Inject constructor(private val uiManager: UIManager, priva
     }
 
     fun deleteAllTimer() {
-        realm.executeTransaction {
-            val timer = realm.where(MyTimer::class.java).findAll()
-            timer.deleteAllFromRealm()
-        }
+        dbManager.deleteAllTimer()
         reLoadTimerList()
         cancelDeleteModeCommand.execute(Unit)
     }

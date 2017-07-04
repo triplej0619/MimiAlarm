@@ -1,5 +1,7 @@
 package com.mimi.mimialarm.core.model
 
+import com.mimi.data.model.MyAlarm
+import com.mimi.data.model.MyTimer
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmDetailViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerListItemViewModel
@@ -12,6 +14,12 @@ import java.util.*
 class DataMapper {
     companion object {
         val DEFAULT_VOLUME: Int = 80
+
+        fun alarmToListItemViewModel(alarm: MyAlarm) : AlarmListItemViewModel {
+            val listItem: AlarmListItemViewModel = AlarmListItemViewModel()
+            alarmToListItemViewModel(alarm, listItem)
+            return listItem
+        }
 
         fun alarmToListItemViewModel(alarm: MyAlarm, viewModel: AlarmListItemViewModel) {
             viewModel.id = alarm.id
@@ -86,6 +94,12 @@ class DataMapper {
             alarm.vibration = viewModel.vibration.get()
 
             alarm.enable = true
+        }
+
+        fun timerToListItemViewModel(newTimer: MyTimer) : TimerListItemViewModel {
+            val listItem: TimerListItemViewModel = TimerListItemViewModel()
+            timerToListItemViewModel(newTimer, listItem)
+            return listItem
         }
 
         fun timerToListItemViewModel(newTimer: MyTimer, item: TimerListItemViewModel) {

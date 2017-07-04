@@ -7,11 +7,19 @@ import com.mimi.data.model.MyTimer
  * Created by MihyeLee on 2017. 7. 3..
  */
 interface DBManager {
+    fun getNextAlarmId() : Int
     fun findAllAlarm() : List<MyAlarm>
-    fun findAlarmWithId(id: Int) : MyAlarm
-    fun deleteAlarmWithId(id: Int) : Boolean
+    fun findAlarmWithId(id: Int?) : MyAlarm?
+    fun deleteAlarmWithId(id: Int?)
+    fun addAlarm(alarm: MyAlarm)
+    fun updateAlarm(alarm: MyAlarm)
+    fun deleteAllAlarm() : Boolean
 
+    fun getNextTimerId() : Int
     fun findAllTimer() : List<MyTimer>
-    fun findTimerWithId(id: Int) : MyTimer
-    fun deleteTimerWithId(id: Int) : Boolean
+    fun findTimerWithId(id: Int?) : MyTimer?
+    fun deleteTimerWithId(id: Int?)
+    fun addTimer(timer: MyTimer)
+    fun updateTimer(timer: MyTimer)
+    fun deleteAllTimer() : Boolean
 }

@@ -2,6 +2,7 @@ package com.mimi.data
 
 import io.realm.Realm
 import io.realm.RealmModel
+import io.realm.RealmObject
 import io.realm.RealmResults
 
 /**
@@ -12,18 +13,46 @@ class RealmDataUtils {
         inline fun <reified T : RealmModel?> findObjects(realm: Realm) : RealmResults<T> {
             return realm.where(T::class.java).findAll()
         }
+
         inline fun <reified T : RealmModel?> findObjectWithId(realm: Realm, idFieldName: String, id: Int) : T {
             return realm.where(T::class.java).equalTo(idFieldName, id).findFirst()
         }
 
-        inline fun <reified T : RealmModel?> getCurrentId(realm: Realm, idFieldName: String) : Int {
-            return realm.where(T::class.java).max(idFieldName).toInt()
+        inline fun <reified T : RealmModel?> getCurrentId(realm: Realm, idFieldName: String) : Int? {
+            return realm.where(T::class.java).max(idFieldName)?.toInt()
         }
 
-        inline fun <reified T : RealmModel?> deleteClass(realm: Realm) : Boolean = realm.where(T::class.java).findAll().deleteAllFromRealm()
+        inline fun <reified T : RealmModel?> deleteClass(realm: Realm) : Boolean {
+            realm.beginTransaction()
+            val ret = realm.where(T::class.java).findAll().deleteAllFromRealm()
+            realm.commitTransaction()
+            return ret
+        }
 
         fun deleteAll(realm: Realm) {
-            realm.deleteAll()
+            realm.executeTransaction {
+                realm.deleteAll()
+            }
+        }
+
+        fun <T : RealmObject?> deleteObject(realm: Realm, obj: T) {
+            if(obj != null) {
+                realm.executeTransaction {
+                    obj.deleteFromRealm()
+                }
+            }
+        }
+
+        fun <T : RealmModel?> insertOrUpdateObject(realm: Realm, obj: T) {
+            realm.executeTransaction {
+                realm.insertOrUpdate(obj)
+            }
+        }
+
+        fun <T : RealmModel?> insertObjectWithId(realm: Realm, obj: T) {
+            realm.executeTransaction {
+                realm.insert(obj)
+            }
         }
     }
 }
