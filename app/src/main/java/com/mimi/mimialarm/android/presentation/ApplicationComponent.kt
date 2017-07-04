@@ -1,8 +1,10 @@
 package com.mimi.mimialarm.android.presentation
 
+import com.mimi.data.DBManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.squareup.otto.Bus
 import dagger.Component
+import io.realm.Realm
 import javax.inject.Singleton
 
 /**
@@ -16,4 +18,5 @@ interface ApplicationComponent {
 
     fun bus(): Bus
     fun uiManager(): UIManager
+    fun dbManager(): DBManager
 }

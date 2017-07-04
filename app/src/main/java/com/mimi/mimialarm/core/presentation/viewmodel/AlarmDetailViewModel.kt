@@ -5,23 +5,27 @@ import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import com.mimi.data.DBManager
+import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.android.infrastructure.AddAlarmEvent
 import com.mimi.mimialarm.android.infrastructure.UpdateAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
-import com.mimi.mimialarm.core.model.MyAlarm
+import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
 import com.squareup.otto.Bus
-import io.realm.Realm
 import java.util.*
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 
 
 /**
  * Created by MihyeLee on 2017. 5. 29..
  */
-class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager, private val bus: Bus) : BaseViewModel() {
+class AlarmDetailViewModel @Inject constructor(
+        private val uiManager: UIManager,
+        private val bus: Bus,
+        private val dbManager: DBManager
+) : BaseViewModel() {
 
     val DEFAULT_VOLUME: Int = 80
 
@@ -53,14 +57,7 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     var saturDay: ObservableBoolean = ObservableBoolean(false)
     var sunDay: ObservableBoolean = ObservableBoolean(false)
 
-    var realm: Realm by Delegates.notNull()
-
-    init {
-        realm = Realm.getDefaultInstance()
-    }
-
     fun release() {
-        realm.close()
     }
 
     val changeMondayStatus: Command = object : Command {
@@ -122,58 +119,10 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     }
 
     fun loadAlarmData() {
-        val alarm: MyAlarm = realm.where(MyAlarm::class.java).equalTo(MyAlarm.FIELD_ID, id).findFirst()
-        alarmToThis(realm.copyFromRealm(alarm))
-    }
-
-    fun alarmToThis(alarm: MyAlarm) {
-        endTime.set(alarm.completedAt)
-
-        friDay.set(alarm.friDay ?: false)
-        monDay.set(alarm.monDay ?: false)
-        tuesDay.set(alarm.tuesDay ?: false)
-        wednesDay.set(alarm.wednesDay ?: false)
-        thursDay.set(alarm.thursDay ?: false)
-        saturDay.set(alarm.saturDay ?: false)
-        sunDay.set(alarm.sunDay ?: false)
-
-        vibration.set(alarm.vibration ?: false)
-        sound.set(alarm.media ?: false)
-        mediaSrc = alarm.mediaSrc ?: ""
-        soundVolume.set(alarm.volume ?: DEFAULT_VOLUME)
-
-        snooze.set(alarm.snooze ?: false)
-        snoozeInterval.set(alarm.snoozeInterval ?: 0)
-        snoozeCount.set(alarm.snoozeCount ?: 0)
-    }
-
-    fun thisToAlarm(id: Int) : MyAlarm {
-        val alarm: MyAlarm = MyAlarm()
-        alarm.id = id
-
-        alarm.createdAt = Date()
-        alarm.completedAt = endTime.get()
-
-        alarm.repeat = repeat.get()
-        alarm.monDay = monDay.get()
-        alarm.tuesDay = tuesDay.get()
-        alarm.wednesDay = wednesDay.get()
-        alarm.thursDay = thursDay.get()
-        alarm.friDay = friDay.get()
-        alarm.saturDay = saturDay.get()
-        alarm.sunDay = sunDay.get()
-
-        alarm.snooze = snooze.get()
-        alarm.snoozeInterval = snoozeInterval.get()
-        alarm.snoozeCount = snoozeCount.get()
-
-        alarm.mediaSrc = mediaSrc
-        alarm.media = sound.get()
-        alarm.volume = soundVolume.get()
-        alarm.vibration = vibration.get()
-
-        alarm.enable = true
-        return alarm;
+        val alarm: MyAlarm? = dbManager.findAlarmWithId(id)
+        if(alarm != null) {
+            DataMapper.alarmToDetailViewModel(alarm, this)
+        }
     }
 
     fun addAlarm() {
@@ -189,19 +138,13 @@ class AlarmDetailViewModel @Inject constructor(private val uiManager: UIManager,
     }
 
     fun updateAlarmInDB() {
-        realm.executeTransaction {
-            val updatedAlarm: MyAlarm = thisToAlarm(id!!)
-            realm.insertOrUpdate(updatedAlarm)
-        }
+        val alarm: MyAlarm = DataMapper.detailViewModelToAlarm(this, id!!)
+        dbManager.updateAlarm(alarm)
     }
 
     fun saveAlarmInDB() {
-        realm.executeTransaction {
-            val currentIdNum = realm.where(MyAlarm::class.java).max(MyAlarm.FIELD_ID)
-            id = currentIdNum?.toInt()?.plus(1)
-            val alarm: MyAlarm = thisToAlarm(id ?: 0)
-            realm.insert(alarm)
-        }
+        val alarm: MyAlarm = DataMapper.detailViewModelToAlarm(this, dbManager.getNextAlarmId())
+        dbManager.addAlarm(alarm)
     }
 
     fun closeView() {

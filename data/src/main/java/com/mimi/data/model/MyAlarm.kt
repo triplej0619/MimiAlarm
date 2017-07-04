@@ -1,4 +1,4 @@
-package com.mimi.mimialarm.core.model
+package com.mimi.data.model
 
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
@@ -7,7 +7,7 @@ import io.realm.annotations.Required
 import java.util.*
 
 /**
- * Created by MihyeLee on 2017. 5. 29..
+ * Created by MihyeLee on 2017. 7. 3..
  */
 open class MyAlarm : RealmObject() {
     companion object {
