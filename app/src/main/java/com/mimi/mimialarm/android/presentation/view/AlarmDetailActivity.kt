@@ -31,6 +31,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import com.mimi.mimialarm.android.utils.ContextUtils
 
 
 /**
@@ -227,24 +228,26 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
     }
 
     fun playRingtone(uri: Uri?, volume: Int) {
-        if(uri != null) {
-            try {
-                selectedRingtone = RingtoneManager.getRingtone(this, uri)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    selectedRingtone?.audioAttributes = AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_ALARM)
-                            .build()
-                } else {
-                    selectedRingtone?.streamType = AudioManager.STREAM_ALARM
-                }
-                val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                val calculatedVolume: Float = volume.toFloat() / 100.0f * audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM).toFloat()
-                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, calculatedVolume.toInt(), 0)
-                selectedRingtone?.play()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+        selectedRingtone = ContextUtils.getRingtone(this, uri, volume)
+        selectedRingtone?.play()
+//        if(uri != null) {
+//            try {
+//                selectedRingtone = RingtoneManager.getRingtone(this, uri)
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    selectedRingtone?.audioAttributes = AudioAttributes.Builder()
+//                            .setUsage(AudioAttributes.USAGE_ALARM)
+//                            .build()
+//                } else {
+//                    selectedRingtone?.streamType = AudioManager.STREAM_ALARM
+//                }
+//                val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+//                val calculatedVolume: Float = volume.toFloat() / 100.0f * audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM).toFloat()
+//                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, calculatedVolume.toInt(), 0)
+//                selectedRingtone?.play()
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
     }
 
     fun stopRingtone() {

@@ -2,4 +2,15 @@
 <resources>
     <string name="alarm_close">종료</string>
     <string name="alarm_snooze">다시 알림</string>
+
+    <string name="alarm_on_month">월</string>
+    <string name="alarm_on_day">일</string>
+
+    <string name="alarm_on_sunday">일요일</string>
+    <string name="alarm_on_monday">월요일</string>
+    <string name="alarm_on_tuesday">화요일</string>
+    <string name="alarm_on_wednesDay">수요일</string>
+    <string name="alarm_on_thursday">목요일</string>
+    <string name="alarm_on_friday">금요일</string>
+    <string name="alarm_on_saturday">토요일</string>
 </resources>

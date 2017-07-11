@@ -2,10 +2,7 @@ package com.mimi.mimialarm.core.model
 
 import com.mimi.data.model.MyAlarm
 import com.mimi.data.model.MyTimer
-import com.mimi.mimialarm.core.presentation.viewmodel.AlarmDetailViewModel
-import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
-import com.mimi.mimialarm.core.presentation.viewmodel.TimerListItemViewModel
-import com.mimi.mimialarm.core.presentation.viewmodel.TimerViewModel
+import com.mimi.mimialarm.core.presentation.viewmodel.*
 import java.util.*
 
 /**
@@ -154,6 +151,29 @@ class DataMapper {
             timer.activated = false
 
             return timer
+        }
+
+        fun alarmToAlarmOnViewModel(alarm: MyAlarm, viewModel: AlarmOnViewModel) {
+            viewModel.endTime = alarm.completedAt!!
+            val calendar: GregorianCalendar = GregorianCalendar()
+            calendar.time = alarm.completedAt
+            if(calendar.get(GregorianCalendar.HOUR_OF_DAY) < 12) {
+                viewModel.isAm.set(true)
+            }
+            viewModel.hour.set(calendar.get(GregorianCalendar.HOUR))
+            viewModel.minute.set(calendar.get(GregorianCalendar.MINUTE))
+            viewModel.day.set(calendar.get(GregorianCalendar.DAY_OF_MONTH))
+            viewModel.dayOfWeek.set(calendar.get(GregorianCalendar.DAY_OF_WEEK))
+            viewModel.month.set(calendar.get(GregorianCalendar.MONTH) + 1)
+
+            viewModel.vibration = alarm.vibration ?: false
+            viewModel.sound = alarm.media ?: false
+            viewModel.mediaSrc = alarm.mediaSrc ?: ""
+            viewModel.soundVolume = alarm.volume ?: DEFAULT_VOLUME
+
+            viewModel.snooze.set(alarm.snooze ?: false)
+            viewModel.snoozeInterval = alarm.snoozeInterval ?: 0
+            viewModel.snoozeCount = alarm.snoozeCount ?: 0
         }
     }
 }

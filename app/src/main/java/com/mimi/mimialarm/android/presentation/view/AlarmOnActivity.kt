@@ -1,15 +1,76 @@
 package com.mimi.mimialarm.android.presentation.view
 
+import android.content.Context
+import android.databinding.DataBindingUtil
+import android.media.Ringtone
+import android.net.Uri
 import android.os.Bundle
+import android.os.Vibrator
 import android.support.v7.app.AppCompatActivity
 import com.mimi.mimialarm.R
+import com.mimi.mimialarm.android.infrastructure.service.AlarmOnBroadcastReceiver
+import com.mimi.mimialarm.android.presentation.ActivityComponent
+import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
+import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
+import com.mimi.mimialarm.android.presentation.ViewModelModule
+import com.mimi.mimialarm.android.utils.ContextUtils
+import com.mimi.mimialarm.core.presentation.viewmodel.AlarmOnViewModel
+import com.mimi.mimialarm.core.utils.Command
+import com.mimi.mimialarm.databinding.ActivityAlarmOnBinding
+import javax.inject.Inject
 
 /**
  * Created by MihyeLee on 2017. 6. 29..
  */
 class AlarmOnActivity : AppCompatActivity() {
+
+    lateinit var binding: ActivityAlarmOnBinding
+    @Inject lateinit var viewModel: AlarmOnViewModel
+
+    var selectedRingtone: Ringtone? = null
+    var vibrator: Vibrator? = null
+
+    fun buildComponent(): ActivityComponent {
+        return DaggerActivityComponent.builder()
+                .applicationComponent((application as MimiAlarmApplication).component)
+                .viewModelModule(ViewModelModule())
+                .build()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_alarm_on)
+        buildComponent().inject(this)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_on)
+        binding.alarmOnViewModel = viewModel
+
+        viewModel.alarmId = intent.getIntExtra(AlarmOnBroadcastReceiver.KEY_ALARM_ID, -1)
+        viewModel.startCommand.execute(object : Command {
+            override fun execute(arg: Any) {
+                playRingtone()
+            }
+        }, object : Command {
+            override fun execute(arg: Any) {
+                playVibration()
+            }
+        })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        selectedRingtone?.stop()
+        vibrator?.cancel()
+    }
+
+    fun playVibration() {
+        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrator?.vibrate(longArrayOf(100, 1000), 0)
+    }
+
+    fun playRingtone() {
+        selectedRingtone = ContextUtils.getRingtone(this, Uri.parse(viewModel.mediaSrc), viewModel.soundVolume)
+        selectedRingtone?.play()
+    }
+
+    override fun onBackPressed() {
     }
 }

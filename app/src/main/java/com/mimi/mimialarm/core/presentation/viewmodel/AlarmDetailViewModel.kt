@@ -127,7 +127,7 @@ class AlarmDetailViewModel @Inject constructor(
 
     fun addAlarm() {
         saveAlarmInDB()
-        bus.post(AddAlarmEvent(id, 1000 * 5)) // TODO test code, 시간 계산 해서 스케쥴링 해야 함
+        bus.post(AddAlarmEvent(id, 1000 * 3)) // TODO test code, 시간 계산 해서 스케쥴링 해야 함
         closeView()
     }
     
@@ -143,7 +143,8 @@ class AlarmDetailViewModel @Inject constructor(
     }
 
     fun saveAlarmInDB() {
-        val alarm: MyAlarm = DataMapper.detailViewModelToAlarm(this, dbManager.getNextAlarmId())
+        id = dbManager.getNextAlarmId()
+        val alarm: MyAlarm = DataMapper.detailViewModelToAlarm(this, id!!)
         dbManager.addAlarm(alarm)
     }
 
