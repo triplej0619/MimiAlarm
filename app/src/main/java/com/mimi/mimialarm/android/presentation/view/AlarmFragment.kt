@@ -25,10 +25,12 @@ import com.squareup.otto.Subscribe
 import javax.inject.Inject
 import android.os.Build
 import android.app.PendingIntent
+import android.widget.Toast
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.android.infrastructure.service.AlarmOnBroadcastReceiver
 import com.mimi.mimialarm.android.utils.ContextUtils
+import com.mimi.mimialarm.core.utils.TimeCalculator
 import java.util.*
 
 
@@ -37,14 +39,13 @@ import java.util.*
  */
 class AlarmFragment : LifecycleFragment() {
 
+    val MINUTE: Int = 1000 * 60
+
     private var listAdapter: AlarmListAdapter? = null
     var binding: FragmentAlarmBinding? = null
-    @Inject
-    lateinit var viewModel: AlarmViewModel
-    @Inject
-    lateinit var bus: Bus
-    @Inject
-    lateinit var dbManager: DBManager
+    @Inject lateinit var viewModel: AlarmViewModel
+    @Inject lateinit var bus: Bus
+    @Inject lateinit var dbManager: DBManager
 
     fun buildComponent(): ActivityComponent {
         return DaggerActivityComponent.builder()
@@ -138,21 +139,13 @@ class AlarmFragment : LifecycleFragment() {
 
     fun startAlarm(id: Int) {
         val alarm: MyAlarm = dbManager.findAlarmWithId(id) ?: return
-        val time: Long = alarm.completedAt?.time?.minus(Date().time) ?: 0
-        ContextUtils.startAlarm<AlarmOnBroadcastReceiver>(context, id, 1000*3, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
+        val time: Long = TimeCalculator.getMilliSecondsForScheduling(alarm)
+        ContextUtils.startAlarm<AlarmOnBroadcastReceiver>(context, id, time, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
 
-//        val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        val alarmIntent = Intent(context, AlarmOnBroadcastReceiver::class.java)
-//        alarmIntent.putExtra(AlarmOnBroadcastReceiver.KEY_ALARM_ID, id)
-//        val pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, 0)
-//
-//        val alarm: MyAlarm = dbManager.findAlarmWithId(id) ?: return
-//        val time: Long = alarm.completedAt?.time?.minus(Date().time) ?: 0
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
-//        } else {
-//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
-//        }
+        // TODO 문구 리소스 화
+        var minute: Long = (time / MINUTE) % 60
+        val hour: Long = (time / MINUTE) / 60
+        if(time % MINUTE > 0) minute += 1
+        Toast.makeText(context, String.format("%s시간 %s분 후 알람이 울립니다.", hour, minute), Toast.LENGTH_SHORT).show()
     }
 }

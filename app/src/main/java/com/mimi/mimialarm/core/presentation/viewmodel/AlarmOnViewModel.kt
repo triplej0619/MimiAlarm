@@ -43,7 +43,6 @@ class AlarmOnViewModel @Inject constructor(
 
     val finishViewCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            cancelAlarm()
             uiManager.finishForegroundActivity()
         }
     }
@@ -63,10 +62,6 @@ class AlarmOnViewModel @Inject constructor(
                 playVibration(arg2)
             }
         }
-    }
-
-    fun cancelAlarm() {
-        bus.post(CancelAlarmEvent(alarmId))
     }
 
     fun resetAlarm() {

@@ -3,6 +3,7 @@ package com.mimi.mimialarm.core.model
 import com.mimi.data.model.MyAlarm
 import com.mimi.data.model.MyTimer
 import com.mimi.mimialarm.core.presentation.viewmodel.*
+import com.mimi.mimialarm.core.utils.Enums
 import java.util.*
 
 /**
@@ -21,13 +22,13 @@ class DataMapper {
         fun alarmToListItemViewModel(alarm: MyAlarm, viewModel: AlarmListItemViewModel) {
             viewModel.id = alarm.id
 
-            viewModel.friDay.set(alarm.friDay ?: false)
-            viewModel.monDay.set(alarm.monDay ?: false)
-            viewModel.thursDay.set(alarm.thursDay ?: false)
-            viewModel.tuesDay.set(alarm.tuesDay ?: false)
-            viewModel.wednesDay.set(alarm.wednesDay ?: false)
-            viewModel.saturDay.set(alarm.saturDay ?: false)
-            viewModel.sunDay.set(alarm.sunDay ?: false)
+            viewModel.monDay.set(alarm.monDay)
+            viewModel.thursDay.set(alarm.thursDay)
+            viewModel.tuesDay.set(alarm.tuesDay)
+            viewModel.wednesDay.set(alarm.wednesDay)
+            viewModel.friDay.set(alarm.friDay)
+            viewModel.saturDay.set(alarm.saturDay)
+            viewModel.sunDay.set(alarm.sunDay)
 
             viewModel.endTime = alarm.completedAt
 
@@ -36,26 +37,27 @@ class DataMapper {
             }
             viewModel.snoozeCount.set(alarm.snoozeCount ?: 0)
             viewModel.snoozeInterval.set(alarm.snoozeInterval ?: 0)
-            viewModel.isEnable.set(alarm.enable ?: false)
+            viewModel.isEnable.set(alarm.enable)
         }
 
         fun alarmToDetailViewModel(alarm: MyAlarm, viewModel: AlarmDetailViewModel) {
             viewModel.endTime.set(alarm.completedAt)
 
-            viewModel.friDay.set(alarm.friDay ?: false)
-            viewModel.monDay.set(alarm.monDay ?: false)
-            viewModel.tuesDay.set(alarm.tuesDay ?: false)
-            viewModel.wednesDay.set(alarm.wednesDay ?: false)
-            viewModel.thursDay.set(alarm.thursDay ?: false)
-            viewModel.saturDay.set(alarm.saturDay ?: false)
-            viewModel.sunDay.set(alarm.sunDay ?: false)
+            viewModel.repeat.set(alarm.repeat)
+            viewModel.monDay.set(alarm.monDay)
+            viewModel.thursDay.set(alarm.thursDay)
+            viewModel.tuesDay.set(alarm.tuesDay)
+            viewModel.wednesDay.set(alarm.wednesDay)
+            viewModel.friDay.set(alarm.friDay)
+            viewModel.saturDay.set(alarm.saturDay)
+            viewModel.sunDay.set(alarm.sunDay)
 
-            viewModel.vibration.set(alarm.vibration ?: false)
-            viewModel.sound.set(alarm.media ?: false)
+            viewModel.vibration.set(alarm.vibration)
+            viewModel.sound.set(alarm.media)
             viewModel.mediaSrc = alarm.mediaSrc ?: ""
             viewModel.soundVolume.set(alarm.volume ?: DEFAULT_VOLUME)
 
-            viewModel.snooze.set(alarm.snooze ?: false)
+            viewModel.snooze.set(alarm.snooze)
             viewModel.snoozeInterval.set(alarm.snoozeInterval ?: 0)
             viewModel.snoozeCount.set(alarm.snoozeCount ?: 0)
         }
@@ -70,7 +72,12 @@ class DataMapper {
             alarm.id = id
 
             alarm.createdAt = Date()
-            alarm.completedAt = viewModel.endTime.get()
+
+            val calendar: GregorianCalendar = GregorianCalendar()
+            calendar.time = viewModel.endTime.get()
+            calendar.set(GregorianCalendar.SECOND, 0)
+            calendar.set(GregorianCalendar.MILLISECOND, 0)
+            alarm.completedAt = calendar.time
 
             alarm.repeat = viewModel.repeat.get()
             alarm.monDay = viewModel.monDay.get()
@@ -166,12 +173,12 @@ class DataMapper {
             viewModel.dayOfWeek.set(calendar.get(GregorianCalendar.DAY_OF_WEEK))
             viewModel.month.set(calendar.get(GregorianCalendar.MONTH) + 1)
 
-            viewModel.vibration = alarm.vibration ?: false
-            viewModel.sound = alarm.media ?: false
+            viewModel.vibration = alarm.vibration
+            viewModel.sound = alarm.media
             viewModel.mediaSrc = alarm.mediaSrc ?: ""
             viewModel.soundVolume = alarm.volume ?: DEFAULT_VOLUME
 
-            viewModel.snooze.set(alarm.snooze ?: false)
+            viewModel.snooze.set(alarm.snooze)
             viewModel.snoozeInterval = alarm.snoozeInterval ?: 0
             viewModel.snoozeCount = alarm.snoozeCount ?: 0
         }
