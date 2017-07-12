@@ -7,8 +7,8 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
-import com.mimi.mimialarm.android.infrastructure.AddAlarmEvent
-import com.mimi.mimialarm.android.infrastructure.UpdateAlarmEvent
+import com.mimi.mimialarm.core.infrastructure.AddAlarmEvent
+import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
@@ -120,14 +120,12 @@ class AlarmDetailViewModel @Inject constructor(
 
     fun loadAlarmData() {
         val alarm: MyAlarm? = dbManager.findAlarmWithId(id)
-        if(alarm != null) {
-            DataMapper.alarmToDetailViewModel(alarm, this)
-        }
+        alarm?.let { DataMapper.alarmToDetailViewModel(alarm, this) }
     }
 
     fun addAlarm() {
         saveAlarmInDB()
-        bus.post(AddAlarmEvent(id, 1000 * 3)) // TODO test code, 시간 계산 해서 스케쥴링 해야 함
+        bus.post(AddAlarmEvent(id)) // TODO test code, 시간 계산 해서 스케쥴링 해야 함
         closeView()
     }
     

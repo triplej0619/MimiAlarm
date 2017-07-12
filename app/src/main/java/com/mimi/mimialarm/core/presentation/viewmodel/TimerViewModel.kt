@@ -6,7 +6,7 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyTimer
-import com.mimi.mimialarm.android.infrastructure.AddTimerEvent
+import com.mimi.mimialarm.core.infrastructure.AddTimerEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command

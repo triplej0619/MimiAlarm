@@ -3,10 +3,13 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
+import com.mimi.mimialarm.core.infrastructure.CancelAlarmEvent
+import com.mimi.mimialarm.core.infrastructure.ResetAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.Command2
+import com.squareup.otto.Bus
 import java.util.*
 import javax.inject.Inject
 
@@ -15,7 +18,8 @@ import javax.inject.Inject
  */
 class AlarmOnViewModel @Inject constructor(
         private val uiManager: UIManager,
-        private val dbManager: DBManager
+        private val dbManager: DBManager,
+        private val bus: Bus
 ) : BaseViewModel() {
 
     val DEFAULT_VOLUME: Int = 80
@@ -39,6 +43,7 @@ class AlarmOnViewModel @Inject constructor(
 
     val finishViewCommand: Command = object : Command {
         override fun execute(arg: Any) {
+            cancelAlarm()
             uiManager.finishForegroundActivity()
         }
     }
@@ -60,8 +65,12 @@ class AlarmOnViewModel @Inject constructor(
         }
     }
 
-    fun resetAlarm() {
+    fun cancelAlarm() {
+        bus.post(CancelAlarmEvent(alarmId))
+    }
 
+    fun resetAlarm() {
+        bus.post(ResetAlarmEvent(alarmId))
     }
 
     fun loadAlarm() {

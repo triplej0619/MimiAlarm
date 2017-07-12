@@ -1,4 +1,4 @@
-package com.mimi.mimialarm.android.infrastructure
+package com.mimi.mimialarm.core.infrastructure
 
 /**
  * Created by MihyeLee on 2017. 6. 23..

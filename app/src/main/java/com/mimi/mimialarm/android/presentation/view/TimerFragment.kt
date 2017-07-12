@@ -13,7 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mimi.mimialarm.R
-import com.mimi.mimialarm.android.infrastructure.AddTimerEvent
+import com.mimi.mimialarm.core.infrastructure.AddTimerEvent
 import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
 import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerListItemViewModel

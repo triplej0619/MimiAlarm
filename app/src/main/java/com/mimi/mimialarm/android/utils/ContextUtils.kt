@@ -1,6 +1,10 @@
 package com.mimi.mimialarm.android.utils
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioAttributes
 import android.media.AudioManager
@@ -8,6 +12,8 @@ import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import java.util.*
+import kotlin.reflect.KClass
 
 /**
  * Created by MihyeLee on 2017. 6. 29..
@@ -45,6 +51,28 @@ class ContextUtils {
                 }
             }
             return ringtone
+        }
+
+        fun <T> startAlarm(context: Context, alarmId: Int, time: Long, receiverClass: Class<T>, intentIdKey: String) {
+            val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val alarmIntent = Intent(context, receiverClass)
+            alarmIntent.putExtra(intentIdKey, alarmId)
+            val pendingIntent = PendingIntent.getBroadcast(context, alarmId, alarmIntent, 0)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
+            }
+        }
+
+        fun <T> cancelAlarm(context: Context, alarmId: Int, receiverClass: Class<T>, intentIdKey: String) {
+            val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val alarmIntent = Intent(context, receiverClass)
+            alarmIntent.putExtra(intentIdKey, alarmId)
+            val pendingIntent = PendingIntent.getBroadcast(context, alarmId, alarmIntent, 0)
+
+            alarmManager.cancel(pendingIntent)
         }
     }
 }

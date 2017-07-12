@@ -12,7 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mimi.mimialarm.R
-import com.mimi.mimialarm.android.infrastructure.AddAlarmEvent
+import com.mimi.mimialarm.core.infrastructure.AddAlarmEvent
 import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
 import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
@@ -28,6 +28,7 @@ import android.app.PendingIntent
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.android.infrastructure.service.AlarmOnBroadcastReceiver
+import com.mimi.mimialarm.android.utils.ContextUtils
 import java.util.*
 
 
@@ -136,18 +137,22 @@ class AlarmFragment : LifecycleFragment() {
     }
 
     fun startAlarm(id: Int) {
-        val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(context, AlarmOnBroadcastReceiver::class.java)
-        alarmIntent.putExtra(AlarmOnBroadcastReceiver.KEY_ALARM_ID, id)
-        val pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, 0)
-
         val alarm: MyAlarm = dbManager.findAlarmWithId(id) ?: return
         val time: Long = alarm.completedAt?.time?.minus(Date().time) ?: 0
+        ContextUtils.startAlarm<AlarmOnBroadcastReceiver>(context, id, 1000*3, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
-        } else {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
-        }
+//        val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val alarmIntent = Intent(context, AlarmOnBroadcastReceiver::class.java)
+//        alarmIntent.putExtra(AlarmOnBroadcastReceiver.KEY_ALARM_ID, id)
+//        val pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, 0)
+//
+//        val alarm: MyAlarm = dbManager.findAlarmWithId(id) ?: return
+//        val time: Long = alarm.completedAt?.time?.minus(Date().time) ?: 0
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
+//        } else {
+//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
+//        }
     }
 }
