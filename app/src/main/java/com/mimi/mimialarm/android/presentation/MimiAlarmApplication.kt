@@ -1,7 +1,6 @@
 package com.mimi.mimialarm.android.presentation
 
-import android.app.Application
-import com.facebook.stetho.Stetho
+import android.support.multidex.MultiDexApplication
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.presentation.service.MimiActivityManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
@@ -13,7 +12,7 @@ import javax.inject.Inject
 /**
  * Created by MihyeLee on 2017. 5. 24..
  */
-class MimiAlarmApplication : Application() {
+class MimiAlarmApplication : MultiDexApplication() {
 
     lateinit var component: ApplicationComponent
     @Inject

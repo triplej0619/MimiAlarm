@@ -25,7 +25,10 @@ import com.squareup.otto.Subscribe
 import javax.inject.Inject
 import android.os.Build
 import android.app.PendingIntent
+import com.mimi.data.DBManager
+import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.android.infrastructure.service.AlarmOnBroadcastReceiver
+import java.util.*
 
 
 /**
@@ -39,6 +42,8 @@ class AlarmFragment : LifecycleFragment() {
     lateinit var viewModel: AlarmViewModel
     @Inject
     lateinit var bus: Bus
+    @Inject
+    lateinit var dbManager: DBManager
 
     fun buildComponent(): ActivityComponent {
         return DaggerActivityComponent.builder()
@@ -100,24 +105,13 @@ class AlarmFragment : LifecycleFragment() {
 //        })
     }
 
-    protected inner class AlarmListAdapter(items: List<AlarmListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick, longClick: IListItemClick)
+    private inner class AlarmListAdapter(items: List<AlarmListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick, longClick: IListItemClick)
         : CustomRecyclerViewAdapter<AlarmListItemViewModel>(items, layoutId, itemClickEvent, longClick) {
 
         override fun setViewModel(holder: CustomRecyclerViewHolder, item: AlarmListItemViewModel) {
             if(holder.binding is ListItemAlarmBinding) {
                 holder.binding.alarmListItemViewModel = item
             }
-        }
-    }
-
-    @Subscribe
-    fun answerAddAlarmEvent(event: AddAlarmEvent) {
-        viewModel.loadAlarmList()
-        listAdapter?.addItem(listAdapter!!.itemCount - 1)
-        binding?.list?.smoothScrollToPosition(listAdapter!!.itemCount - 1)
-
-        if(event.id != null && event.settedTime != null) {
-            startAlarm(event.id!!, event.settedTime!!)
         }
     }
 
@@ -132,14 +126,24 @@ class AlarmFragment : LifecycleFragment() {
         }
     }
 
-    fun startAlarm(id: Int, time: Int) {
+    @Subscribe
+    fun answerAddAlarmEvent(event: AddAlarmEvent) {
+        viewModel.loadAlarmList()
+        listAdapter?.addItem(listAdapter!!.itemCount - 1)
+        binding?.list?.smoothScrollToPosition(listAdapter!!.itemCount - 1)
+
+        event.id?.let { startAlarm(event.id!!) }
+    }
+
+    fun startAlarm(id: Int) {
         val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(context, AlarmOnBroadcastReceiver::class.java)
         alarmIntent.putExtra(AlarmOnBroadcastReceiver.KEY_ALARM_ID, id)
         val pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, 0)
 
-        // TODO repeat 여부 분기 필요
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, AlarmManager.INTERVAL_DAY, pendingIntent)
+        val alarm: MyAlarm = dbManager.findAlarmWithId(id) ?: return
+        val time: Long = alarm.completedAt?.time?.minus(Date().time) ?: 0
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
         } else {
