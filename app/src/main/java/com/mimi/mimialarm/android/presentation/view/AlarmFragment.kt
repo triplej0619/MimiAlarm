@@ -64,7 +64,6 @@ class AlarmFragment : LifecycleFragment() {
         binding?.alarmViewModel = viewModel
 
         bus.register(this)
-        viewModel.init()
         initListView()
 
         return binding?.root

@@ -50,6 +50,7 @@
 
 
         <receiver android:name=".android.infrastructure.service.AlarmOnBroadcastReceiver" />
+        <receiver android:name=".android.infrastructure.service.TimerOnBroadcastReceiver" />
 
     </application>
 

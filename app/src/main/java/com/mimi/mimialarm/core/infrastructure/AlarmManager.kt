@@ -6,4 +6,6 @@ package com.mimi.mimialarm.core.infrastructure
 interface AlarmManager {
     fun startAlarm(id: Int, time: Long)
     fun cancelAlarm(id: Int)
+    fun startTimer(id: Int, time: Long)
+    fun cancelTimer(id: Int)
 }

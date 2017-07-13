@@ -7,11 +7,14 @@ import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyTimer
 import com.mimi.mimialarm.core.infrastructure.AddTimerEvent
+import com.mimi.mimialarm.core.infrastructure.AlarmManager
+import com.mimi.mimialarm.core.infrastructure.ChangeTimerStatusEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.TextChanger
 import com.squareup.otto.Bus
+import com.squareup.otto.Subscribe
 import java.util.*
 import javax.inject.Inject
 
@@ -21,7 +24,8 @@ import javax.inject.Inject
 class TimerViewModel @Inject constructor(
         private val uiManager: UIManager,
         private val bus: Bus,
-        private val dbManager: DBManager
+        private val dbManager: DBManager,
+        private val alarmManager: AlarmManager
 ) : BaseViewModel() {
 
     val MINUTE_IN_SECONDS: Int = 60
@@ -94,7 +98,12 @@ class TimerViewModel @Inject constructor(
         }
     }
 
+    init {
+        bus.register(this)
+    }
+
     fun release() {
+        bus.unregister(this)
     }
 
     fun clear() {
@@ -125,7 +134,7 @@ class TimerViewModel @Inject constructor(
             }
         }
 
-        timerList.add(DataMapper.timerToListItemViewModel(timer))
+        timerList.add(DataMapper.timerToListItemViewModel(timer, bus))
     }
 
     fun addTimer() {
@@ -133,11 +142,14 @@ class TimerViewModel @Inject constructor(
         if(timer != null) {
             dbManager.addTimer(timer)
             addTimerListItem(timer)
+            alarmManager.startTimer(timer.id!!, timer.remainSeconds * 1000)
         }
     }
 
     fun addTimerListItem(timer: MyTimer) {
-        timerList.add(DataMapper.timerToListItemViewModel(timer))
+        val listItem: TimerListItemViewModel = DataMapper.timerToListItemViewModel(timer, bus)
+        listItem.startTimer()
+        timerList.add(listItem)
         timerCount.set(timerCount.get() + 1)
         timerListLive.postValue(timerList)
 
@@ -152,16 +164,22 @@ class TimerViewModel @Inject constructor(
     }
 
     fun deleteTimers() {
-        for (item in timerList) {
-            if (item.selectForDelete.get()) {
-                dbManager.deleteTimerWithId(item.id)
-            }
-        }
+        timerList
+                .filter { it.selectForDelete.get() }
+                .forEach {
+                    dbManager.deleteTimerWithId(it.id)
+                    alarmManager.cancelTimer(it.id!!)
+                }
         reLoadTimerList()
         cancelDeleteModeCommand.execute(Unit)
     }
 
     fun deleteAllTimer() {
+        timerList
+                .filter { it.selectForDelete.get() }
+                .forEach {
+                    alarmManager.cancelTimer(it.id!!)
+                }
         dbManager.deleteAllTimer()
         reLoadTimerList()
         cancelDeleteModeCommand.execute(Unit)
@@ -170,6 +188,26 @@ class TimerViewModel @Inject constructor(
     fun clickListItem(position: Int) {
         if(deleteMode.get()) {
             timerList[position].selectForDelete.set(!timerList[position].selectForDelete.get())
+        }
+    }
+
+    fun updateTimerTime(id: Int, remainSeconds: Long) {
+        val timer: MyTimer = dbManager.findTimerWithId(id) ?: return
+        timer.remainSeconds = remainSeconds
+        dbManager.updateTimer(timer)
+    }
+
+    @Subscribe
+    fun answerChangeTimerStatusEvent(event: ChangeTimerStatusEvent) {
+        if(event.activated) {
+            val timer = dbManager.findTimerWithId(event.id) ?: return
+            if(timer.remainSeconds == 0L) {
+                timer.remainSeconds = timer.seconds
+            }
+            alarmManager.startTimer(event.id, timer.remainSeconds * 1000)
+        } else {
+            updateTimerTime(event.id, event.remainSeconds)
+            alarmManager.cancelTimer(event.id)
         }
     }
 

@@ -3,6 +3,7 @@ package com.mimi.mimialarm.core.model
 import com.mimi.data.model.MyAlarm
 import com.mimi.data.model.MyTimer
 import com.mimi.mimialarm.core.presentation.viewmodel.*
+import com.mimi.mimialarm.core.utils.TimeCalculator
 import com.squareup.otto.Bus
 import java.util.*
 
@@ -100,30 +101,36 @@ class DataMapper {
             alarm.enable = true
         }
 
-        fun timerToListItemViewModel(newTimer: MyTimer) : TimerListItemViewModel {
-            val listItem: TimerListItemViewModel = TimerListItemViewModel()
+        fun timerToListItemViewModel(newTimer: MyTimer, bus: Bus) : TimerListItemViewModel {
+            val listItem: TimerListItemViewModel = TimerListItemViewModel(bus)
             timerToListItemViewModel(newTimer, listItem)
             return listItem
         }
 
-        fun timerToListItemViewModel(newTimer: MyTimer, item: TimerListItemViewModel) {
-            item.id = newTimer.id
-            item.activated = newTimer.activated
+        fun timerToListItemViewModel(timer: MyTimer, item: TimerListItemViewModel) {
+            item.id = timer.id
+            item.activated.set(timer.activated)
 
-            if(newTimer.activated) {
-                val diff: Long = newTimer.completedAt!!.time - Date().time
+            item.hour.set(TimeCalculator.getHourFromSeconds(timer.remainSeconds).toInt())
+            item.minute.set(TimeCalculator.getMinuteFromSeconds(timer.remainSeconds).toInt())
+            item.second.set(TimeCalculator.getSecondFromSeconds(timer.remainSeconds).toInt())
 
-                val hour: Long = diff / (60 * 60)
-                val minute: Long = (diff % (60 * 60)) / 60
-                val second: Long = diff % 60
-                item.hour.set(hour.toInt())
-                item.minute.set(minute.toInt())
-                item.second.set(second.toInt())
-            } else {
-                item.hour.set(newTimer.seconds!! / (60 * 60))
-                item.minute.set((newTimer.seconds!! % (60 * 60)) / 60)
-                item.second.set(newTimer.seconds!! % 60)
-            }
+            item.wholeTimeInSecond = timer.remainSeconds
+
+//            if(timer.activated) {
+//                val diff: Long = timer.completedAt!!.time - Date().time
+//
+//                val hour: Long = diff / (60 * 60)
+//                val minute: Long = (diff % (60 * 60)) / 60
+//                val second: Long = diff % 60
+//                item.hour.set(hour.toInt())
+//                item.minute.set(minute.toInt())
+//                item.second.set(second.toInt())
+//            } else {
+//                item.hour.set(timer.seconds!! / (60 * 60))
+//                item.minute.set((timer.seconds!! % (60 * 60)) / 60)
+//                item.second.set(timer.seconds!! % 60)
+//            }
         }
 
         fun viewModelToTimer(viewModel: TimerViewModel, id: Int): MyTimer? {
@@ -143,19 +150,20 @@ class DataMapper {
             if (!viewModel.second.get().isEmpty()) {
                 secInt = viewModel.second.get().toInt()
             }
-            timer.seconds = (hourInt * viewModel.HOUR_IN_SECONDS) + (minInt * viewModel.MINUTE_IN_SECONDS) + secInt
-            if (timer.seconds == 0) {
-                return null;
-            }
+            timer.seconds = (hourInt * viewModel.HOUR_IN_SECONDS).toLong() + (minInt * viewModel.MINUTE_IN_SECONDS).toLong() + secInt.toLong()
+            timer.remainSeconds = timer.seconds
+//            if (timer.seconds == 0) {
+//                return null
+//            }
 
-            val calendar: GregorianCalendar = GregorianCalendar()
-            calendar.time = timer.createdAt
-            calendar.add(GregorianCalendar.HOUR, hourInt)
-            calendar.add(GregorianCalendar.MINUTE, minInt)
-            calendar.add(GregorianCalendar.SECOND, secInt)
-            timer.completedAt = calendar.time
+//            val calendar: GregorianCalendar = GregorianCalendar()
+//            calendar.time = timer.createdAt
+//            calendar.add(GregorianCalendar.HOUR, hourInt)
+//            calendar.add(GregorianCalendar.MINUTE, minInt)
+//            calendar.add(GregorianCalendar.SECOND, secInt)
+//            timer.completedAt = calendar.time
 
-            timer.activated = false
+            timer.activated = true
 
             return timer
         }
@@ -183,6 +191,14 @@ class DataMapper {
             viewModel.snoozeCount = alarm.snoozeCount ?: 0
 
             viewModel.enable = alarm.enable
+        }
+
+        fun timerToTimerOnViewModel(timer: MyTimer, viewModel: TimerOnViewModel) {
+            viewModel.timerId = timer.id
+
+            viewModel.hour.set(TimeCalculator.getHourFromSeconds(timer.seconds).toInt())
+            viewModel.minute.set(TimeCalculator.getMinuteFromSeconds(timer.seconds).toInt())
+            viewModel.second.set(TimeCalculator.getSecondFromSeconds(timer.seconds).toInt())
         }
     }
 }

@@ -20,7 +20,8 @@ open class MyTimer : RealmObject() {
     var id: Int? = null
 
     var createdAt: Date? = null
-    var completedAt: Date? = null
-    var seconds: Int? = null
+//    var completedAt: Date? = null
+    var seconds: Long = 0
+    var remainSeconds: Long = 0
     var activated: Boolean = false
 }

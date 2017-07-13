@@ -71,12 +71,12 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    fun release() {
-        bus.unregister(this)
+    init {
+        bus.register(this)
     }
 
-    fun init() {
-        bus.register(this)
+    fun release() {
+        bus.unregister(this)
     }
 
     fun clear() {

@@ -105,6 +105,7 @@ class TimerFragment : LifecycleFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         bus.unregister(this)
+        viewModel.release()
     }
 
     override fun onResume() {

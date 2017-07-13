@@ -17,4 +17,5 @@ interface ActivityComponent {
     fun inject(settingsFragment: SettingsFragment)
     fun inject(alarmDetailActivity: AlarmDetailActivity)
     fun inject(alarmOnActivity: AlarmOnActivity)
+    fun inject(timerOnActivity: TimerOnActivity)
 }

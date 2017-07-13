@@ -12,6 +12,7 @@ import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.os.SystemClock
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -73,6 +74,19 @@ class ContextUtils {
             val pendingIntent = PendingIntent.getBroadcast(context, alarmId, alarmIntent, 0)
 
             alarmManager.cancel(pendingIntent)
+        }
+
+        fun <T> startTimer(context: Context, id: Int, time: Long, receiverClass: Class<T>, intentIdKey: String) {
+            val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val alarmIntent = Intent(context, receiverClass)
+            alarmIntent.putExtra(intentIdKey, id)
+            val pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, 0)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + time, pendingIntent)
+            } else {
+                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + time, pendingIntent)
+            }
         }
     }
 }

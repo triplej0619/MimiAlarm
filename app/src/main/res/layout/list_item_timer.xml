@@ -47,16 +47,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <ImageButton
+                app:clickEvent="@{timerListItemViewModel.changeActivationCommand}"
                 android:id="@+id/pause"
                 android:src="@drawable/icn_stop"
-                android:visibility="@{!timerListItemViewModel.stop &amp;&amp; !timerListItemViewModel.paused ? View.VISIBLE : View.GONE}"
+                android:visibility="@{timerListItemViewModel.activated ? View.VISIBLE : View.GONE}"
                 android:background="@drawable/selector_btn_accent"
                 android:layout_width="40dp"
                 android:layout_height="40dp" />
             <ImageButton
+                app:clickEvent="@{timerListItemViewModel.changeActivationCommand}"
                 android:id="@+id/start"
                 android:src="@drawable/icn_start"
-                android:visibility="@{timerListItemViewModel.stop || timerListItemViewModel.paused ? View.VISIBLE : View.GONE}"
+                android:visibility="@{timerListItemViewModel.activated ? View.GONE : View.VISIBLE}"
                 android:background="@drawable/selector_btn_accent"
                 android:layout_width="40dp"
                 android:layout_height="40dp" />

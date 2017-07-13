@@ -9,6 +9,12 @@ import kotlin.collections.HashMap
  */
 class TimeCalculator {
     companion object {
+
+        val SECOND: Int = 1
+        val MINUTE: Int = SECOND * 60
+        val HOUR: Int = MINUTE * 60
+        val DAY: Int = HOUR * 24
+
         fun getMilliSecondsForScheduling(alarm: MyAlarm): Long {
             val today: GregorianCalendar = GregorianCalendar()
             val targetDate: GregorianCalendar = GregorianCalendar()
@@ -66,6 +72,26 @@ class TimeCalculator {
                 ret = Enums.DAY_OF_WEEK.SATURDAY.value
             }
             return ret
+        }
+
+        fun getHourFromSeconds(seconds: Long) : Long {
+            return (seconds % DAY) / HOUR
+        }
+
+        fun getMinuteFromSeconds(seconds: Long) : Long {
+            return (seconds % HOUR) / MINUTE
+        }
+
+        fun getDayFromSeconds(seconds: Long) : Long {
+            return seconds / DAY
+        }
+
+        fun getSecondFromSeconds(seconds: Long) : Long {
+            return seconds % MINUTE
+        }
+
+        fun getSecondsFromAll(hour: Long, minute: Long, second: Long) : Long {
+            return (hour * HOUR) + (minute * MINUTE) + second
         }
     }
 
