@@ -8,10 +8,12 @@ import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.core.infrastructure.AddAlarmEvent
+import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
+import com.mimi.mimialarm.core.utils.TimeCalculator
 import com.squareup.otto.Bus
 import java.util.*
 import javax.inject.Inject
@@ -24,11 +26,13 @@ import javax.inject.Inject
 class AlarmDetailViewModel @Inject constructor(
         private val uiManager: UIManager,
         private val bus: Bus,
-        private val dbManager: DBManager
+        private val dbManager: DBManager,
+        private val alarmManager: AlarmManager
 ) : BaseViewModel() {
 
     val DEFAULT_VOLUME: Int = 80
 
+    var savedAlarm: MyAlarm? = null
     var id: Int? = null
 
     var endTime: ObservableField<Date> = ObservableField<Date>(Date())
@@ -125,25 +129,36 @@ class AlarmDetailViewModel @Inject constructor(
 
     fun addAlarm() {
         saveAlarmInDB()
-        bus.post(AddAlarmEvent(id)) // TODO test code, 시간 계산 해서 스케쥴링 해야 함
+        savedAlarm?.let {
+            val time = TimeCalculator.getMilliSecondsForScheduling(savedAlarm!!)
+            alarmManager.startAlarm(id!!, time)
+            bus.post(AddAlarmEvent(id, time / 1000))
+        }
         closeView()
     }
     
     fun updateAlarm() {
         updateAlarmInDB()
-        bus.post(UpdateAlarmEvent())
+        alarmManager.cancelAlarm(savedAlarm?.id!!)
+        savedAlarm?.let {
+            val time = TimeCalculator.getMilliSecondsForScheduling(savedAlarm!!)
+            alarmManager.startAlarm(id!!, time)
+            bus.post(UpdateAlarmEvent(time / 1000))
+        }
         closeView()
     }
 
     fun updateAlarmInDB() {
         val alarm: MyAlarm = DataMapper.detailViewModelToAlarm(this, id!!)
         dbManager.updateAlarm(alarm)
+        savedAlarm = alarm
     }
 
     fun saveAlarmInDB() {
         id = dbManager.getNextAlarmId()
         val alarm: MyAlarm = DataMapper.detailViewModelToAlarm(this, id!!)
         dbManager.addAlarm(alarm)
+        savedAlarm = alarm
     }
 
     fun closeView() {

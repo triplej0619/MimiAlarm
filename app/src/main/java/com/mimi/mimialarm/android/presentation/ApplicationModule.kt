@@ -2,7 +2,8 @@ package com.mimi.mimialarm.android.presentation
 
 import com.mimi.data.DBManager
 import com.mimi.data.RealmDBManager
-import com.mimi.mimialarm.android.presentation.service.MimiActivityManager
+import com.mimi.mimialarm.android.infrastructure.MimiAlarmManager
+import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.squareup.otto.Bus
 import com.squareup.otto.ThreadEnforcer
@@ -25,4 +26,7 @@ class ApplicationModule(private val application: MimiAlarmApplication) {
 
     @Provides @Singleton
     fun provideDbManager(): DBManager = RealmDBManager().setRealm(Realm.getDefaultInstance())
+
+    @Provides @Singleton
+    fun provideAlarmManager(): AlarmManager = MimiAlarmManager(application)
 }

@@ -97,10 +97,10 @@ class AlarmOnActivity : AppCompatActivity() {
 //        }
 //    }
 
-    @Subscribe
-    fun answerResetAlarmEvent(event: ResetAlarmEvent) {
-        val alarm: MyAlarm = dbManager.findAlarmWithId(event.id) ?: return
-        val time: Long = TimeCalculator.getMilliSecondsForScheduling(alarm)
-        ContextUtils.startAlarm<AlarmOnBroadcastReceiver>(this, event.id!!, time, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
-    }
+//    @Subscribe
+//    fun answerResetAlarmEvent(event: ResetAlarmEvent) {
+//        val alarm: MyAlarm = dbManager.findAlarmWithId(event.id) ?: return
+//        val time: Long = TimeCalculator.getMilliSecondsForScheduling(alarm)
+//        ContextUtils.startAlarm<AlarmOnBroadcastReceiver>(this, event.id!!, time, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
+//    }
 }

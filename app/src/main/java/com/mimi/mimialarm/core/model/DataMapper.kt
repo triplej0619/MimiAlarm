@@ -3,7 +3,7 @@ package com.mimi.mimialarm.core.model
 import com.mimi.data.model.MyAlarm
 import com.mimi.data.model.MyTimer
 import com.mimi.mimialarm.core.presentation.viewmodel.*
-import com.mimi.mimialarm.core.utils.Enums
+import com.squareup.otto.Bus
 import java.util.*
 
 /**
@@ -13,8 +13,8 @@ class DataMapper {
     companion object {
         val DEFAULT_VOLUME: Int = 80
 
-        fun alarmToListItemViewModel(alarm: MyAlarm) : AlarmListItemViewModel {
-            val listItem: AlarmListItemViewModel = AlarmListItemViewModel()
+        fun alarmToListItemViewModel(alarm: MyAlarm, bus: Bus) : AlarmListItemViewModel {
+            val listItem: AlarmListItemViewModel = AlarmListItemViewModel(bus)
             alarmToListItemViewModel(alarm, listItem)
             return listItem
         }
@@ -37,7 +37,7 @@ class DataMapper {
             }
             viewModel.snoozeCount.set(alarm.snoozeCount ?: 0)
             viewModel.snoozeInterval.set(alarm.snoozeInterval ?: 0)
-            viewModel.isEnable.set(alarm.enable)
+            viewModel.enable.set(alarm.enable)
         }
 
         fun alarmToDetailViewModel(alarm: MyAlarm, viewModel: AlarmDetailViewModel) {
@@ -181,6 +181,8 @@ class DataMapper {
             viewModel.snooze.set(alarm.snooze)
             viewModel.snoozeInterval = alarm.snoozeInterval ?: 0
             viewModel.snoozeCount = alarm.snoozeCount ?: 0
+
+            viewModel.enable = alarm.enable
         }
     }
 }

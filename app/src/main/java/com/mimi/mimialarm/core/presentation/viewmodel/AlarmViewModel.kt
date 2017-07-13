@@ -5,9 +5,14 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
+import com.mimi.mimialarm.core.infrastructure.AlarmManager
+import com.mimi.mimialarm.core.infrastructure.ChangeAlarmStatusEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
+import com.mimi.mimialarm.core.utils.TimeCalculator
+import com.squareup.otto.Bus
+import com.squareup.otto.Subscribe
 import javax.inject.Inject
 
 /**
@@ -16,7 +21,9 @@ import javax.inject.Inject
 
 class AlarmViewModel @Inject constructor(
         private val uiManager: UIManager,
-        private val dbManager: DBManager
+        private val dbManager: DBManager,
+        private val alarmManager: AlarmManager,
+        private val bus: Bus
 ) : BaseViewModel() {
 
     var deleteMode: ObservableBoolean = ObservableBoolean(false)
@@ -46,7 +53,7 @@ class AlarmViewModel @Inject constructor(
 
     val deleteAlarmsCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            uiManager.showAlertDialog("정말 삭제하시겠습니까?", "", true, object: Command { // TODO text -> resource
+            uiManager.showAlertDialog("정말 삭제하시겠습니까?", "", true, object: Command { // TODO text -> string resource
                 override fun execute(arg: Any) {
                     deleteAlarms()
                 }
@@ -56,7 +63,7 @@ class AlarmViewModel @Inject constructor(
 
     val deleteAllCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            uiManager.showAlertDialog("전부 삭제하시겠습니까?", "", true, object: Command { // TODO text -> resource
+            uiManager.showAlertDialog("전부 삭제하시겠습니까?", "", true, object: Command { // TODO text -> string resource
                 override fun execute(arg: Any) {
                     deleteAllAlarm()
                 }
@@ -65,6 +72,11 @@ class AlarmViewModel @Inject constructor(
     }
 
     fun release() {
+        bus.unregister(this)
+    }
+
+    fun init() {
+        bus.register(this)
     }
 
     fun clear() {
@@ -95,7 +107,7 @@ class AlarmViewModel @Inject constructor(
             }
         }
 
-        alarmList.add(DataMapper.alarmToListItemViewModel(alarm))
+        alarmList.add(DataMapper.alarmToListItemViewModel(alarm, bus))
     }
 
     fun showAddAlarmView() {
@@ -122,18 +134,39 @@ class AlarmViewModel @Inject constructor(
     }
 
     fun deleteAlarms() {
-        for (item in alarmList) {
-            if (item.selectForDelete.get()) {
-                dbManager.deleteAlarmWithId(item.id)
-            }
-        }
+        alarmList
+                .filter { it.selectForDelete.get() }
+                .forEach {
+                    dbManager.deleteAlarmWithId(it.id)
+                    if(it.enable.get()) {
+                        alarmManager.cancelAlarm(it.id!!)
+                    }
+                }
         reLoadAlarmList()
         cancelDeleteModeCommand.execute(Unit)
     }
 
     fun deleteAllAlarm() {
+        alarmList
+                .filter { it.selectForDelete.get() }
+                .forEach {
+                    if(it.enable.get()) {
+                        alarmManager.cancelAlarm(it.id!!)
+                    }
+                }
         dbManager.deleteAllAlarm()
         reLoadAlarmList()
         cancelDeleteModeCommand.execute(Unit)
+    }
+
+    @Subscribe
+    fun answerChangeAlarmStatusEvent(event: ChangeAlarmStatusEvent) {
+        if(event.activation) {
+            val alarm: MyAlarm = dbManager.findAlarmWithId(event.id) ?: return
+            val time = TimeCalculator.getMilliSecondsForScheduling(alarm)
+            alarmManager.startAlarm(event.id, time)
+        } else {
+            alarmManager.cancelAlarm(event.id)
+        }
     }
 }

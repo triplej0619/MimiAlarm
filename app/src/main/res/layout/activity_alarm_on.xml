@@ -83,6 +83,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/close"
             app:layout_constraintRight_toRightOf="parent"
+            android:visibility="@{alarmOnViewModel.snooze ? View.VISIBLE : View.GONE}"
             android:id="@+id/snooze"
             android:text="@string/alarm_snooze"
             android:background="@drawable/selector_btn_gray"

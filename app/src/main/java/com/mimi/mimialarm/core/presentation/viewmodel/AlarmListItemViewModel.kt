@@ -1,7 +1,9 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.databinding.*
+import com.mimi.mimialarm.core.infrastructure.ChangeAlarmStatusEvent
 import com.mimi.mimialarm.core.utils.Command
+import com.squareup.otto.Bus
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -9,7 +11,7 @@ import java.util.*
  * Created by MihyeLee on 2017. 5. 24..
  */
 
-class AlarmListItemViewModel : BaseViewModel() {
+class AlarmListItemViewModel(val bus: Bus) : BaseViewModel() {
 
     var deleteMode: ObservableBoolean = ObservableBoolean(false)
     var selectForDelete: ObservableBoolean = ObservableBoolean(false)
@@ -45,11 +47,25 @@ class AlarmListItemViewModel : BaseViewModel() {
     var snoozeInterval: ObservableInt = ObservableInt(0)
     var snoozeCount: ObservableInt = ObservableInt(0)
 
-    var isEnable: ObservableBoolean = ObservableBoolean(true)
+    var enable: ObservableBoolean = ObservableBoolean(true)
 
     val changeSelectStatusCommand: Command = object : Command {
         override fun execute(arg: Any) {
             selectForDelete.set(!selectForDelete.get())
         }
+    }
+    val changeEnableStatusCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            changeEnableStatus()
+        }
+    }
+
+    fun changeEnableStatus() {
+        enable.set(!enable.get())
+        changeAlarmStatus(enable.get())
+    }
+
+    fun changeAlarmStatus(activation: Boolean) {
+        id?.let { bus.post(ChangeAlarmStatusEvent(id!!, activation)) }
     }
 }

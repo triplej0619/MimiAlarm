@@ -2,7 +2,6 @@ package com.mimi.mimialarm.android.presentation
 
 import android.support.multidex.MultiDexApplication
 import com.mimi.mimialarm.R
-import com.mimi.mimialarm.android.presentation.service.MimiActivityManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import io.realm.Realm
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig

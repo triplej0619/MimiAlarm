@@ -1,18 +1,15 @@
-package com.mimi.mimialarm.android.presentation.service
+package com.mimi.mimialarm.android.presentation
 
 import android.app.Activity
 import android.app.Application
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import com.mimi.mimialarm.R
-import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.android.presentation.view.AlarmDetailActivity
 import com.mimi.mimialarm.android.utils.BundleKey
 import com.mimi.mimialarm.core.infrastructure.UIManager
-import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
 import com.mimi.mimialarm.core.utils.Command
 import com.squareup.otto.Bus
 import javax.inject.Inject

@@ -1,10 +1,7 @@
 package com.mimi.mimialarm.android.presentation.view
 
-import android.app.AlarmManager
 import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
-import android.content.Context
-import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -23,14 +20,10 @@ import com.mimi.mimialarm.databinding.ListItemAlarmBinding
 import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
 import javax.inject.Inject
-import android.os.Build
-import android.app.PendingIntent
 import android.widget.Toast
 import com.mimi.data.DBManager
-import com.mimi.data.model.MyAlarm
-import com.mimi.mimialarm.android.infrastructure.service.AlarmOnBroadcastReceiver
-import com.mimi.mimialarm.android.utils.ContextUtils
-import com.mimi.mimialarm.core.utils.TimeCalculator
+import com.mimi.mimialarm.core.infrastructure.AlarmManager
+import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
 import java.util.*
 
 
@@ -39,13 +32,14 @@ import java.util.*
  */
 class AlarmFragment : LifecycleFragment() {
 
-    val MINUTE: Int = 1000 * 60
+    val MINUTE: Int = 60
 
     private var listAdapter: AlarmListAdapter? = null
     var binding: FragmentAlarmBinding? = null
     @Inject lateinit var viewModel: AlarmViewModel
     @Inject lateinit var bus: Bus
     @Inject lateinit var dbManager: DBManager
+    @Inject lateinit var alarmManager: AlarmManager
 
     fun buildComponent(): ActivityComponent {
         return DaggerActivityComponent.builder()
@@ -70,6 +64,7 @@ class AlarmFragment : LifecycleFragment() {
         binding?.alarmViewModel = viewModel
 
         bus.register(this)
+        viewModel.init()
         initListView()
 
         return binding?.root
@@ -134,18 +129,45 @@ class AlarmFragment : LifecycleFragment() {
         listAdapter?.addItem(listAdapter!!.itemCount - 1)
         binding?.list?.smoothScrollToPosition(listAdapter!!.itemCount - 1)
 
-        event.id?.let { startAlarm(event.id!!) }
-    }
-
-    fun startAlarm(id: Int) {
-        val alarm: MyAlarm = dbManager.findAlarmWithId(id) ?: return
-        val time: Long = TimeCalculator.getMilliSecondsForScheduling(alarm)
-        ContextUtils.startAlarm<AlarmOnBroadcastReceiver>(context, id, time, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
-
+//        event.id?.let { startAlarm(event.id!!) }
         // TODO 문구 리소스 화
-        var minute: Long = (time / MINUTE) % 60
-        val hour: Long = (time / MINUTE) / 60
-        if(time % MINUTE > 0) minute += 1
+        var minute: Long = (event.seconds / MINUTE) % 60
+        val hour: Long = (event.seconds / MINUTE) / 60
+        if(event.seconds % MINUTE > 0) minute += 1
         Toast.makeText(context, String.format("%s시간 %s분 후 알람이 울립니다.", hour, minute), Toast.LENGTH_SHORT).show()
     }
+
+    @Subscribe
+    fun answerUpdateAlarmEvent(event: UpdateAlarmEvent) {
+        // TODO 문구 리소스 화
+        var minute: Long = (event.seconds / MINUTE) % 60
+        val hour: Long = (event.seconds / MINUTE) / 60
+        if(event.seconds % MINUTE > 0) minute += 1
+        Toast.makeText(context, String.format("%s시간 %s분 후 알람이 울립니다.", hour, minute), Toast.LENGTH_SHORT).show()
+    }
+
+//    @Subscribe
+//    fun answerChangeAlarmStatusEvent(event: ChangeAlarmStatusEvent) {
+//        if(event.activation) {
+//            startAlarm(event.id)
+//        } else {
+//            stopAlarm(event.id)
+//        }
+//    }
+
+//    fun startAlarm(id: Int) {
+//        val alarm: MyAlarm = dbManager.findAlarmWithId(id) ?: return
+//        val time: Long = TimeCalculator.getMilliSecondsForScheduling(alarm)
+//        alarmManager.startAlarm(id, time)
+
+//         TODO 문구 리소스 화
+//        var minute: Long = (time / MINUTE) % 60
+//        val hour: Long = (time / MINUTE) / 60
+//        if(time % MINUTE > 0) minute += 1
+//        Toast.makeText(context, String.format("%s시간 %s분 후 알람이 울립니다.", hour, minute), Toast.LENGTH_SHORT).show()
+//    }
+
+//    fun stopAlarm(id: Int) {
+//        alarmManager.cancelAlarm(id)
+//    }
 }

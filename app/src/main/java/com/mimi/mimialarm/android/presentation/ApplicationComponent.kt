@@ -1,6 +1,7 @@
 package com.mimi.mimialarm.android.presentation
 
 import com.mimi.data.DBManager
+import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.squareup.otto.Bus
 import dagger.Component
@@ -19,4 +20,5 @@ interface ApplicationComponent {
     fun bus(): Bus
     fun uiManager(): UIManager
     fun dbManager(): DBManager
+    fun alarmManager(): AlarmManager
 }

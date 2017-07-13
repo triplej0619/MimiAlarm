@@ -1,6 +1,5 @@
 package com.mimi.mimialarm.android.presentation
 
-import com.mimi.mimialarm.android.presentation.service.MimiActivityManager
 import com.mimi.mimialarm.android.presentation.view.*
 import dagger.Component
 

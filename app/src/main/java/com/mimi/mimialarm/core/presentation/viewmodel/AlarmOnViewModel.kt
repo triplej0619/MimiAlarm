@@ -3,12 +3,13 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
-import com.mimi.mimialarm.core.infrastructure.CancelAlarmEvent
-import com.mimi.mimialarm.core.infrastructure.ResetAlarmEvent
+import com.mimi.data.model.MyAlarm
+import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.Command2
+import com.mimi.mimialarm.core.utils.TimeCalculator
 import com.squareup.otto.Bus
 import java.util.*
 import javax.inject.Inject
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class AlarmOnViewModel @Inject constructor(
         private val uiManager: UIManager,
         private val dbManager: DBManager,
+        private val alarmManager: AlarmManager,
         private val bus: Bus
 ) : BaseViewModel() {
 
@@ -30,6 +32,7 @@ class AlarmOnViewModel @Inject constructor(
     var snoozeInterval: Int = 0
     var snoozeCount: Int = 0
     var endTime: Date = Date()
+    var enable: Boolean = false
     var sound: Boolean = true
     var vibration: Boolean = true
     var mediaSrc: String = ""
@@ -40,6 +43,8 @@ class AlarmOnViewModel @Inject constructor(
     var day: ObservableInt = ObservableInt(0)
     var dayOfWeek: ObservableInt = ObservableInt(0)
     var month: ObservableInt = ObservableInt(0)
+
+    var alarm: MyAlarm? = null
 
     val finishViewCommand: Command = object : Command {
         override fun execute(arg: Any) {
@@ -65,14 +70,16 @@ class AlarmOnViewModel @Inject constructor(
     }
 
     fun resetAlarm() {
-        bus.post(ResetAlarmEvent(alarmId))
+        if(enable && alarm != null) {
+            alarmManager.startAlarm(alarmId!!, TimeCalculator.getMilliSecondsForScheduling(alarm!!))
+        }
     }
 
     fun loadAlarm() {
         if(alarmId != null) {
-            val alarm = dbManager.findAlarmWithId(alarmId)
+            alarm = dbManager.findAlarmWithId(alarmId)
             alarm?.let {
-                DataMapper.alarmToAlarmOnViewModel(alarm, this)
+                DataMapper.alarmToAlarmOnViewModel(alarm!!, this)
             }
         }
     }

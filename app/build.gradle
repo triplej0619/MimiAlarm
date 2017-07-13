@@ -24,6 +24,10 @@ android {
         enabled = true
     }
 
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     buildTypes {
         debug {
             versionNameSuffix "-debug"
@@ -93,9 +97,5 @@ dependencies {
 repositories {
     mavenCentral()
 }
-
-//kapt {
-//    generateStubs = true
-//}
 
 apply plugin: 'com.google.gms.google-services'
