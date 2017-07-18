@@ -48,10 +48,10 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
                 hour.set(TimeCalculator.getHourFromSeconds(wholeTimeInSecond).toInt())
                 minute.set(TimeCalculator.getMinuteFromSeconds(wholeTimeInSecond).toInt())
                 second.set(TimeCalculator.getSecondFromSeconds(wholeTimeInSecond).toInt())
+                e.onComplete()
             } else {
                 activated.set(false)
             }
-            e.onComplete()
         }).repeatWhen({ t: Observable<Any> ->
             t.delay(1, TimeUnit.SECONDS)
         })

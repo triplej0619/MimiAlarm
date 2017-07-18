@@ -21,9 +21,9 @@
 
         <TextView
             tools:text="8시간 20분 설정"
+            app:timerText="@{timerListItemViewModel}"
             style="@style/NotoSans.Regular.13.Accent"
             android:id="@+id/settedTime"
-            android:text="8시간 20분 설정"
             android:includeFontPadding="false"
             android:layout_marginTop="11dp"
             android:layout_width="wrap_content"

@@ -28,6 +28,7 @@ class TimerViewModel @Inject constructor(
         private val alarmManager: AlarmManager
 ) : BaseViewModel() {
 
+    val SECOND_IN_MILLI: Int = 1000
     val MINUTE_IN_SECONDS: Int = 60
     val HOUR_IN_SECONDS: Int = MINUTE_IN_SECONDS * 60
 
@@ -142,7 +143,7 @@ class TimerViewModel @Inject constructor(
         if(timer != null) {
             dbManager.addTimer(timer)
             addTimerListItem(timer)
-            alarmManager.startTimer(timer.id!!, timer.remainSeconds * 1000)
+            alarmManager.startTimer(timer.id!!, timer.remainSeconds * SECOND_IN_MILLI)
         }
     }
 
@@ -204,7 +205,7 @@ class TimerViewModel @Inject constructor(
             if(timer.remainSeconds == 0L) {
                 timer.remainSeconds = timer.seconds
             }
-            alarmManager.startTimer(event.id, timer.remainSeconds * 1000)
+            alarmManager.startTimer(event.id, timer.remainSeconds * SECOND_IN_MILLI)
         } else {
             updateTimerTime(event.id, event.remainSeconds)
             alarmManager.cancelTimer(event.id)

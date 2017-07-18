@@ -115,7 +115,7 @@ class DataMapper {
             item.minute.set(TimeCalculator.getMinuteFromSeconds(timer.remainSeconds).toInt())
             item.second.set(TimeCalculator.getSecondFromSeconds(timer.remainSeconds).toInt())
 
-            item.wholeTimeInSecond = timer.remainSeconds
+            item.wholeTimeInSecond = timer.remainSeconds + 1
 
 //            if(timer.activated) {
 //                val diff: Long = timer.completedAt!!.time - Date().time
