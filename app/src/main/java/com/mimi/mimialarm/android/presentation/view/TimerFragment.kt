@@ -84,6 +84,10 @@ class TimerFragment : LifecycleFragment() {
     }
 
     fun initEditView() {
+        binding?.hour?.setSelectAllOnFocus(true)
+        binding?.minute?.setSelectAllOnFocus(true)
+        binding?.second?.setSelectAllOnFocus(true)
+
         Observable.combineLatest(RxTextView.textChanges(binding?.hour as TextView),
                 RxTextView.textChanges(binding?.minute as TextView),
                 RxTextView.textChanges(binding?.second as TextView),

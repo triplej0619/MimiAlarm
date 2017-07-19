@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
 import com.mimi.mimialarm.android.presentation.ActivityComponent
@@ -45,6 +47,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun init() {
+        MobileAds.initialize(applicationContext, getString(R.string.adsmob_id))
+
+        val adRequest = AdRequest.Builder()
+                .addTestDevice("A9BE77B32D16C6F3BD1C2609FA36BE9C") // TODO remove test code
+                .build()
+        binding?.adView?.loadAd(adRequest)
+
         setupViewPager()
     }
 
