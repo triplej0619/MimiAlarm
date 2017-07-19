@@ -35,7 +35,7 @@
                 android:layout_height="72dp">
                 <RadioButton
                     style="@style/NotoSans.Regular.16.Gray1"
-                    android:checked="true"
+                    android:checked="@{settingsViewModel.alarmCloseMethod == 0 ? true : false}"
                     android:id="@+id/alarmCloseMethodInWindow"
                     android:gravity="center_vertical"
                     android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
                 android:layout_height="72dp">
                 <RadioButton
                     style="@style/NotoSans.Regular.16.Gray1"
-                    android:checked="false"
+                    android:checked="@{settingsViewModel.alarmCloseMethod == 0 ? false : true}"
                     android:id="@+id/alarmCloseMethodInApp"
                     android:gravity="center_vertical"
                     android:layout_width="wrap_content"
@@ -111,12 +111,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="46dp" />
             <RadioGroup
+                android:id="@+id/themeGroup"
                 android:checkedButton="@+id/theme1"
                 android:background="@android:color/white"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="72dp">
                 <RadioButton
+                    app:clickEvent="@{settingsViewModel.changeThemeCommand}"
                     android:id="@+id/theme1"
                     android:background="@drawable/selector_theme_btn1"
                     android:button="@android:color/transparent"
@@ -125,6 +127,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp" />
                 <RadioButton
+                    app:clickEvent="@{settingsViewModel.changeThemeCommand}"
                     android:id="@+id/theme2"
                     android:background="@drawable/selector_theme_btn2"
                     android:button="@android:color/transparent"
@@ -133,6 +136,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp" />
                 <RadioButton
+                    app:clickEvent="@{settingsViewModel.changeThemeCommand}"
                     android:id="@+id/theme3"
                     android:background="@drawable/selector_theme_btn3"
                     android:button="@android:color/transparent"
@@ -141,6 +145,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp" />
                 <RadioButton
+                    app:clickEvent="@{settingsViewModel.changeThemeCommand}"
                     android:id="@+id/theme4"
                     android:background="@drawable/selector_theme_btn4"
                     android:button="@android:color/transparent"
@@ -149,6 +154,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp" />
                 <RadioButton
+                    app:clickEvent="@{settingsViewModel.changeThemeCommand}"
                     android:id="@+id/theme5"
                     android:background="@drawable/selector_theme_btn5"
                     android:button="@android:color/transparent"

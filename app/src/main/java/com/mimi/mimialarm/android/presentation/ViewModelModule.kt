@@ -2,9 +2,11 @@ package com.mimi.mimialarm.android.presentation
 
 import com.mimi.data.DBManager
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
+import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmDetailViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmViewModel
+import com.mimi.mimialarm.core.presentation.viewmodel.SettingsViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerOnViewModel
 import com.squareup.otto.Bus
 import dagger.Module
@@ -27,4 +29,8 @@ class ViewModelModule {
     @Provides
     fun provideTimerOnViewModel(uiManager: UIManager, dbManager: DBManager): TimerOnViewModel
             = TimerOnViewModel(uiManager, dbManager)
+
+    @Provides
+    fun provideSettingsViewModel(uiManager: UIManager, bus: Bus, applicationDataManager: ApplicationDataManager): SettingsViewModel
+            = SettingsViewModel(uiManager, bus, applicationDataManager)
 }
