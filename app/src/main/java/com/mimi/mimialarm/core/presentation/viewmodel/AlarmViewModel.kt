@@ -162,9 +162,11 @@ class AlarmViewModel @Inject constructor(
     @Subscribe
     fun answerChangeAlarmStatusEvent(event: ChangeAlarmStatusEvent) {
         if(event.activation) {
-            val alarm: MyAlarm = dbManager.findAlarmWithId(event.id) ?: return
-            val time = TimeCalculator.getMilliSecondsForScheduling(alarm)
-            alarmManager.startAlarm(event.id, time)
+            val alarm: MyAlarm? = dbManager.findAlarmWithId(event.id)
+            alarm?.let {
+                val time = TimeCalculator.getMilliSecondsForScheduling(alarm)
+                alarmManager.startAlarm(event.id, time)
+            }
         } else {
             alarmManager.cancelAlarm(event.id)
         }

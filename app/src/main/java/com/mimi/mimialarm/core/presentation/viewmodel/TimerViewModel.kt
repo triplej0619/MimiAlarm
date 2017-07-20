@@ -12,6 +12,7 @@ import com.mimi.mimialarm.core.infrastructure.ChangeTimerStatusEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
+import com.mimi.mimialarm.core.utils.DateUtils
 import com.mimi.mimialarm.core.utils.TextChanger
 import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
@@ -149,7 +150,6 @@ class TimerViewModel @Inject constructor(
 
     fun addTimerListItem(timer: MyTimer) {
         val listItem: TimerListItemViewModel = DataMapper.timerToListItemViewModel(timer, bus)
-        listItem.startTimer()
         timerList.add(listItem)
         timerCount.set(timerCount.get() + 1)
         timerListLive.postValue(timerList)
@@ -193,19 +193,25 @@ class TimerViewModel @Inject constructor(
     }
 
     fun updateTimerTime(id: Int, remainSeconds: Long) {
-        val timer: MyTimer = dbManager.findTimerWithId(id) ?: return
-        timer.remainSeconds = remainSeconds
-        dbManager.updateTimer(timer)
+        val timer: MyTimer? = dbManager.findTimerWithId(id)
+        timer?.let {
+            timer.remainSeconds = remainSeconds
+            timer.completedAt = DateUtils.getAfterDate(remainSeconds.toInt() * 1000)
+
+            dbManager.updateTimer(timer)
+        }
     }
 
     @Subscribe
     fun answerChangeTimerStatusEvent(event: ChangeTimerStatusEvent) {
         if(event.activated) {
-            val timer = dbManager.findTimerWithId(event.id) ?: return
-            if(timer.remainSeconds == 0L) {
-                timer.remainSeconds = timer.seconds
+            val timer: MyTimer? = dbManager.findTimerWithId(event.id)
+            timer?.let {
+                if (timer.remainSeconds == 0L) {
+                    timer.remainSeconds = timer.seconds
+                }
+                alarmManager.startTimer(event.id, timer.remainSeconds * SECOND_IN_MILLI)
             }
-            alarmManager.startTimer(event.id, timer.remainSeconds * SECOND_IN_MILLI)
         } else {
             updateTimerTime(event.id, event.remainSeconds)
             alarmManager.cancelTimer(event.id)

@@ -14,75 +14,81 @@
 
     <RelativeLayout
         android:background="@{timerListItemViewModel.selectForDelete ? @color/selectedListItem : @android:color/white}"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
         android:layout_width="match_parent"
         android:layout_height="120dp">
 
-        <TextView
-            tools:text="8시간 20분 설정"
-            app:timerText="@{timerListItemViewModel}"
-            style="@style/NotoSans.Regular.13.Accent"
-            android:id="@+id/settedTime"
-            android:includeFontPadding="false"
-            android:layout_marginTop="11dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            tools:text="01:15:55"
-            style="@style/Roboto.Thin.60.Gray1"
-            android:text='@{String.format("%02d:%02d:%02d", timerListItemViewModel.hour, timerListItemViewModel.minute, timerListItemViewModel.second)}'
-            android:id="@+id/remainTime"
-            android:includeFontPadding="false"
-            android:layout_below="@id/settedTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
         <RelativeLayout
-            android:visibility="@{timerListItemViewModel.deleteMode ? View.GONE : View.VISIBLE}"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageButton
-                app:clickEvent="@{timerListItemViewModel.changeActivationCommand}"
-                android:id="@+id/pause"
-                android:src="@drawable/icn_stop"
-                android:visibility="@{timerListItemViewModel.activated ? View.VISIBLE : View.GONE}"
-                android:background="@drawable/selector_btn_accent"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
-            <ImageButton
-                app:clickEvent="@{timerListItemViewModel.changeActivationCommand}"
-                android:id="@+id/start"
-                android:src="@drawable/icn_start"
-                android:visibility="@{timerListItemViewModel.activated ? View.GONE : View.VISIBLE}"
-                android:background="@drawable/selector_btn_accent"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
-        </RelativeLayout>
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <android.support.v7.widget.AppCompatCheckBox
-            style="@style/CustomCheckBox"
-            app:clickEvent="@{timerListItemViewModel.changeSelectStatusCommand}"
-            android:visibility="@{timerListItemViewModel.deleteMode ? View.VISIBLE : View.GONE}"
-            android:checked="@{timerListItemViewModel.selectForDelete}"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                tools:text="8시간 20분 설정"
+                app:timerText="@{timerListItemViewModel}"
+                style="@style/NotoSans.Regular.13.Accent"
+                android:id="@+id/settedTime"
+                android:includeFontPadding="false"
+                android:layout_marginTop="11dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                tools:text="01:15:55"
+                style="@style/Roboto.Thin.60.Gray1"
+                android:text='@{String.format("%02d:%02d:%02d", timerListItemViewModel.hour, timerListItemViewModel.minute, timerListItemViewModel.second)}'
+                android:id="@+id/remainTime"
+                android:includeFontPadding="false"
+                android:layout_below="@id/settedTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:visibility="@{timerListItemViewModel.deleteMode ? View.GONE : View.VISIBLE}"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    app:clickEvent="@{timerListItemViewModel.changeActivationCommand}"
+                    android:id="@+id/pause"
+                    android:src="@drawable/icn_stop"
+                    android:visibility="@{timerListItemViewModel.activated ? View.VISIBLE : View.GONE}"
+                    android:background="@drawable/selector_btn_accent"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <ImageButton
+                    app:clickEvent="@{timerListItemViewModel.changeActivationCommand}"
+                    android:id="@+id/start"
+                    android:src="@drawable/icn_start"
+                    android:visibility="@{timerListItemViewModel.activated ? View.GONE : View.VISIBLE}"
+                    android:background="@drawable/selector_btn_accent"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                style="@style/CustomCheckBox"
+                app:clickEvent="@{timerListItemViewModel.changeSelectStatusCommand}"
+                android:visibility="@{timerListItemViewModel.deleteMode ? View.VISIBLE : View.GONE}"
+                android:checked="@{timerListItemViewModel.selectForDelete}"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
 
         <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             tools:max="100"
             tools:progress="20"
             android:id="@+id/progressbar"
+            android:progress="@{timerListItemViewModel.progressed}"
             android:indeterminate="false"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="1dp" />
-
     </RelativeLayout>
 </layout>

@@ -39,15 +39,19 @@ class TimerOnViewModel(
 
     fun loadAlarm() {
         if(timerId != null) {
-            val timer: MyTimer = dbManager.findTimerWithId(timerId) ?: return
-            DataMapper.timerToTimerOnViewModel(timer, this)
+            val timer: MyTimer? = dbManager.findTimerWithId(timerId)
+            timer?.let {
+                DataMapper.timerToTimerOnViewModel(timer, this)
+            }
         }
     }
 
     fun deactivatedTimer() {
-        val timer: MyTimer = dbManager.findTimerWithId(timerId) ?: return
-        timer.activated = false
-        dbManager.updateTimer(timer)
+        val timer: MyTimer? = dbManager.findTimerWithId(timerId)
+        timer?.let {
+            timer.activated = false
+            dbManager.updateTimer(timer)
+        }
     }
 
 }
