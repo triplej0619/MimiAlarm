@@ -45,8 +45,10 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
     }
 
     init {
+        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "init() id : $id")
+
         timeObservable = Observable.create(ObservableOnSubscribe<Int> { e ->
-            LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "timeObservable - wholeTimeInSecond : $wholeTimeInSecond")
+            LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "timeObservable - wholeTimeInSecond : $wholeTimeInSecond, id : $id")
             if (wholeTimeInSecond > 0) {
                 wholeTimeInSecond -= 1
                 hour.set(TimeCalculator.getHourFromSeconds(wholeTimeInSecond).toInt())
@@ -56,14 +58,15 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
                 e.onComplete()
             } else {
                 activated.set(false)
+                pauseTimer()
             }
         }).repeatWhen({ t: Observable<Any> ->
-            t.delay(1, TimeUnit.SECONDS)
+            t.delay(1000, TimeUnit.MILLISECONDS)
         })
     }
 
     fun setActivated(value: Boolean) {
-        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "setActivated()")
+        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "setActivated() : $value, id : $id")
         activated.set(value)
         if(value) {
             startTimer()
@@ -86,18 +89,18 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
 
             bus.post(ChangeTimerStatusEvent(id!!, activated.get(), TimeCalculator.getSecondsFromAll(hour.get().toLong(), minute.get().toLong(), second.get().toLong())))
         }
-        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "changeActivation() " + activated.get())
+        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "changeActivation() id : $id, " + activated.get())
     }
 
     fun startTimer() {
-        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "startTimer()")
+        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "startTimer() id : $id")
         if(timeSubscription == null) {
             timeSubscription = timeObservable.subscribe()
         }
     }
 
     fun pauseTimer() {
-        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "pauseTimer()")
+        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "pauseTimer() id : $id")
         timeSubscription?.dispose()
         timeSubscription = null
     }

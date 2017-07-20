@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mimi.mimialarm.R
@@ -81,12 +82,17 @@ class TimerFragment : LifecycleFragment() {
         })
 
         binding?.list?.adapter = listAdapter
+
+        viewModel.loadTimerList()
     }
 
     fun initEditView() {
         binding?.hour?.setSelectAllOnFocus(true)
         binding?.minute?.setSelectAllOnFocus(true)
         binding?.second?.setSelectAllOnFocus(true)
+        binding?.hour?.setOnClickListener{ binding?.hour?.selectAll() }
+        binding?.minute?.setOnClickListener{ binding?.minute?.selectAll() }
+        binding?.second?.setOnClickListener{ binding?.second?.selectAll() }
 
         Observable.combineLatest(RxTextView.textChanges(binding?.hour as TextView),
                 RxTextView.textChanges(binding?.minute as TextView),
@@ -114,7 +120,6 @@ class TimerFragment : LifecycleFragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadTimerList()
     }
 
     protected inner class TimerListAdapter(items: List<TimerListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick, longClick: IListItemClick)

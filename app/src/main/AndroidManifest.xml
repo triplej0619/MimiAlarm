@@ -33,11 +33,13 @@
 
         <activity
             android:name=".android.presentation.view.AlarmOnActivity"
+            android:excludeFromRecents="true"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
             android:name=".android.presentation.view.TimerOnActivity"
+            android:excludeFromRecents="true"
             android:screenOrientation="portrait">
         </activity>
 
@@ -51,6 +53,8 @@
 
         <receiver android:name=".android.infrastructure.service.AlarmOnBroadcastReceiver" />
         <receiver android:name=".android.infrastructure.service.TimerOnBroadcastReceiver" />
+
+        <service android:name=".android.infrastructure.service.TimerDeactivateService" />
 
     </application>
 

@@ -3,6 +3,7 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyTimer
+import com.mimi.mimialarm.android.utils.LogUtils
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
@@ -24,33 +25,28 @@ class TimerOnViewModel(
 
     val finishViewCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            timerId?.let {
-                deactivatedTimer()
-            }
             uiManager.finishForegroundActivity()
         }
     }
 
     val startCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            loadAlarm()
+            loadAndDeactivatedTimer()
         }
     }
 
-    fun loadAlarm() {
+    fun loadAndDeactivatedTimer() {
+        LogUtils.printDebugLog(this@TimerOnViewModel.javaClass, "loadAndDeactivatedTimer")
+
         if(timerId != null) {
             val timer: MyTimer? = dbManager.findTimerWithId(timerId)
             timer?.let {
                 DataMapper.timerToTimerOnViewModel(timer, this)
-            }
-        }
-    }
 
-    fun deactivatedTimer() {
-        val timer: MyTimer? = dbManager.findTimerWithId(timerId)
-        timer?.let {
-            timer.activated = false
-            dbManager.updateTimer(timer)
+                timer.activated = false
+                timer.remainSeconds = timer.seconds
+                dbManager.updateTimer(timer)
+            }
         }
     }
 

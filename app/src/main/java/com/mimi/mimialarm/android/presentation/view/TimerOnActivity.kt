@@ -16,6 +16,7 @@ import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
 import com.mimi.mimialarm.android.utils.ContextUtils
+import com.mimi.mimialarm.android.utils.LogUtils
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerOnViewModel
 import com.mimi.mimialarm.databinding.ActivityTimerOnBinding
 import com.squareup.otto.Bus
@@ -42,6 +43,8 @@ class TimerOnActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        LogUtils.printDebugLog(this@TimerOnActivity.javaClass, "onCreate")
+
         super.onCreate(savedInstanceState)
         buildComponent().inject(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_timer_on)
@@ -54,8 +57,9 @@ class TimerOnActivity : AppCompatActivity() {
         viewModel.timerId = intent.getIntExtra(TimerOnBroadcastReceiver.KEY_TIMER_ID, -1)
         viewModel.startCommand.execute(Unit)
 
-        playVibration()
-        playRingtone()
+        // TODO disable for test
+//        playVibration()
+//        playRingtone()
     }
 
     override fun onDestroy() {
