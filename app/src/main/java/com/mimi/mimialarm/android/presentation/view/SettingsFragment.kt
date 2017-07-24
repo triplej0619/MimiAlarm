@@ -17,8 +17,12 @@ import com.squareup.otto.Bus
 import javax.inject.Inject
 import com.google.android.gms.ads.reward.RewardedVideoAd
 import com.google.android.gms.ads.reward.RewardedVideoAdListener
+import com.mimi.mimialarm.core.infrastructure.ShareToFriendsEvent
 import com.mimi.mimialarm.core.infrastructure.StartRewardedAdEvent
 import com.squareup.otto.Subscribe
+import android.content.Intent
+
+
 
 
 /**
@@ -114,5 +118,14 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         } else {
             Toast.makeText(this@SettingsFragment.context, R.string.settings_ad_video_not_load_yet, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    @Subscribe
+    fun answerShareToFriends(event: ShareToFriendsEvent) {
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.settings_share_app) + " http://play.google.com/store/apps/details?id=" + context.packageName)
+        sendIntent.type = "text/plain"
+        startActivity(Intent.createChooser(sendIntent, getString(R.string.settings_share_app)))
     }
 }

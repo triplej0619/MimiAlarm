@@ -2,6 +2,7 @@ package com.mimi.mimialarm.android.utils
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -34,6 +35,16 @@ class ContextUtils {
             val wake = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "WAKE_LOCK")
             wake.acquire()
             return wake
+        }
+
+        fun openPlayStoreForPackage(context: Context, packageName: String) {
+            try {
+                context.startActivity(Intent(Intent.ACTION_VIEW, Uri
+                        .parse("market://details?id=" + packageName)))
+            } catch (e: ActivityNotFoundException) {
+                context.startActivity(Intent(Intent.ACTION_VIEW, Uri
+                        .parse("http://play.google.com/store/apps/details?id=" + packageName)))
+            }
         }
 
         fun getRingtone(context: Context, uri: Uri?, volume: Int) : Ringtone? {

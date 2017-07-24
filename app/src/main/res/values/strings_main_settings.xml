@@ -14,4 +14,5 @@
     <string name="settings_app_recommend_to_friends">친구에게 알람앱을 추천해주세요</string>
 
     <string name="settings_app_version">버전</string>
+    <string name="settings_share_app">\'알람\' 앱 확인 하기 - </string>
 </resources>

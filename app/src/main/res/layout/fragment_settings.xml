@@ -173,6 +173,7 @@
                 android:layout_height="46dp" />
             <TextView
                 style="@style/NotoSans.Regular.16.Gray1"
+                app:clickEvent="@{settingsViewModel.shareToFriendsCommand}"
                 android:background="@android:color/white"
                 android:drawableRight="@drawable/icn_arrow_right"
                 android:paddingLeft="16dp"

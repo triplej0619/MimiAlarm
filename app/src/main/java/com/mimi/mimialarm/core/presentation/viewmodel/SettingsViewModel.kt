@@ -4,6 +4,7 @@ import android.databinding.ObservableArrayList
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
+import com.mimi.mimialarm.core.infrastructure.ShareToFriendsEvent
 import com.mimi.mimialarm.core.infrastructure.StartRewardedAdEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.utils.Command
@@ -25,6 +26,12 @@ class SettingsViewModel @Inject constructor(
     val changeThemeCommand: Command = object : Command {
         override fun execute(arg: Any) {
             bus.post(StartRewardedAdEvent())
+        }
+    }
+
+    val shareToFriendsCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            bus.post(ShareToFriendsEvent())
         }
     }
 
