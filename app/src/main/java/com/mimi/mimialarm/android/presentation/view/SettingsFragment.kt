@@ -140,7 +140,7 @@ class SettingsFragment : android.support.v4.app.Fragment() {
     fun answerShareToFriends(event: ShareToFriendsEvent) {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.settings_share_app) + " http://play.google.com/store/apps/details?id=" + context.packageName)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.settings_see_alarm_app) + " http://play.google.com/store/apps/details?id=" + context.packageName)
         sendIntent.type = "text/plain"
         startActivity(Intent.createChooser(sendIntent, getString(R.string.settings_share_app)))
     }
