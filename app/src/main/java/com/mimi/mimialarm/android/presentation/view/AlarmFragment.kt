@@ -130,20 +130,33 @@ class AlarmFragment : LifecycleFragment() {
         binding?.list?.smoothScrollToPosition(listAdapter!!.itemCount - 1)
 
 //        event.id?.let { startAlarm(event.id!!) }
-        // TODO 문구 리소스 화
-        var minute: Long = (event.seconds / MINUTE) % 60
+        val minute: Long = (event.seconds / MINUTE) % 60
         val hour: Long = (event.seconds / MINUTE) / 60
-        if(event.seconds % MINUTE > 0) minute += 1
-        Toast.makeText(context, String.format("%s시간 %s분 후 알람이 울립니다.", hour, minute), Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getAlarmScheduleString(hour, minute), Toast.LENGTH_SHORT).show()
+    }
+
+    fun getAlarmScheduleString(hour: Long, minute: Long) : String{
+        var text: String = ""
+
+        if(hour > 0 || minute > 0) {
+            if (hour > 0) {
+                text = hour.toString() + getString(R.string.hour)
+            }
+            if (minute > 0) {
+                text += " " + minute.toString() + getString(R.string.minute)
+            }
+            text += " " + getString(R.string.msg_add_alarm_over_1min)
+        } else {
+            text = String.format("1%s %s", getString(R.string.minute), getString(R.string.msg_add_alarm_under_1min))
+        }
+        return text
     }
 
     @Subscribe
     fun answerUpdateAlarmEvent(event: UpdateAlarmEvent) {
-        // TODO 문구 리소스 화
-        var minute: Long = (event.seconds / MINUTE) % 60
+        val minute: Long = (event.seconds / MINUTE) % 60
         val hour: Long = (event.seconds / MINUTE) / 60
-        if(event.seconds % MINUTE > 0) minute += 1
-        Toast.makeText(context, String.format("%s시간 %s분 후 알람이 울립니다.", hour, minute), Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getAlarmScheduleString(hour, minute), Toast.LENGTH_SHORT).show()
     }
 
     @Subscribe

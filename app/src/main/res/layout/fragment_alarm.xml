@@ -27,7 +27,7 @@
             android:scrollbarThumbVertical="@color/scrollbarVertical"
             android:visibility="@{alarmViewModel.alarmCount > 0 ? View.VISIBLE : View.GONE}"
             android:longClickable="true"
-            android:layout_marginBottom="72dp"
+            android:layout_marginBottom="88dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
