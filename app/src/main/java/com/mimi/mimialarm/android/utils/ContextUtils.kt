@@ -2,7 +2,6 @@ package com.mimi.mimialarm.android.utils
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,9 +11,8 @@ import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
 import android.os.SystemClock
-import java.util.*
-import kotlin.reflect.KClass
 
 /**
  * Created by MihyeLee on 2017. 6. 29..
@@ -29,6 +27,13 @@ class ContextUtils {
             } catch (ex: PackageManager.NameNotFoundException) {
                 return ""
             }
+        }
+
+        fun turnOnScreen(context: Context) : PowerManager.WakeLock {
+            val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+            val wake = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "WAKE_LOCK")
+            wake.acquire()
+            return wake
         }
 
         fun getRingtone(context: Context, uri: Uri?, volume: Int) : Ringtone? {

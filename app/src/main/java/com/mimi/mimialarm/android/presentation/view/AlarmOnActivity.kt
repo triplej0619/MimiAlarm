@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Vibrator
 import android.support.v7.app.AppCompatActivity
+import android.view.WindowManager
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.R
@@ -56,6 +57,8 @@ class AlarmOnActivity : AppCompatActivity() {
     }
 
     fun init() {
+        wakeUpScreen()
+
         bus.register(this)
 
         viewModel.alarmId = intent.getIntExtra(AlarmOnBroadcastReceiver.KEY_ALARM_ID, -1)
@@ -68,6 +71,10 @@ class AlarmOnActivity : AppCompatActivity() {
                 playVibration()
             }
         })
+    }
+
+    fun wakeUpScreen() {
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
     }
 
     override fun onDestroy() {

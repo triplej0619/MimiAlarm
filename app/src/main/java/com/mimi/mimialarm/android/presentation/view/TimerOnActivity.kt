@@ -6,8 +6,10 @@ import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.PowerManager
 import android.os.Vibrator
 import android.support.v7.app.AppCompatActivity
+import android.view.WindowManager
 import com.mimi.data.DBManager
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.infrastructure.service.TimerOnBroadcastReceiver
@@ -54,12 +56,18 @@ class TimerOnActivity : AppCompatActivity() {
     }
 
     fun init() {
+        wakeUpScreen()
+
         viewModel.timerId = intent.getIntExtra(TimerOnBroadcastReceiver.KEY_TIMER_ID, -1)
         viewModel.startCommand.execute(Unit)
 
         // TODO disable for test
 //        playVibration()
 //        playRingtone()
+    }
+
+    fun wakeUpScreen() {
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
     }
 
     override fun onDestroy() {
