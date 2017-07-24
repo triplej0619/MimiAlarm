@@ -136,15 +136,19 @@ class AlarmViewModel @Inject constructor(
     }
 
     fun deleteAlarms() {
-        alarmList
-                .filter { it.selectForDelete.get() }
-                .forEach {
-                    dbManager.deleteAlarmWithId(it.id)
-                    if(it.enable.get()) {
-                        alarmManager.cancelAlarm(it.id!!)
+        if(alarmList.filter { it.selectForDelete.get() }.isEmpty()) {
+            uiManager.showToast("선택된 알람이 없습니다.") // TODO text -> resource
+        } else {
+            alarmList
+                    .filter { it.selectForDelete.get() }
+                    .forEach {
+                        dbManager.deleteAlarmWithId(it.id)
+                        if (it.enable.get()) {
+                            alarmManager.cancelAlarm(it.id!!)
+                        }
                     }
-                }
-        reLoadAlarmList()
+            reLoadAlarmList()
+        }
         cancelDeleteModeCommand.execute(Unit)
     }
 
@@ -170,6 +174,11 @@ class AlarmViewModel @Inject constructor(
                 alarmManager.startAlarm(event.id, time)
             }
         } else {
+            val alarm: MyAlarm? = dbManager.findAlarmWithId(event.id)
+            alarm?.let {
+                alarm.enable = false
+                dbManager.updateAlarm(alarm)
+            }
             alarmManager.cancelAlarm(event.id)
         }
     }

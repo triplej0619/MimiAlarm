@@ -76,8 +76,10 @@ class TimerViewModel @Inject constructor(
 
     val cancelDeleteModeCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            deleteMode.set(false)
-            setDeleteMode(false)
+            if(deleteMode.get()) {
+                deleteMode.set(false)
+                setDeleteMode(false)
+            }
         }
     }
 
@@ -107,6 +109,9 @@ class TimerViewModel @Inject constructor(
 
     fun release() {
         bus.unregister(this)
+        timerList.forEach {
+            it.release()
+        }
     }
 
     fun clear() {
@@ -172,15 +177,19 @@ class TimerViewModel @Inject constructor(
 
     fun deleteTimers() {
         LogUtils.printDebugLog(this@TimerViewModel.javaClass, "deleteTimers()")
-        timerList
-                .filter { it.selectForDelete.get() }
-                .forEach {
-                    alarmManager.cancelTimer(it.id!!)
-                    it.pauseTimer()
-                    dbManager.deleteTimerWithId(it.id)
-                    LogUtils.printDebugLog(this@TimerViewModel.javaClass, "deleteTimers() - cancelTimer : " + it.id)
-                }
-        reLoadTimerList()
+        if(timerList.filter { it.selectForDelete.get() }.isEmpty()) {
+            uiManager.showToast("선택된 타이머가 없습니다.") // TODO text -> resource
+        } else {
+            timerList
+                    .filter { it.selectForDelete.get() }
+                    .forEach {
+                        alarmManager.cancelTimer(it.id!!)
+                        it.pauseTimer()
+                        dbManager.deleteTimerWithId(it.id)
+                        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "deleteTimers() - cancelTimer : " + it.id)
+                    }
+            reLoadTimerList()
+        }
         cancelDeleteModeCommand.execute(Unit)
     }
 
@@ -193,6 +202,7 @@ class TimerViewModel @Inject constructor(
                     LogUtils.printDebugLog(this@TimerViewModel.javaClass, "deleteAllTimer() - cancelTimer : " + it.id)
                 }
         dbManager.deleteAllTimer()
+        reLoadTimerList()
         cancelDeleteModeCommand.execute(Unit)
     }
 
@@ -206,7 +216,9 @@ class TimerViewModel @Inject constructor(
     fun pauseAndUpdateTimerTime(id: Int, remainSeconds: Long) {
         val timer: MyTimer? = dbManager.findTimerWithId(id)
         timer?.let {
-            timer.remainSeconds = remainSeconds
+            if(remainSeconds != 0L) {
+                timer.remainSeconds = remainSeconds
+            }
             timer.activated = false
 
             dbManager.updateTimer(timer)
