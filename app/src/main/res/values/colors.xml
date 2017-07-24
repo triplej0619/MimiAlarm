@@ -10,13 +10,40 @@
     <color name="listDivider1">#eaeaea</color>
 
     <!--theme 2-->
-    <color name="colorPrimary2">#ff2b01</color>
-    <color name="colorPrimaryDark2">#ff2b01</color>
-    <color name="colorAccent2">#65c976</color>
-    <color name="gradientEnd2">#bf4713</color>
-    <color name="gradientMid2">#d60b5d</color>
-    <color name="bg2">#f2eff1</color>
+    <color name="colorPrimary2">#FBDC2D</color>
+    <color name="colorPrimaryDark2">#FBDC2D</color>
+    <color name="colorAccent2">#FA6969</color>
+    <color name="gradientEnd2">#F5A417</color>
+    <color name="gradientMid2">#F9BA25</color>
+    <color name="bg2">#F3F3F0</color>
     <color name="listDivider2">#eaeaea</color>
+
+    <!--theme 3-->
+    <color name="colorPrimary3">#00D2FF</color>
+    <color name="colorPrimaryDark3">#00D2FF</color>
+    <color name="colorAccent3">#3E479F</color>
+    <color name="gradientEnd3">#3A7DD5</color>
+    <color name="gradientMid3">#3AA3D5</color>
+    <color name="bg3">#F0F2F3</color>
+    <color name="listDivider3">#eaeaea</color>
+
+    <!--theme 4-->
+    <color name="colorPrimary4">#6DEF85</color>
+    <color name="colorPrimaryDark4">#6DEF85</color>
+    <color name="colorAccent4">#FF8855</color>
+    <color name="gradientEnd4">#26C599</color>
+    <color name="gradientMid4">#52DF98</color>
+    <color name="bg4">#E9ECEA</color>
+    <color name="listDivider4">#eaeaea</color>
+
+    <!--theme 5-->
+    <color name="colorPrimary5">#8D61E0</color>
+    <color name="colorPrimaryDark5">#8D61E0</color>
+    <color name="colorAccent5">#FEDA31</color>
+    <color name="gradientEnd5">#541D6F</color>
+    <color name="gradientMid5">#6441A5</color>
+    <color name="bg5">#EBE9EC</color>
+    <color name="listDivider5">#eaeaea</color>
 
 
 

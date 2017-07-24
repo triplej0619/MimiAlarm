@@ -32,6 +32,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import com.mimi.mimialarm.android.utils.ContextUtils
+import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 
 
 /**
@@ -42,6 +43,7 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
 
     lateinit var binding: ActivityAlarmDetailBinding
     @Inject lateinit var viewModel: AlarmDetailViewModel
+    @Inject lateinit var dataManager: ApplicationDataManager
 
     val ringtones: MutableMap<String, Uri> = HashMap<String, Uri>()
     var selectedRingtone: Ringtone? = null
@@ -56,8 +58,10 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
     }
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
-        super.onCreate(savedInstanceState)
         buildComponent().inject(this)
+        setTheme(ContextUtils.getThemeId(dataManager.getCurrentTheme()))
+
+        super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_detail)
         binding.alarmDetailViewModel = viewModel
 

@@ -21,8 +21,10 @@ import com.mimi.mimialarm.core.infrastructure.ShareToFriendsEvent
 import com.mimi.mimialarm.core.infrastructure.StartRewardedAdEvent
 import com.squareup.otto.Subscribe
 import android.content.Intent
-
-
+import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
+import com.mimi.mimialarm.core.infrastructure.ChagneThemeEvent
+import com.mimi.mimialarm.core.utils.Command
 
 
 /**
@@ -32,33 +34,45 @@ class SettingsFragment : android.support.v4.app.Fragment() {
 
     var rewardedVideoAd: RewardedVideoAd? = null
     var binding: FragmentSettingsBinding? = null
-    @Inject
-    lateinit var viewModel: SettingsViewModel
-    @Inject
-    lateinit var bus: Bus
+    var nextThemeIndex: Int = 0
+    var themeChangeCompletedCallback: Command? = null
+    @Inject lateinit var viewModel: SettingsViewModel
+    @Inject lateinit var bus: Bus
+    @Inject lateinit var dataManager: ApplicationDataManager
 
     val rewardedVideoAdListener: RewardedVideoAdListener = object : RewardedVideoAdListener {
         override fun onRewardedVideoAdClosed() {
+            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdClosed()")
             loadAdVideo()
         }
 
         override fun onRewardedVideoAdLeftApplication() {
+            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdLeftApplication()")
         }
 
         override fun onRewardedVideoAdLoaded() {
+            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdLoaded()")
         }
 
         override fun onRewardedVideoAdOpened() {
+            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdOpened()")
         }
 
         override fun onRewarded(p0: RewardItem?) {
-            Toast.makeText(this@SettingsFragment.context, "onRewarded", Toast.LENGTH_SHORT).show()
+            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewarded()")
+            themeChangeCompletedCallback?.execute(Unit)
+            themeChangeCompletedCallback = null
+            dataManager.setCurrentTheme(nextThemeIndex)
+            bus.post(ChagneThemeEvent(nextThemeIndex))
         }
 
         override fun onRewardedVideoStarted() {
+            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoStarted()")
         }
 
         override fun onRewardedVideoAdFailedToLoad(p0: Int) {
+            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdFailedToLoad()")
+            loadAdVideo()
             Toast.makeText(this@SettingsFragment.context, R.string.settings_fail_to_load_ad, Toast.LENGTH_SHORT).show()
         }
     }
@@ -114,6 +128,8 @@ class SettingsFragment : android.support.v4.app.Fragment() {
     @Subscribe
     fun answerStartRewardedAdEvent(event: StartRewardedAdEvent) {
         if(rewardedVideoAd?.isLoaded ?: false) {
+            nextThemeIndex = event.themeNo
+            themeChangeCompletedCallback = event.onComplete
             rewardedVideoAd?.show()
         } else {
             Toast.makeText(this@SettingsFragment.context, R.string.settings_ad_video_not_load_yet, Toast.LENGTH_SHORT).show()

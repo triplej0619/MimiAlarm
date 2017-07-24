@@ -19,6 +19,7 @@ import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
 import com.mimi.mimialarm.android.utils.ContextUtils
 import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerOnViewModel
 import com.mimi.mimialarm.databinding.ActivityTimerOnBinding
 import com.squareup.otto.Bus
@@ -33,6 +34,7 @@ class TimerOnActivity : AppCompatActivity() {
     @Inject lateinit var viewModel: TimerOnViewModel
     @Inject lateinit var bus: Bus
     @Inject lateinit var dbManager: DBManager
+    @Inject lateinit var dataManager: ApplicationDataManager
 
     var selectedRingtone: Ringtone? = null
     var vibrator: Vibrator? = null
@@ -46,9 +48,10 @@ class TimerOnActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         LogUtils.printDebugLog(this@TimerOnActivity.javaClass, "onCreate")
+        buildComponent().inject(this)
+        setTheme(ContextUtils.getThemeId(dataManager.getCurrentTheme()))
 
         super.onCreate(savedInstanceState)
-        buildComponent().inject(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_timer_on)
         binding.timerOnViewModel = viewModel
 

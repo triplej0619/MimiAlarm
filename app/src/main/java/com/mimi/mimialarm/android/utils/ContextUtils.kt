@@ -14,6 +14,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.os.SystemClock
+import com.mimi.mimialarm.R
 
 /**
  * Created by MihyeLee on 2017. 6. 29..
@@ -35,6 +36,16 @@ class ContextUtils {
             val wake = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "WAKE_LOCK")
             wake.acquire()
             return wake
+        }
+
+        fun getThemeId(index: Int) : Int{
+            when(index) {
+                1 -> return R.style.AppTheme2
+                2 -> return R.style.AppTheme3
+                3 -> return R.style.AppTheme4
+                4 -> return R.style.AppTheme5
+                else -> return R.style.AppTheme1
+            }
         }
 
         fun openPlayStoreForPackage(context: Context, packageName: String) {

@@ -17,19 +17,22 @@ import com.mimi.mimialarm.android.presentation.ActivityComponent
 import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
+import com.mimi.mimialarm.android.utils.ContextUtils
+import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
+import com.mimi.mimialarm.core.infrastructure.ChagneThemeEvent
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.Enums
 import com.mimi.mimialarm.databinding.ActivityMainBinding
 import com.squareup.otto.Bus
+import com.squareup.otto.Subscribe
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
 
-
-    @Inject
-    lateinit var bus: Bus
+    @Inject lateinit var bus: Bus
+    @Inject lateinit var dataManager: ApplicationDataManager
 
     var viewPagerAdapter: CustomViewPagerAdapter? = null
     var binding: ActivityMainBinding? = null
@@ -42,8 +45,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
-        super.onCreate(savedInstanceState)
         buildComponent().inject(this)
+        setTheme(ContextUtils.getThemeId(dataManager.getCurrentTheme()))
+
+        super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
         init()
@@ -145,5 +150,10 @@ class MainActivity : AppCompatActivity() {
         override fun getCount(): Int {
             return fragmentList.size
         }
+    }
+
+    @Subscribe
+    fun answerChangeThemeEvent(event: ChagneThemeEvent) {
+        recreate()
     }
 }

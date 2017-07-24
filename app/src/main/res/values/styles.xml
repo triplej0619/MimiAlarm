@@ -26,6 +26,39 @@
         <item name="colorListDivider">@color/listDivider2</item>
     </style>
 
+    <style name="AppTheme3" parent="MimiBaseTheme">
+        <item name="colorPrimary">@color/colorPrimary3</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark3</item>
+        <item name="colorAccent">@color/colorAccent3</item>
+        <item name="colorControlNormal">@color/colorAccent3</item>
+        <item name="colorGradientEnd">@color/gradientEnd3</item>
+        <item name="colorGradientMid">@color/gradientMid3</item>
+        <item name="colorBg">@color/bg3</item>
+        <item name="colorListDivider">@color/listDivider3</item>
+    </style>
+
+    <style name="AppTheme4" parent="MimiBaseTheme">
+        <item name="colorPrimary">@color/colorPrimary4</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark4</item>
+        <item name="colorAccent">@color/colorAccent4</item>
+        <item name="colorControlNormal">@color/colorAccent4</item>
+        <item name="colorGradientEnd">@color/gradientEnd4</item>
+        <item name="colorGradientMid">@color/gradientMid4</item>
+        <item name="colorBg">@color/bg4</item>
+        <item name="colorListDivider">@color/listDivider4</item>
+    </style>
+
+    <style name="AppTheme5" parent="MimiBaseTheme">
+        <item name="colorPrimary">@color/colorPrimary5</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark5</item>
+        <item name="colorAccent">@color/colorAccent5</item>
+        <item name="colorControlNormal">@color/colorAccent5</item>
+        <item name="colorGradientEnd">@color/gradientEnd5</item>
+        <item name="colorGradientMid">@color/gradientMid5</item>
+        <item name="colorBg">@color/bg5</item>
+        <item name="colorListDivider">@color/listDivider5</item>
+    </style>
+
     <style name="CustomEditInTimer" parent="Widget.AppCompat.EditText">
         <item name="android:textSize">60sp</item>
         <item name="android:textColor">@android:color/white</item>

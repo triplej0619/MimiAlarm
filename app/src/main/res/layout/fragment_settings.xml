@@ -29,6 +29,7 @@
                 android:layout_height="46dp" />
 
             <android.support.constraint.ConstraintLayout
+                app:clickEvent="@{settingsViewModel.changeAlarmCloseMethodInWindowCommand}"
                 android:background="@android:color/white"
                 android:paddingLeft="16dp"
                 android:layout_width="match_parent"
@@ -68,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp" />
             <android.support.constraint.ConstraintLayout
+                app:clickEvent="@{settingsViewModel.changeAlarmCloseMethodInAppCommand}"
                 android:background="@android:color/white"
                 android:paddingLeft="16dp"
                 android:layout_width="match_parent"
@@ -112,14 +114,14 @@
                 android:layout_height="46dp" />
             <RadioGroup
                 android:id="@+id/themeGroup"
-                android:checkedButton="@+id/theme1"
                 android:background="@android:color/white"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="72dp">
                 <RadioButton
-                    app:clickEvent="@{settingsViewModel.changeThemeCommand}"
+                    app:clickEvent="@{settingsViewModel.changeTheme1Command}"
                     android:id="@+id/theme1"
+                    android:checked="@{settingsViewModel.themeList[0]}"
                     android:background="@drawable/selector_theme_btn1"
                     android:button="@android:color/transparent"
                     android:layout_gravity="center"
@@ -127,8 +129,9 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp" />
                 <RadioButton
-                    app:clickEvent="@{settingsViewModel.changeThemeCommand}"
+                    app:clickEvent="@{settingsViewModel.changeTheme2Command}"
                     android:id="@+id/theme2"
+                    android:checked="@{settingsViewModel.themeList[1]}"
                     android:background="@drawable/selector_theme_btn2"
                     android:button="@android:color/transparent"
                     android:layout_gravity="center"
@@ -136,8 +139,9 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp" />
                 <RadioButton
-                    app:clickEvent="@{settingsViewModel.changeThemeCommand}"
+                    app:clickEvent="@{settingsViewModel.changeTheme3Command}"
                     android:id="@+id/theme3"
+                    android:checked="@{settingsViewModel.themeList[2]}"
                     android:background="@drawable/selector_theme_btn3"
                     android:button="@android:color/transparent"
                     android:layout_gravity="center"
@@ -145,8 +149,9 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp" />
                 <RadioButton
-                    app:clickEvent="@{settingsViewModel.changeThemeCommand}"
+                    app:clickEvent="@{settingsViewModel.changeTheme4Command}"
                     android:id="@+id/theme4"
+                    android:checked="@{settingsViewModel.themeList[3]}"
                     android:background="@drawable/selector_theme_btn4"
                     android:button="@android:color/transparent"
                     android:layout_gravity="center"
@@ -154,8 +159,9 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp" />
                 <RadioButton
-                    app:clickEvent="@{settingsViewModel.changeThemeCommand}"
+                    app:clickEvent="@{settingsViewModel.changeTheme5Command}"
                     android:id="@+id/theme5"
+                    android:checked="@{settingsViewModel.themeList[4]}"
                     android:background="@drawable/selector_theme_btn5"
                     android:button="@android:color/transparent"
                     android:layout_gravity="center"

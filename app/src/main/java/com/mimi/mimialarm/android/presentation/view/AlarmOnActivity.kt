@@ -17,6 +17,7 @@ import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
 import com.mimi.mimialarm.android.utils.ContextUtils
+import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.ResetAlarmEvent
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmOnViewModel
 import com.mimi.mimialarm.core.utils.Command
@@ -36,6 +37,7 @@ class AlarmOnActivity : AppCompatActivity() {
     @Inject lateinit var viewModel: AlarmOnViewModel
     @Inject lateinit var bus: Bus
     @Inject lateinit var dbManager: DBManager
+    @Inject lateinit var dataManager: ApplicationDataManager
 
     var selectedRingtone: Ringtone? = null
     var vibrator: Vibrator? = null
@@ -48,8 +50,10 @@ class AlarmOnActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         buildComponent().inject(this)
+        setTheme(ContextUtils.getThemeId(dataManager.getCurrentTheme()))
+
+        super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_on)
         binding.alarmOnViewModel = viewModel
 

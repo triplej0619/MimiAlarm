@@ -18,6 +18,7 @@ import com.mimi.mimialarm.core.infrastructure.AddTimerEvent
 import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
 import com.mimi.mimialarm.android.infrastructure.ChangePageEvent
 import com.mimi.mimialarm.android.presentation.*
+import com.mimi.mimialarm.android.utils.LogUtils
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerListItemViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerViewModel
 import com.mimi.mimialarm.core.utils.Enums
@@ -146,6 +147,7 @@ class TimerFragment : LifecycleFragment() {
 
     @Subscribe
     fun answerBackPressed(event: BackPressedEvent) {
+        LogUtils.printDebugLog(this@TimerFragment.javaClass, "answerBackPressed()")
         if(event.tabType == Enums.MAIN_TAB.MAIN_TIMER) {
             if (viewModel.deleteMode.get()) {
                 viewModel.cancelDeleteModeCommand.execute(Unit)
