@@ -16,6 +16,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.core.infrastructure.AddTimerEvent
 import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
+import com.mimi.mimialarm.android.infrastructure.ChangePageEvent
 import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerListItemViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerViewModel
@@ -151,6 +152,14 @@ class TimerFragment : LifecycleFragment() {
             } else {
                 event.callback.execute(Unit)
             }
+        }
+    }
+
+    @Subscribe
+
+    fun answerChangePageEvent(event: ChangePageEvent) {
+        if(event.page == 1) {
+            viewModel.cancelDeleteModeCommand.execute(Unit)
         }
     }
 }

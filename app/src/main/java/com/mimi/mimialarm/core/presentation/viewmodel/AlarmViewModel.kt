@@ -46,8 +46,10 @@ class AlarmViewModel @Inject constructor(
 
     val cancelDeleteModeCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            deleteMode.set(false)
-            setDeleteMode(false)
+            if(deleteMode.get()) {
+                deleteMode.set(false)
+                setDeleteMode(false)
+            }
         }
     }
 

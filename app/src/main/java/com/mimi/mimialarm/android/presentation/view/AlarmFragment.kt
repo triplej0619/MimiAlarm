@@ -22,6 +22,7 @@ import com.squareup.otto.Subscribe
 import javax.inject.Inject
 import android.widget.Toast
 import com.mimi.data.DBManager
+import com.mimi.mimialarm.android.infrastructure.ChangePageEvent
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
 import java.util.*
@@ -143,6 +144,13 @@ class AlarmFragment : LifecycleFragment() {
         val hour: Long = (event.seconds / MINUTE) / 60
         if(event.seconds % MINUTE > 0) minute += 1
         Toast.makeText(context, String.format("%s시간 %s분 후 알람이 울립니다.", hour, minute), Toast.LENGTH_SHORT).show()
+    }
+
+    @Subscribe
+    fun answerChangePageEvent(event: ChangePageEvent) {
+        if(event.page == 0) {
+            viewModel.cancelDeleteModeCommand.execute(Unit)
+        }
     }
 
 //    @Subscribe

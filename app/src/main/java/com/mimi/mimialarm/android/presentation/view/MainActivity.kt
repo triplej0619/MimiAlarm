@@ -2,14 +2,17 @@ package com.mimi.mimialarm.android.presentation.view
 
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
+import com.mimi.mimialarm.android.infrastructure.ChangePageEvent
 import com.mimi.mimialarm.android.presentation.ActivityComponent
 import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
@@ -47,6 +50,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun init() {
+        bus.register(this)
+
         MobileAds.initialize(applicationContext, getString(R.string.adsmob_id))
 
         val adRequest = AdRequest.Builder()
@@ -57,11 +62,16 @@ class MainActivity : AppCompatActivity() {
         setupViewPager()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        bus.unregister(this)
+    }
+
     fun setupViewPager() {
         viewPagerAdapter = CustomViewPagerAdapter(supportFragmentManager);
 
         binding?.viewpager?.adapter = viewPagerAdapter
-        binding!!.viewpager.offscreenPageLimit = 2
+        binding?.viewpager?.offscreenPageLimit = 2
 
         viewPagerAdapter?.addItem(AlarmFragment())
         viewPagerAdapter?.addItem(TimerFragment())
@@ -77,6 +87,19 @@ class MainActivity : AppCompatActivity() {
             }
             binding?.tabs?.getTabAt(i)?.customView?.findViewById(R.id.tabIcon)?.setBackgroundResource(iconIndex)
         }
+
+        binding?.viewpager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                bus.post(ChangePageEvent(position))
+            }
+
+        })
     }
 
     override fun attachBaseContext(newBase: Context) {
