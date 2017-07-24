@@ -174,7 +174,7 @@
             <TextView
                 style="@style/NotoSans.Regular.16.Gray1"
                 app:clickEvent="@{settingsViewModel.shareToFriendsCommand}"
-                android:background="@android:color/white"
+                android:background="@drawable/selector_bg_list_item"
                 android:drawableRight="@drawable/icn_arrow_right"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
