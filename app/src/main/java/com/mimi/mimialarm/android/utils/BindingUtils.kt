@@ -9,6 +9,7 @@ import com.mimi.mimialarm.R
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerListItemViewModel
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.TextChanger
+import com.mimi.mimialarm.core.utils.TimeCalculator
 import kotlinx.android.synthetic.main.fragment_timer.*
 
 /**
@@ -50,15 +51,16 @@ class BindingUtils {
         fun bindTimerText(view: View, viewModel: TimerListItemViewModel) {
             if(view is TextView) {
                 var text: String = ""
-                if(viewModel.hour.get() > 0) {
-                    text += viewModel.hour.get().toString() + view.context.getString(R.string.hour)
+                val hour = TimeCalculator.getHourFromSeconds(viewModel.baseTime)
+                val minute = TimeCalculator.getMinuteFromSeconds(viewModel.baseTime)
+                val second = TimeCalculator.getSecondFromSeconds(viewModel.baseTime)
+                if(hour > 0) {
+                    text += hour.toString() + view.context.getString(R.string.hour)
                 }
-                if(viewModel.minute.get() > 0) {
-                    text += " " + viewModel.minute.get().toString() + view.context.getString(R.string.minute)
+                if(minute > 0) {
+                    text += " " + minute.toString() + view.context.getString(R.string.minute)
                 }
-                if(viewModel.second.get() > 0) {
-                    text += " " + viewModel.second.get().toString() + view.context.getString(R.string.second)
-                }
+                text += " " + second.toString() + view.context.getString(R.string.second)
                 text += " " + view.context.getString(R.string.setting)
                 view.text = text
             }

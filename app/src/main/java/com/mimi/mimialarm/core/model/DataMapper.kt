@@ -119,7 +119,7 @@ class DataMapper {
             item.minute.set(TimeCalculator.getMinuteFromSeconds(remainSeconds).toInt())
             item.second.set(TimeCalculator.getSecondFromSeconds(remainSeconds).toInt())
 
-            item.wholeTimeInSecond = remainSeconds + 1
+            item.wholeTimeInSecond = remainSeconds
             item.baseTime = timer.seconds
 
             item.calculateProgressedTime()
