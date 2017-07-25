@@ -92,6 +92,7 @@ class SettingsViewModel @Inject constructor(
 
     fun changeAlarmCloseMethod(methodIndex: Int) {
         applicationDataManager.setAlarmCloseMethod(methodIndex)
+        alarmCloseMethod.set(methodIndex)
     }
 
     fun release() {
