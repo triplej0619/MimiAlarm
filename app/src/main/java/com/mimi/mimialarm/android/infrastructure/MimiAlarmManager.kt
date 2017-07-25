@@ -15,7 +15,7 @@ class MimiAlarmManager(val context: Context) : AlarmManager {
         try {
             ContextUtils.startTimer<TimerOnBroadcastReceiver>(context, id, time, TimerOnBroadcastReceiver::class.java, TimerOnBroadcastReceiver.KEY_TIMER_ID)
         } catch (ex: Exception) {
-            Log.e(this::class.simpleName, ex.toString())
+            Log.e(this::class.java.simpleName, ex.toString())
         }
     }
 
@@ -23,7 +23,7 @@ class MimiAlarmManager(val context: Context) : AlarmManager {
         try {
             ContextUtils.cancelAlarm<TimerOnBroadcastReceiver>(context, id, TimerOnBroadcastReceiver::class.java, TimerOnBroadcastReceiver.KEY_TIMER_ID)
         } catch (ex: Exception) {
-            Log.e(this::class.simpleName, ex.toString())
+            Log.e(this::class.java.simpleName, ex.toString())
         }
     }
 
@@ -31,7 +31,7 @@ class MimiAlarmManager(val context: Context) : AlarmManager {
         try {
             ContextUtils.startAlarm<AlarmOnBroadcastReceiver>(context, id, time, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
         } catch (ex: Exception) {
-            Log.e(this::class.simpleName, ex.toString())
+            Log.e(this::class.java.simpleName, ex.toString())
         }
     }
 
@@ -39,7 +39,7 @@ class MimiAlarmManager(val context: Context) : AlarmManager {
         try {
             ContextUtils.cancelAlarm<AlarmOnBroadcastReceiver>(context, id, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
         } catch (ex: Exception) {
-            Log.e(this::class.simpleName, ex.toString())
+            Log.e(this::class.java.simpleName, ex.toString())
         }
     }
 }

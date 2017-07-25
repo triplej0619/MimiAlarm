@@ -1,5 +1,6 @@
 package com.mimi.mimialarm.android.presentation
 
+import com.mimi.mimialarm.android.infrastructure.service.ReschedulingAlarmAfterBootService
 import com.mimi.mimialarm.android.infrastructure.service.TimerDeactivateService
 import com.mimi.mimialarm.android.presentation.view.*
 import dagger.Component
@@ -21,4 +22,5 @@ interface ActivityComponent {
     fun inject(timerOnActivity: TimerOnActivity)
 
     fun inject(timerDeactivateService: TimerDeactivateService)
+    fun inject(reschedulingAlarmAfterBootService: ReschedulingAlarmAfterBootService)
 }
