@@ -4,7 +4,9 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
+import com.mimi.mimialarm.android.utils.LogUtils
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
+import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
@@ -21,7 +23,8 @@ class AlarmOnViewModel @Inject constructor(
         private val uiManager: UIManager,
         private val dbManager: DBManager,
         private val alarmManager: AlarmManager,
-        private val bus: Bus
+        private val bus: Bus,
+        private val applicationDataManager: ApplicationDataManager
 ) : BaseViewModel() {
 
     val DEFAULT_VOLUME: Int = 80
@@ -45,6 +48,11 @@ class AlarmOnViewModel @Inject constructor(
     var month: ObservableInt = ObservableInt(0)
 
     var alarm: MyAlarm? = null
+    var finishInWindow = ObservableBoolean(true)
+
+    init {
+        finishInWindow.set(applicationDataManager.getAlarmCloseMethod() == 0)
+    }
 
     val finishViewCommand: Command = object : Command {
         override fun execute(arg: Any) {
@@ -70,12 +78,16 @@ class AlarmOnViewModel @Inject constructor(
     }
 
     fun resetAlarm() {
-        if(enable && alarm != null) {
-            alarmManager.startAlarm(alarmId!!, TimeCalculator.getMilliSecondsForScheduling(alarm!!))
+        LogUtils.printDebugLog(this@AlarmOnViewModel.javaClass, "resetAlarm()")
+        if(enable && alarm != null && alarm!!.usedSnoozeCount!! < alarm!!.snoozeCount!!) {
+            alarm?.usedSnoozeCount?.plus(1)
+            dbManager.updateAlarm(alarm!!)
+            alarmManager.startAlarm(alarmId!!, TimeCalculator.getSnoozeTime(alarm!!) * 1000)
         }
     }
 
     fun loadAlarm() {
+        LogUtils.printDebugLog(this@AlarmOnViewModel.javaClass, "loadAlarm()")
         if(alarmId != null) {
             alarm = dbManager.findAlarmWithId(alarmId)
             alarm?.let {

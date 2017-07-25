@@ -32,6 +32,7 @@ open class MyAlarm : RealmObject() {
     var snooze: Boolean = false
     var snoozeInterval: Int? = null
     var snoozeCount: Int? = null
+    var usedSnoozeCount: Int? = null
 
     var repeat: Boolean = false
     var monDay: Boolean = false

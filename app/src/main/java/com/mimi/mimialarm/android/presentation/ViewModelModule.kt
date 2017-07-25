@@ -4,10 +4,7 @@ import com.mimi.data.DBManager
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
-import com.mimi.mimialarm.core.presentation.viewmodel.AlarmDetailViewModel
-import com.mimi.mimialarm.core.presentation.viewmodel.AlarmViewModel
-import com.mimi.mimialarm.core.presentation.viewmodel.SettingsViewModel
-import com.mimi.mimialarm.core.presentation.viewmodel.TimerOnViewModel
+import com.mimi.mimialarm.core.presentation.viewmodel.*
 import com.squareup.otto.Bus
 import dagger.Module
 import dagger.Provides
@@ -25,6 +22,10 @@ class ViewModelModule {
     @Provides
     fun provideAlarmDetailViewModel(uiManager: UIManager, bus: Bus, dbManager: DBManager, alarmManager: AlarmManager): AlarmDetailViewModel
             = AlarmDetailViewModel(uiManager, bus, dbManager, alarmManager)
+
+    @Provides
+    fun provideAlarmOnViewModel(uiManager: UIManager, dbManager: DBManager, alarmManager: AlarmManager, bus: Bus, applicationDataManager: ApplicationDataManager): AlarmOnViewModel
+            = AlarmOnViewModel(uiManager, dbManager, alarmManager, bus, applicationDataManager)
 
     @Provides
     fun provideTimerOnViewModel(uiManager: UIManager, dbManager: DBManager): TimerOnViewModel

@@ -93,6 +93,7 @@ class DataMapper {
             alarm.snooze = viewModel.snooze.get()
             alarm.snoozeInterval = viewModel.snoozeInterval.get()
             alarm.snoozeCount = viewModel.snoozeCount.get()
+            alarm.usedSnoozeCount = 0
 
             alarm.mediaSrc = viewModel.mediaSrc
             alarm.media = viewModel.sound.get()

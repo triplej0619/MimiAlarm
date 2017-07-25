@@ -15,7 +15,14 @@ class TimeCalculator {
         val HOUR: Int = MINUTE * 60
         val DAY: Int = HOUR * 24
 
-        fun getMilliSecondsForScheduling(alarm: MyAlarm): Long {
+        fun getSnoozeTime(alarm: MyAlarm) : Long {
+            alarm.snoozeInterval?.let {
+                return alarm.snoozeInterval!!.toLong() * MINUTE
+            }
+            return 0
+        }
+
+        fun getMilliSecondsForScheduling(alarm: MyAlarm) : Long {
             val today: GregorianCalendar = GregorianCalendar()
             val targetDate: GregorianCalendar = GregorianCalendar()
             today.time = Date()
