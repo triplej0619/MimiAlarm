@@ -10,6 +10,10 @@ import io.realm.RealmResults
  */
 class RealmDataUtils {
     companion object {
+        inline fun <reified T : RealmModel?> findObjectsAsync(realm: Realm) : RealmResults<T> {
+            return realm.where(T::class.java).findAllAsync()
+        }
+
         inline fun <reified T : RealmModel?> findObjects(realm: Realm) : RealmResults<T> {
             return realm.where(T::class.java).findAll()
         }

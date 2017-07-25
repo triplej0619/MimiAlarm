@@ -22,10 +22,18 @@ import com.squareup.otto.Subscribe
 import javax.inject.Inject
 import android.widget.Toast
 import com.mimi.data.DBManager
+import com.mimi.data.RealmDataUtils
+import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.android.infrastructure.ChangePageEvent
+import com.mimi.mimialarm.android.utils.LogUtils
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
+import com.mimi.mimialarm.core.model.DataMapper
+import io.realm.OrderedRealmCollection
+import io.realm.Realm
+import io.realm.RealmRecyclerViewAdapter
 import java.util.*
+import kotlin.properties.Delegates
 
 
 /**
@@ -37,6 +45,7 @@ class AlarmFragment : LifecycleFragment() {
 
     private var listAdapter: AlarmListAdapter? = null
     var binding: FragmentAlarmBinding? = null
+    var realm: Realm by Delegates.notNull<Realm>()
     @Inject lateinit var viewModel: AlarmViewModel
     @Inject lateinit var bus: Bus
     @Inject lateinit var dbManager: DBManager
@@ -51,12 +60,12 @@ class AlarmFragment : LifecycleFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.alarmListLive.observe(this, object : Observer<ArrayList<AlarmListItemViewModel>> {
-            override fun onChanged(t: ArrayList<AlarmListItemViewModel>?) {
-                listAdapter?.clear()
-            }
-
-        })
+//        viewModel.alarmListLive.observe(this, object : Observer<ArrayList<AlarmListItemViewModel>> {
+//            override fun onChanged(t: ArrayList<AlarmListItemViewModel>?) {
+//                listAdapter?.clear()
+//            }
+//
+//        })
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,6 +73,7 @@ class AlarmFragment : LifecycleFragment() {
         buildComponent().inject(this)
         binding?.alarmViewModel = viewModel
 
+        realm = Realm.getDefaultInstance()
         bus.register(this)
         initListView()
 
@@ -74,42 +84,89 @@ class AlarmFragment : LifecycleFragment() {
         super.onDestroy()
         bus.unregister(this)
         viewModel.release()
+        realm.close()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadAlarmList()
+//        viewModel.loadAlarmList()
     }
 
     fun initListView() {
         binding?.list?.layoutManager = LinearLayoutManager(activity)
-        listAdapter = AlarmListAdapter(viewModel.alarmList, R.layout.list_item_alarm, object : IListItemClick {
-            override fun clickEvent(v: View, pos: Int) {
-                viewModel.clickListItem(pos)
-            }
-        }, object : IListItemClick {
-            override fun clickEvent(v: View, pos: Int) {
-                viewModel.startDeleteModeCommand.execute(Unit)
-            }
-        })
-
-        binding?.list?.adapter = listAdapter
-//        binding?.list?.setOnLongClickListener(object : View.OnLongClickListener {
-//            override fun onLongClick(v: View?): Boolean {
+        listAdapter = AlarmListAdapter(RealmDataUtils.findObjects<MyAlarm>(realm)
+                                        , R.layout.list_item_alarm
+                                        , object : IListItemClick {
+                                            override fun clickEvent(v: View, pos: Int) {
+                                                viewModel.clickListItem(pos)
+                                            }
+                                        }, object : IListItemClick {
+                                            override fun clickEvent(v: View, pos: Int) {
+                                                viewModel.startDeleteModeCommand.execute(Unit)
+                                            }
+                                        })
+//        listAdapter = AlarmListAdapter(viewModel.alarmList, R.layout.list_item_alarm, object : IListItemClick {
+//            override fun clickEvent(v: View, pos: Int) {
+//                viewModel.clickListItem(pos)
+//            }
+//        }, object : IListItemClick {
+//            override fun clickEvent(v: View, pos: Int) {
 //                viewModel.startDeleteModeCommand.execute(Unit)
-//                return true
 //            }
 //        })
+
+        binding?.list?.adapter = listAdapter
     }
 
-    private inner class AlarmListAdapter(items: List<AlarmListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick, longClick: IListItemClick)
-        : CustomRecyclerViewAdapter<AlarmListItemViewModel>(items, layoutId, itemClickEvent, longClick) {
+//    private inner class AlarmListAdapter(items: List<AlarmListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick, longClick: IListItemClick)
+//        : CustomRecyclerViewAdapter<AlarmListItemViewModel>(items, layoutId, itemClickEvent, longClick) {
+//
+//        override fun setViewModel(holder: CustomRecyclerViewHolder, item: AlarmListItemViewModel) {
+//            if(holder.binding is ListItemAlarmBinding) {
+//                holder.binding.alarmListItemViewModel = item
+//            }
+//        }
+//    }
 
-        override fun setViewModel(holder: CustomRecyclerViewHolder, item: AlarmListItemViewModel) {
-            if(holder.binding is ListItemAlarmBinding) {
+    private inner class AlarmListAdapter(data: OrderedRealmCollection<MyAlarm>, val layoutId: Int, val itemClick: IListItemClick, val longClick: IListItemClick)
+        : RealmRecyclerViewAdapter<MyAlarm, CustomRecyclerViewHolder>(data, true) {
+
+//        var longClick: IListItemClick by Delegates.notNull<IListItemClick>()
+//        var itemClick: IListItemClick by Delegates.notNull<IListItemClick>()
+
+//        constructor(data: OrderedRealmCollection<MyAlarm>, layoutId: Int, itemClick: IListItemClick, longClick: IListItemClick) : this(data, layoutId) {
+//            this.itemClick = itemClick
+//            this.longClick = longClick
+//            setHasStableIds(true)
+//        }
+
+        init {
+            setHasStableIds(true)
+        }
+
+        override fun onBindViewHolder(holder: CustomRecyclerViewHolder?, position: Int) {
+            val item = data!![position]
+            setViewModel(holder!!, DataMapper.alarmToListItemViewModel(item, bus))
+        }
+
+        fun setViewModel(holder: CustomRecyclerViewHolder, item: AlarmListItemViewModel) {
+                        if(holder.binding is ListItemAlarmBinding) {
                 holder.binding.alarmListItemViewModel = item
             }
         }
+
+        override fun getItemCount(): Int {
+            val count = super.getItemCount()
+            viewModel.alarmCount.set(count)
+            return count
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): CustomRecyclerViewHolder {
+            val itemView = LayoutInflater.from(parent!!.context).inflate(layoutId, parent, false)
+
+            return CustomRecyclerViewHolder(itemView, itemClick, longClick)
+        }
+
     }
 
     @Subscribe
@@ -125,8 +182,9 @@ class AlarmFragment : LifecycleFragment() {
 
     @Subscribe
     fun answerAddAlarmEvent(event: AddAlarmEvent) {
-        viewModel.loadAlarmList()
-        listAdapter?.addItem(listAdapter!!.itemCount - 1)
+        LogUtils.printDebugLog(this@AlarmFragment.javaClass, "answerAddAlarmEvent()")
+//        viewModel.loadAlarmList()
+//        listAdapter?.addItem(listAdapter!!.itemCount - 1)
         binding?.list?.smoothScrollToPosition(listAdapter!!.itemCount - 1)
 
 //        event.id?.let { startAlarm(event.id!!) }
@@ -165,29 +223,4 @@ class AlarmFragment : LifecycleFragment() {
             viewModel.cancelDeleteModeCommand.execute(Unit)
         }
     }
-
-//    @Subscribe
-//    fun answerChangeAlarmStatusEvent(event: ChangeAlarmStatusEvent) {
-//        if(event.activation) {
-//            startAlarm(event.id)
-//        } else {
-//            stopAlarm(event.id)
-//        }
-//    }
-
-//    fun startAlarm(id: Int) {
-//        val alarm: MyAlarm = dbManager.findAlarmWithId(id) ?: return
-//        val time: Long = TimeCalculator.getMilliSecondsForScheduling(alarm)
-//        alarmManager.startAlarm(id, time)
-
-//         TODO 문구 리소스 화
-//        var minute: Long = (time / MINUTE) % 60
-//        val hour: Long = (time / MINUTE) / 60
-//        if(time % MINUTE > 0) minute += 1
-//        Toast.makeText(context, String.format("%s시간 %s분 후 알람이 울립니다.", hour, minute), Toast.LENGTH_SHORT).show()
-//    }
-
-//    fun stopAlarm(id: Int) {
-//        alarmManager.cancelAlarm(id)
-//    }
 }

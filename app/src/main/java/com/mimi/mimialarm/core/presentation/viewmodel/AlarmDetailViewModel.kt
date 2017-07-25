@@ -7,6 +7,7 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
+import com.mimi.mimialarm.android.utils.LogUtils
 import com.mimi.mimialarm.core.infrastructure.AddAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
@@ -123,11 +124,15 @@ class AlarmDetailViewModel @Inject constructor(
     }
 
     fun loadAlarmData() {
+        LogUtils.printDebugLog(this@AlarmDetailViewModel.javaClass, "loadAlarmData")
+
         val alarm: MyAlarm? = dbManager.findAlarmWithId(id)
         alarm?.let { DataMapper.alarmToDetailViewModel(alarm, this) }
     }
 
     fun addAlarm() {
+        LogUtils.printDebugLog(this@AlarmDetailViewModel.javaClass, "addAlarm")
+
         saveAlarmInDB()
         savedAlarm?.let {
             val time = TimeCalculator.getMilliSecondsForScheduling(savedAlarm!!)
@@ -138,6 +143,8 @@ class AlarmDetailViewModel @Inject constructor(
     }
     
     fun updateAlarm() {
+        LogUtils.printDebugLog(this@AlarmDetailViewModel.javaClass, "updateAlarm")
+
         updateAlarmInDB()
         alarmManager.cancelAlarm(savedAlarm?.id!!)
         savedAlarm?.let {
@@ -149,12 +156,15 @@ class AlarmDetailViewModel @Inject constructor(
     }
 
     fun updateAlarmInDB() {
+        LogUtils.printDebugLog(this@AlarmDetailViewModel.javaClass, "updateAlarmInDB")
         val alarm: MyAlarm = DataMapper.detailViewModelToAlarm(this, id!!)
         dbManager.updateAlarm(alarm)
         savedAlarm = alarm
     }
 
     fun saveAlarmInDB() {
+        LogUtils.printDebugLog(this@AlarmDetailViewModel.javaClass, "saveAlarmInDB")
+
         id = dbManager.getNextAlarmId()
         val alarm: MyAlarm = DataMapper.detailViewModelToAlarm(this, id!!)
         dbManager.addAlarm(alarm)

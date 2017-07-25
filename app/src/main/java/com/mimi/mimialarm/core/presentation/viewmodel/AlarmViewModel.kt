@@ -5,6 +5,7 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
+import com.mimi.mimialarm.android.utils.LogUtils
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.ChangeAlarmStatusEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
@@ -88,20 +89,23 @@ class AlarmViewModel @Inject constructor(
     }
 
     fun reLoadAlarmList() {
+        LogUtils.printDebugLog(this@AlarmViewModel.javaClass, "reLoadAlarmList()")
         clear()
         loadAlarmList()
     }
 
     fun loadAlarmList() {
-        val alarms: List<MyAlarm> = dbManager.findAllAlarm()
-        for (alarm in alarms) {
-            updateOrInsertListItem(alarm)
-        }
-        alarmListLive.postValue(alarmList)
-        alarmCount.set(alarms.size)
+        LogUtils.printDebugLog(this@AlarmViewModel.javaClass, "loadAlarmList()")
+//        val alarms: List<MyAlarm> = dbManager.findAllAlarm()
+//        for (alarm in alarms) {
+//            updateOrInsertListItem(alarm)
+//        }
+//        alarmListLive.postValue(alarmList)
+//        alarmCount.set(alarms.size)
     }
 
     fun updateOrInsertListItem(alarm: MyAlarm) {
+        LogUtils.printDebugLog(this@AlarmViewModel.javaClass, "updateOrInsertListItem()")
         for (item in alarmList) {
             if (item.id?.equals(alarm.id) ?: false) {
                 DataMapper.alarmToListItemViewModel(alarm, item)
@@ -113,10 +117,12 @@ class AlarmViewModel @Inject constructor(
     }
 
     fun showAddAlarmView() {
+        LogUtils.printDebugLog(this@AlarmViewModel.javaClass, "showAddAlarmView()")
         uiManager.startAlarmDetailActivityForNew()
     }
 
     fun clickListItem(position: Int) {
+        LogUtils.printDebugLog(this@AlarmViewModel.javaClass, "clickListItem() $position")
         if(!deleteMode.get()) {
             showAlarmDetailView(position)
         } else {
@@ -125,6 +131,7 @@ class AlarmViewModel @Inject constructor(
     }
 
     fun showAlarmDetailView(position: Int) {
+        LogUtils.printDebugLog(this@AlarmViewModel.javaClass, "showAlarmDetailView()")
         uiManager.startAlarmDetailActivityForUpdate(alarmList[position].id)
     }
 
@@ -136,6 +143,7 @@ class AlarmViewModel @Inject constructor(
     }
 
     fun deleteAlarms() {
+        LogUtils.printDebugLog(this@AlarmViewModel.javaClass, "deleteAlarms()")
         if(alarmList.filter { it.selectForDelete.get() }.isEmpty()) {
             uiManager.showToast("선택된 알람이 없습니다.") // TODO text -> resource
         } else {
@@ -153,6 +161,7 @@ class AlarmViewModel @Inject constructor(
     }
 
     fun deleteAllAlarm() {
+        LogUtils.printDebugLog(this@AlarmViewModel.javaClass, "deleteAllAlarm()")
         alarmList
                 .filter { it.selectForDelete.get() }
                 .forEach {
@@ -167,6 +176,8 @@ class AlarmViewModel @Inject constructor(
 
     @Subscribe
     fun answerChangeAlarmStatusEvent(event: ChangeAlarmStatusEvent) {
+        LogUtils.printDebugLog(this@AlarmViewModel.javaClass, "answerChangeAlarmStatusEvent() event.activation: " + event.activation)
+
         if(event.activation) {
             val alarm: MyAlarm? = dbManager.findAlarmWithId(event.id)
             alarm?.let {
