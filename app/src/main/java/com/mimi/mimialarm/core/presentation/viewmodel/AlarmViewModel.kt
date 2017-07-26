@@ -31,6 +31,7 @@ class AlarmViewModel @Inject constructor(
     var alarmCount: ObservableInt = ObservableInt(0)
     var alarmListLive: MutableLiveData<ArrayList<AlarmListItemViewModel>> = MutableLiveData()
     var alarmList: ArrayList<AlarmListItemViewModel> = ArrayList<AlarmListItemViewModel>()
+    var showActivatedAlarmList = ObservableBoolean(false)
 
     val addAlarmCommand: Command = object : Command {
         override fun execute(arg: Any) {
@@ -74,6 +75,12 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
+    val showActivateAlarmListCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            uiManager.startActivatedAlarmListView()
+        }
+    }
+
     init {
         bus.register(this)
     }
@@ -100,6 +107,7 @@ class AlarmViewModel @Inject constructor(
         for (alarm in alarms) {
             updateOrInsertListItem(alarm)
         }
+        showActivatedAlarmList.set(alarms.filter { it.usedSnoozeCount!! > 0 }.isNotEmpty())
         alarmListLive.postValue(alarmList)
         alarmCount.set(alarms.size)
     }
@@ -116,7 +124,7 @@ class AlarmViewModel @Inject constructor(
     }
 
     fun showAddAlarmView() {
-        uiManager.startAlarmDetailActivityForNew()
+        uiManager.startAlarmDetailViewForNew()
     }
 
     fun clickListItem(position: Int) {
@@ -129,7 +137,7 @@ class AlarmViewModel @Inject constructor(
 
     fun showAlarmDetailView(position: Int) {
         LogUtils.printDebugLog(this@AlarmViewModel.javaClass, "showAlarmDetailView()")
-        uiManager.startAlarmDetailActivityForUpdate(alarmList[position].id)
+        uiManager.startAlarmDetailViewForUpdate(alarmList[position].id)
     }
 
     fun setDeleteMode(mode: Boolean) {

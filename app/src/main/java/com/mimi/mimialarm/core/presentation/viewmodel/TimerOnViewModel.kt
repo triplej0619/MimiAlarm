@@ -25,7 +25,7 @@ class TimerOnViewModel(
 
     val finishViewCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            uiManager.finishForegroundActivity()
+            uiManager.finishForegroundView()
         }
     }
 

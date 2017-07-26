@@ -5,6 +5,7 @@ import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.core.infrastructure.ActivateAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
@@ -56,14 +57,14 @@ class AlarmOnViewModel @Inject constructor(
 
     val finishViewCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            uiManager.finishForegroundActivity()
+            uiManager.finishForegroundView()
         }
     }
 
     val finishWithResetCommand: Command = object : Command {
         override fun execute(arg: Any) {
             resetAlarm()
-            uiManager.finishForegroundActivity()
+            uiManager.finishForegroundView()
         }
     }
 
@@ -80,9 +81,10 @@ class AlarmOnViewModel @Inject constructor(
     fun resetAlarm() {
         LogUtils.printDebugLog(this@AlarmOnViewModel.javaClass, "resetAlarm()")
         if(enable && alarm != null && alarm!!.usedSnoozeCount!! < alarm!!.snoozeCount!!) {
-            alarm?.usedSnoozeCount?.plus(1)
+            alarm?.usedSnoozeCount = alarm?.usedSnoozeCount?.inc()
             dbManager.updateAlarm(alarm!!)
             alarmManager.startAlarm(alarmId!!, TimeCalculator.getSnoozeTime(alarm!!) * 1000)
+            bus.post(ActivateAlarmEvent())
         }
     }
 

@@ -20,6 +20,7 @@ interface ActivityComponent {
     fun inject(alarmDetailActivity: AlarmDetailActivity)
     fun inject(alarmOnActivity: AlarmOnActivity)
     fun inject(timerOnActivity: TimerOnActivity)
+    fun inject(activatedAlarmListActivity: ActivatedAlarmListActivity)
 
     fun inject(timerDeactivateService: TimerDeactivateService)
     fun inject(reschedulingAlarmAfterBootService: ReschedulingAlarmAfterBootService)

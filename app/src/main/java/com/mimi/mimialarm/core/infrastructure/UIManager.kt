@@ -7,10 +7,11 @@ import com.mimi.mimialarm.core.utils.Command
  * Created by MihyeLee on 2017. 5. 31..
  */
 interface UIManager {
-    fun finishForegroundActivity()
+    fun finishForegroundView()
 
-    fun startAlarmDetailActivityForNew()
-    fun startAlarmDetailActivityForUpdate(alarmId: Int?)
+    fun startAlarmDetailViewForNew()
+    fun startAlarmDetailViewForUpdate(alarmId: Int?)
+    fun startActivatedAlarmListView()
 
     fun showAlertDialog(msg: String, title: String, cancelable: Boolean)
     fun showAlertDialog(msg: String, title: String, cancelable: Boolean, okCallback: Command?, cancelCallback: Command?)

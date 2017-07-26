@@ -50,6 +50,7 @@
     <!--etc-->
     <color name="normalText">#7c787b</color>
     <color name="dayOfWeek">#383643</color>
+    <color name="dayOfWeek2">#66383643</color>
     <color name="dayOfWeekNegative">#b0b0b0</color>
     <color name="scrollbarVertical">#2a000000</color>
     <color name="selectedListItem">#13000000</color>

@@ -44,6 +44,12 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity
+            android:name=".android.presentation.view.ActivatedAlarmListActivity"
+            android:label="@string/title_activity_activated_alarm_list"
+            android:screenOrientation="portrait">
+        </activity>
+
         <receiver android:name=".android.infrastructure.BootCompleteReceiver"
             android:enabled="true">
             <intent-filter>

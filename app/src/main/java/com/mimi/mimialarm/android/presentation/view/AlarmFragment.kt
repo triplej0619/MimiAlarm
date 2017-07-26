@@ -23,6 +23,8 @@ import javax.inject.Inject
 import android.widget.Toast
 import com.mimi.data.DBManager
 import com.mimi.mimialarm.android.infrastructure.ChangePageEvent
+import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.core.infrastructure.ActivateAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
 import java.util.*
@@ -36,7 +38,7 @@ class AlarmFragment : LifecycleFragment() {
     val MINUTE: Int = 60
 
     private var listAdapter: AlarmListAdapter? = null
-    var binding: FragmentAlarmBinding? = null
+    lateinit var binding: FragmentAlarmBinding
     @Inject lateinit var viewModel: AlarmViewModel
     @Inject lateinit var bus: Bus
     @Inject lateinit var dbManager: DBManager
@@ -53,7 +55,7 @@ class AlarmFragment : LifecycleFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel.alarmListLive.observe(this, object : Observer<ArrayList<AlarmListItemViewModel>> {
             override fun onChanged(t: ArrayList<AlarmListItemViewModel>?) {
-                listAdapter?.clear()
+                listAdapter?.notifyDataSetChanged()
             }
 
         })
@@ -62,12 +64,12 @@ class AlarmFragment : LifecycleFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_alarm, container, false)
         buildComponent().inject(this)
-        binding?.alarmViewModel = viewModel
+        binding.alarmViewModel = viewModel
 
         bus.register(this)
         initListView()
 
-        return binding?.root
+        return binding.root
     }
 
     override fun onDestroy() {
@@ -82,7 +84,7 @@ class AlarmFragment : LifecycleFragment() {
     }
 
     fun initListView() {
-        binding?.list?.layoutManager = LinearLayoutManager(activity)
+        binding.list.layoutManager = LinearLayoutManager(activity)
         listAdapter = AlarmListAdapter(viewModel.alarmList, R.layout.list_item_alarm, object : IListItemClick {
             override fun clickEvent(v: View, pos: Int) {
                 viewModel.clickListItem(pos)
@@ -93,13 +95,7 @@ class AlarmFragment : LifecycleFragment() {
             }
         })
 
-        binding?.list?.adapter = listAdapter
-//        binding?.list?.setOnLongClickListener(object : View.OnLongClickListener {
-//            override fun onLongClick(v: View?): Boolean {
-//                viewModel.startDeleteModeCommand.execute(Unit)
-//                return true
-//            }
-//        })
+        binding.list.adapter = listAdapter
     }
 
     private inner class AlarmListAdapter(items: List<AlarmListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick, longClick: IListItemClick)
@@ -125,11 +121,11 @@ class AlarmFragment : LifecycleFragment() {
 
     @Subscribe
     fun answerAddAlarmEvent(event: AddAlarmEvent) {
+        LogUtils.printDebugLog(this@AlarmFragment.javaClass, "answerAddAlarmEvent()")
         viewModel.loadAlarmList()
         listAdapter?.addItem(listAdapter!!.itemCount - 1)
-        binding?.list?.smoothScrollToPosition(listAdapter!!.itemCount - 1)
+        binding.list.smoothScrollToPosition(listAdapter!!.itemCount - 1)
 
-//        event.id?.let { startAlarm(event.id!!) }
         val minute: Long = (event.seconds / MINUTE) % 60
         val hour: Long = (event.seconds / MINUTE) / 60
         Toast.makeText(context, getAlarmScheduleString(hour, minute), Toast.LENGTH_SHORT).show()
@@ -149,11 +145,13 @@ class AlarmFragment : LifecycleFragment() {
         } else {
             text = String.format("1%s %s", getString(R.string.minute), getString(R.string.msg_add_alarm_under_1min))
         }
+        LogUtils.printDebugLog(this@AlarmFragment.javaClass, "getAlarmScheduleString() $text")
         return text
     }
 
     @Subscribe
     fun answerUpdateAlarmEvent(event: UpdateAlarmEvent) {
+        LogUtils.printDebugLog(this@AlarmFragment.javaClass, "answerUpdateAlarmEvent()")
         val minute: Long = (event.seconds / MINUTE) % 60
         val hour: Long = (event.seconds / MINUTE) / 60
         Toast.makeText(context, getAlarmScheduleString(hour, minute), Toast.LENGTH_SHORT).show()
@@ -166,28 +164,9 @@ class AlarmFragment : LifecycleFragment() {
         }
     }
 
-//    @Subscribe
-//    fun answerChangeAlarmStatusEvent(event: ChangeAlarmStatusEvent) {
-//        if(event.activation) {
-//            startAlarm(event.id)
-//        } else {
-//            stopAlarm(event.id)
-//        }
-//    }
-
-//    fun startAlarm(id: Int) {
-//        val alarm: MyAlarm = dbManager.findAlarmWithId(id) ?: return
-//        val time: Long = TimeCalculator.getMilliSecondsForScheduling(alarm)
-//        alarmManager.startAlarm(id, time)
-
-//         TODO 문구 리소스 화
-//        var minute: Long = (time / MINUTE) % 60
-//        val hour: Long = (time / MINUTE) / 60
-//        if(time % MINUTE > 0) minute += 1
-//        Toast.makeText(context, String.format("%s시간 %s분 후 알람이 울립니다.", hour, minute), Toast.LENGTH_SHORT).show()
-//    }
-
-//    fun stopAlarm(id: Int) {
-//        alarmManager.cancelAlarm(id)
-//    }
+    @Subscribe
+    fun answerActivateAlarmEvent(event: ActivateAlarmEvent) {
+        LogUtils.printDebugLog(this@AlarmFragment.javaClass, "answerActivateAlarmEvent()")
+        viewModel.showActivatedAlarmList.set(true)
+    }
 }

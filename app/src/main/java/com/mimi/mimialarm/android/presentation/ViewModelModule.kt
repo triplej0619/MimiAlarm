@@ -34,4 +34,8 @@ class ViewModelModule {
     @Provides
     fun provideSettingsViewModel(uiManager: UIManager, bus: Bus, applicationDataManager: ApplicationDataManager): SettingsViewModel
             = SettingsViewModel(uiManager, bus, applicationDataManager)
+
+    @Provides
+    fun provideActivatedAlarmListViewModel(dbManager: DBManager, alarmManager: AlarmManager): ActivatedAlarmListViewModel
+            = ActivatedAlarmListViewModel(dbManager, alarmManager)
 }

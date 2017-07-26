@@ -15,21 +15,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            tools:listitem="@layout/list_item_alarm"
-            tools:visibility="gone"
-            android:id="@+id/list"
-            android:scrollbars="vertical"
-            android:fadeScrollbars="true"
-            android:scrollbarFadeDuration="0"
-            android:scrollbarStyle="outsideOverlay"
-            android:scrollbarSize="6dp"
-            android:scrollbarThumbVertical="@color/scrollbarVertical"
-            android:visibility="@{alarmViewModel.alarmCount > 0 ? View.VISIBLE : View.GONE}"
-            android:longClickable="true"
-            android:layout_marginBottom="88dp"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+            <RelativeLayout
+                app:clickEvent="@{alarmViewModel.showActivateAlarmListCommand}"
+                android:id="@+id/showActivateAlarmListLayout"
+                android:visibility="@{alarmViewModel.showActivatedAlarmList ? View.VISIBLE : View.GONE}"
+                android:background="?attr/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="72dp">
+                <TextView
+                    style="@style/NotoSans.Thin.14.White"
+                    android:includeFontPadding="false"
+                    android:gravity="center"
+                    android:background="@drawable/bg_text_main_show_activate_alarm_list"
+                    android:layout_centerInParent="true"
+                    android:text="@string/msg_show_activate_alarm_list"
+                    android:layout_width="160dp"
+                    android:layout_height="32dp"
+                    />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                tools:listitem="@layout/list_item_alarm"
+                tools:visibility="gone"
+                android:id="@+id/list"
+                android:scrollbars="vertical"
+                android:fadeScrollbars="true"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbarSize="6dp"
+                android:scrollbarThumbVertical="@color/scrollbarVertical"
+                android:visibility="@{alarmViewModel.alarmCount > 0 ? View.VISIBLE : View.GONE}"
+                android:longClickable="true"
+                android:layout_marginBottom="88dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
         <TextView
             style="@style/Roboto.Regular.15.Gray1"

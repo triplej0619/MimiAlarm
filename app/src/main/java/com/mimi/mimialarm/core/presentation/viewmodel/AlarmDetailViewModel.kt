@@ -168,6 +168,6 @@ class AlarmDetailViewModel @Inject constructor(
     }
 
     fun closeView() {
-        uiManager.finishForegroundActivity()
+        uiManager.finishForegroundView()
     }
 }

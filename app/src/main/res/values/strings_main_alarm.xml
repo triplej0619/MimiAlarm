@@ -15,4 +15,6 @@
 
     <string name="msg_add_alarm_over_1min">후 알람이 울립니다.</string>
     <string name="msg_add_alarm_under_1min">이내에 알람이 울립니다.</string>
+
+    <string name="msg_show_activate_alarm_list">지금 동작중인 알람 보기</string>
 </resources>

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import com.mimi.mimialarm.R
+import com.mimi.mimialarm.android.presentation.view.ActivatedAlarmListActivity
 import com.mimi.mimialarm.android.presentation.view.AlarmDetailActivity
 import com.mimi.mimialarm.android.utils.BundleKey
 import com.mimi.mimialarm.core.infrastructure.UIManager
@@ -72,20 +73,24 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
         }
     }
 
-    override fun finishForegroundActivity() {
+    override fun finishForegroundView() {
         currentActivity?.finish()
     }
 
-    override fun startAlarmDetailActivityForNew() {
+    override fun startAlarmDetailViewForNew() {
         startActivity<AlarmDetailActivity>(AlarmDetailActivity::class.java)
     }
 
-    override fun startAlarmDetailActivityForUpdate(alarmId: Int?) {
+    override fun startAlarmDetailViewForUpdate(alarmId: Int?) {
         if(alarmId != null) {
             val bundle: Bundle = Bundle()
             bundle.putInt(BundleKey.ALARM_ID.key, alarmId)
             startActivityWithExtras<AlarmDetailActivity>(AlarmDetailActivity::class.java, bundle)
         }
+    }
+
+    override fun startActivatedAlarmListView() {
+        startActivity<ActivatedAlarmListActivity>(ActivatedAlarmListActivity::class.java)
     }
 
     override fun showAlertDialog(msg: String, title: String, cancelable: Boolean) {
