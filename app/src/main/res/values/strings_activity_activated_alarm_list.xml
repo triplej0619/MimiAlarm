@@ -2,4 +2,5 @@
 <resources>
     <string name="title_activity_activated_alarm_list">지금 동작중인 알람</string>
     <string name="mas_no_activated_alarm">현재 동작중인 알람이 없습니다</string>
+    <string name="stop">중지</string>
 </resources>

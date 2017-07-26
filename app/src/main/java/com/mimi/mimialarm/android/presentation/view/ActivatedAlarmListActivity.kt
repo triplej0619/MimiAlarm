@@ -6,16 +6,16 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import android.view.View
 import com.mimi.data.DBManager
 import com.mimi.mimialarm.R
-import com.mimi.mimialarm.android.presentation.ActivityComponent
-import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
-import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
-import com.mimi.mimialarm.android.presentation.ViewModelModule
+import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.android.utils.ContextUtils
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.presentation.viewmodel.ActivatedAlarmListViewModel
+import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
 import com.mimi.mimialarm.databinding.ActivityActivatedAlarmListBinding
+import com.mimi.mimialarm.databinding.ListItemActivatedAlarmBinding
 import com.squareup.otto.Bus
 import javax.inject.Inject
 
@@ -24,6 +24,7 @@ import javax.inject.Inject
  */
 class ActivatedAlarmListActivity : AppCompatActivity() {
 
+    private lateinit var listAdapter: ActivatedAlarmListAdapter
     lateinit var binding: ActivityActivatedAlarmListBinding
     @Inject lateinit var dbManager: DBManager
     @Inject lateinit var dataManager: ApplicationDataManager
@@ -46,6 +47,7 @@ class ActivatedAlarmListActivity : AppCompatActivity() {
         binding.activatedAlarmListViewModel = viewModel
 
         init()
+        viewModel.loadAlarmList()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -72,5 +74,17 @@ class ActivatedAlarmListActivity : AppCompatActivity() {
 
     fun init() {
         binding.list.layoutManager = LinearLayoutManager(this)
+        listAdapter = ActivatedAlarmListAdapter(viewModel.alarmList, R.layout.list_item_activated_alarm)
+        binding.list.adapter = listAdapter
+    }
+
+    private inner class ActivatedAlarmListAdapter(items: List<AlarmListItemViewModel>?, layoutId: Int)
+        : CustomRecyclerViewAdapter<AlarmListItemViewModel>(items, layoutId) {
+
+        override fun setViewModel(holder: CustomRecyclerViewHolder, item: AlarmListItemViewModel) {
+            if(holder.binding is ListItemActivatedAlarmBinding) {
+                holder.binding.alarmListItemViewModel = item
+            }
+        }
     }
 }
