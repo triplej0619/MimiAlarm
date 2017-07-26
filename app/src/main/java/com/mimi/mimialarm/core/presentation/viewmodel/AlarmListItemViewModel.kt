@@ -2,6 +2,7 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.databinding.*
 import com.mimi.mimialarm.core.infrastructure.ChangeAlarmStatusEvent
+import com.mimi.mimialarm.core.infrastructure.StopAlarmItemEvent
 import com.mimi.mimialarm.core.utils.Command
 import com.squareup.otto.Bus
 import java.text.SimpleDateFormat
@@ -54,9 +55,16 @@ class AlarmListItemViewModel(val bus: Bus) : BaseViewModel() {
             selectForDelete.set(!selectForDelete.get())
         }
     }
+
     val changeEnableStatusCommand: Command = object : Command {
         override fun execute(arg: Any) {
             changeEnableStatus()
+        }
+    }
+
+    val stopCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            stop()
         }
     }
 
@@ -67,5 +75,9 @@ class AlarmListItemViewModel(val bus: Bus) : BaseViewModel() {
 
     fun changeAlarmStatus(activation: Boolean) {
         id?.let { bus.post(ChangeAlarmStatusEvent(id!!, activation)) }
+    }
+
+    fun stop() {
+        bus.post(StopAlarmItemEvent(id!!))
     }
 }

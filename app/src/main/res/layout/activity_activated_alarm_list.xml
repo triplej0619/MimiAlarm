@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    android:keepScreenOn="true"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -43,13 +42,13 @@
                 tools:listitem="@layout/list_item_alarm"
                 tools:visibility="gone"
                 android:id="@+id/list"
+                android:visibility="@{activatedAlarmListViewModel.alarmCount > 0 ? View.VISIBLE : View.GONE}"
                 android:scrollbars="vertical"
                 android:fadeScrollbars="true"
                 android:scrollbarFadeDuration="0"
                 android:scrollbarStyle="outsideOverlay"
                 android:scrollbarSize="6dp"
                 android:scrollbarThumbVertical="@color/scrollbarVertical"
-                android:visibility="@{activatedAlarmListViewModel.alarmCount > 0 ? View.VISIBLE : View.GONE}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
