@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TimePicker
+                <com.mimi.mimialarm.android.presentation.view.CustomTimerPicker
                     tools:visibility="gone"
                     android:id="@+id/timePicker"
                     android:numbersTextColor="@android:color/white"
