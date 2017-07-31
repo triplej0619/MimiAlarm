@@ -186,14 +186,16 @@
                         <android.support.v7.widget.AppCompatSeekBar
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:id="@+id/soundVolume"
+                            android:thumb="@drawable/icn_theme_selected"
                             android:layout_alignParentRight="true"
                             android:layout_below="@id/selectedSound"
                             android:max="100"
                             android:progress="@{alarmDetailViewModel.soundVolume}"
+                            android:layout_marginLeft="8dp"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="24dp"
                             android:layout_marginBottom="24dp"
-                            android:layout_width="220dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <View
                             android:layout_alignParentBottom="true"
