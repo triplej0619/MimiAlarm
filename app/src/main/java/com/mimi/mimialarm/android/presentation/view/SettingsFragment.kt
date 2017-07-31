@@ -73,7 +73,7 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         override fun onRewardedVideoAdFailedToLoad(p0: Int) {
             LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdFailedToLoad()")
             loadAdVideo()
-            Toast.makeText(this@SettingsFragment.context, R.string.settings_fail_to_load_ad, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this@SettingsFragment.context, R.string.settings_fail_to_load_ad, Toast.LENGTH_SHORT).show()
         }
     }
 
