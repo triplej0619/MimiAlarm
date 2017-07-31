@@ -9,6 +9,7 @@ import com.mimi.mimialarm.android.utils.LogUtils
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.ChangeAlarmStatusEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
+import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.TimeCalculator
@@ -182,20 +183,18 @@ class AlarmViewModel @Inject constructor(
     @Subscribe
     fun answerChangeAlarmStatusEvent(event: ChangeAlarmStatusEvent) {
         LogUtils.printDebugLog(this@AlarmViewModel.javaClass, "answerChangeAlarmStatusEvent() activation : " + event.activation)
-        if(event.activation) {
-            val alarm: MyAlarm? = dbManager.findAlarmWithId(event.id)
-            alarm?.let {
+        val alarm: MyAlarm? = dbManager.findAlarmWithId(event.id)
+        alarm?.let {
+            alarm.enable = event.activation
+            if (event.activation) {
                 val time = TimeCalculator.getMilliSecondsForScheduling(alarm)
                 alarmManager.startAlarm(event.id, time)
-            }
-        } else {
-            val alarm: MyAlarm? = dbManager.findAlarmWithId(event.id)
-            alarm?.let {
+                bus.post(UpdateAlarmEvent(time / 1000))
+            } else {
                 alarm.usedSnoozeCount = 0
-                alarm.enable = false
-                dbManager.updateAlarm(alarm)
+                alarmManager.cancelAlarm(event.id)
             }
-            alarmManager.cancelAlarm(event.id)
+            dbManager.updateAlarm(alarm)
         }
     }
 }

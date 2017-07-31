@@ -2,6 +2,7 @@
 <resources>
     <string name="msg_no_timer">시간을 선택하고 +버튼을 누르면\n타이머를 시작할 수 있습니다.</string>
 
+    <string name="day">일</string>
     <string name="hour">시간</string>
     <string name="minute">분</string>
     <string name="second">초</string>

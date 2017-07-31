@@ -27,6 +27,7 @@ import com.mimi.mimialarm.android.utils.LogUtils
 import com.mimi.mimialarm.core.infrastructure.ActivateAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
+import com.mimi.mimialarm.core.utils.TimeCalculator
 import java.util.*
 
 
@@ -126,22 +127,26 @@ class AlarmFragment : LifecycleFragment() {
         listAdapter?.addItem(listAdapter!!.itemCount - 1)
         binding.list.smoothScrollToPosition(listAdapter!!.itemCount - 1)
 
-        val minute: Long = (event.seconds / MINUTE) % 60
-        val hour: Long = (event.seconds / MINUTE) / 60
-        Toast.makeText(context, getAlarmScheduleString(hour, minute), Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getAlarmScheduleString(event.seconds), Toast.LENGTH_SHORT).show()
     }
 
-    fun getAlarmScheduleString(hour: Long, minute: Long) : String{
+    fun getAlarmScheduleString(second: Long) : String{
         var text: String = ""
+        val hour = TimeCalculator.getHourFromSeconds(second)
+        val minute = TimeCalculator.getMinuteFromSeconds(second)
+        val day = TimeCalculator.getDayFromSeconds(second)
 
-        if(hour > 0 || minute > 0) {
+        if(hour > 0 || minute > 0 || day > 0) {
+            if (day > 0) {
+                text = day.toString() + getString(R.string.day) + " "
+            }
             if (hour > 0) {
-                text = hour.toString() + getString(R.string.hour)
+                text += hour.toString() + getString(R.string.hour) + " "
             }
             if (minute > 0) {
-                text += " " + minute.toString() + getString(R.string.minute)
+                text += minute.toString() + getString(R.string.minute) + " "
             }
-            text += " " + getString(R.string.msg_add_alarm_over_1min)
+            text += getString(R.string.msg_add_alarm_over_1min)
         } else {
             text = String.format("1%s %s", getString(R.string.minute), getString(R.string.msg_add_alarm_under_1min))
         }
@@ -152,9 +157,7 @@ class AlarmFragment : LifecycleFragment() {
     @Subscribe
     fun answerUpdateAlarmEvent(event: UpdateAlarmEvent) {
         LogUtils.printDebugLog(this@AlarmFragment.javaClass, "answerUpdateAlarmEvent()")
-        val minute: Long = (event.seconds / MINUTE) % 60
-        val hour: Long = (event.seconds / MINUTE) / 60
-        Toast.makeText(context, getAlarmScheduleString(hour, minute), Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getAlarmScheduleString(event.seconds), Toast.LENGTH_SHORT).show()
     }
 
     @Subscribe
