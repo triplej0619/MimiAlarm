@@ -33,7 +33,7 @@
                     android:background="@drawable/bg_text_main_show_activate_alarm_list"
                     android:layout_centerInParent="true"
                     android:text="@string/msg_show_activate_alarm_list"
-                    android:layout_width="160dp"
+                    android:layout_width="184dp"
                     android:layout_height="32dp"
                     />
             </RelativeLayout>
