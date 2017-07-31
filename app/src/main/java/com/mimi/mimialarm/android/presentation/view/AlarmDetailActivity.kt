@@ -3,6 +3,7 @@ package com.mimi.mimialarm.android.presentation.view
 import android.arch.lifecycle.LifecycleActivity
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.databinding.Observable
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.widget.TimePicker
@@ -162,17 +163,37 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
     }
 
     fun observeData() {
-//        viewModel.repeatLive.observe(this, Observer<Boolean> { t ->
-//            if(t != null) {
-//                binding.mondayBtn.root.isEnabled = t
-//                binding.tuesdayBtn.root.isEnabled = t
-//                binding.wednesdayBtn.root.isEnabled = t
-//                binding.thursdayBtn.root.isEnabled = t
-//                binding.fridayBtn.root.isEnabled = t
-//                binding.saturdayBtn.root.isEnabled = t
-//                binding.sundayBtn.root.isEnabled = t
-//            }
-//        })
+        viewModel.snoozeLive.observe(this, android.arch.lifecycle.Observer<Boolean> { t ->
+            if(t != null) {
+                setEnableView(binding.snoozeInterval, t)
+                setEnableView(binding.snoozeCount, t)
+            }
+        })
+        viewModel.soundLive.observe(this, android.arch.lifecycle.Observer<Boolean> { t ->
+            if(t != null) {
+                setEnableView(binding.selectedSound, t)
+                setEnableView(binding.soundVolume, t)
+            }
+        })
+        viewModel.repeatLive.observe(this, android.arch.lifecycle.Observer<Boolean> { t ->
+            if(t != null) {
+                setEnableView(binding.mondayBtn.root, t)
+                setEnableView(binding.tuesdayBtn.root, t)
+                setEnableView(binding.wednesdayBtn.root, t)
+                setEnableView(binding.thursdayBtn.root, t)
+                setEnableView(binding.fridayBtn.root, t)
+                setEnableView(binding.saturdayBtn.root, t)
+                setEnableView(binding.sundayBtn.root, t)
+            }
+        })
+    }
+
+    fun setEnableView(view: View, enable: Boolean) {
+        var alpha = 1.0f
+        if(!enable)
+            alpha = 0.3f
+        view.isEnabled = enable
+        view.alpha = alpha
     }
 
     override fun onDestroy() {

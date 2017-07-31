@@ -2,11 +2,13 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.databinding.Bindable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
+import com.mimi.mimialarm.BR
 import com.mimi.mimialarm.android.utils.LogUtils
 import com.mimi.mimialarm.core.infrastructure.AddAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
@@ -37,23 +39,37 @@ class AlarmDetailViewModel @Inject constructor(
     var id: Int? = null
 
     var endTime: ObservableField<Date> = ObservableField<Date>(Date())
-    var repeat: ObservableBoolean = ObservableBoolean(true)
-    val repeatLive: LiveData<Boolean> = MutableLiveData()
-    var snooze: ObservableBoolean = ObservableBoolean(true)
+    val repeatLive: MutableLiveData<Boolean> = MutableLiveData()
+    var repeat: Boolean = true
+        @Bindable get() = field
+        set(value) {
+            field = value
+            repeatLive.postValue(value)
+            notifyPropertyChanged(BR.repeat)
+        }
+    val snoozeLive: MutableLiveData<Boolean> = MutableLiveData()
+    var snooze: Boolean = true
+    @Bindable get() = field
+    set(value) {
+        field = value
+        snoozeLive.postValue(value)
+        notifyPropertyChanged(BR.snooze)
+    }
     var snoozeInterval: ObservableInt = ObservableInt(0)
     var snoozeCount: ObservableInt = ObservableInt(0)
 
     var mediaSrc: String = ""
-    var sound: ObservableBoolean = ObservableBoolean(true)
+    val soundLive: MutableLiveData<Boolean> = MutableLiveData()
+    var sound: Boolean = true
+        @Bindable get() = field
+        set(value) {
+            field = value
+            soundLive.postValue(value)
+            notifyPropertyChanged(BR.sound)
+        }
     var vibration: ObservableBoolean = ObservableBoolean(true)
     var soundVolume: ObservableInt = ObservableInt(DEFAULT_VOLUME)
 
-//    var monDay: Boolean = true
-//    @Bindable get() = field
-//    set(value) {
-//        field = value
-//        notifyPropertyChanged(BR.monDay)
-//    }
     var monDay: ObservableBoolean = ObservableBoolean(true)
     var tuesDay: ObservableBoolean = ObservableBoolean(true)
     var wednesDay: ObservableBoolean = ObservableBoolean(true)

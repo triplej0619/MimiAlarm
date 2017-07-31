@@ -43,7 +43,7 @@ class DataMapper {
         fun alarmToDetailViewModel(alarm: MyAlarm, viewModel: AlarmDetailViewModel) {
             viewModel.endTime.set(alarm.completedAt)
 
-            viewModel.repeat.set(alarm.repeat)
+            viewModel.repeat = alarm.repeat
             viewModel.monDay.set(alarm.monDay)
             viewModel.thursDay.set(alarm.thursDay)
             viewModel.tuesDay.set(alarm.tuesDay)
@@ -53,11 +53,11 @@ class DataMapper {
             viewModel.sunDay.set(alarm.sunDay)
 
             viewModel.vibration.set(alarm.vibration)
-            viewModel.sound.set(alarm.media)
+            viewModel.sound = alarm.media
             viewModel.mediaSrc = alarm.mediaSrc ?: ""
             viewModel.soundVolume.set(alarm.volume ?: DEFAULT_VOLUME)
 
-            viewModel.snooze.set(alarm.snooze)
+            viewModel.snooze = alarm.snooze
             viewModel.snoozeInterval.set(alarm.snoozeInterval ?: 0)
             viewModel.snoozeCount.set(alarm.snoozeCount ?: 0)
         }
@@ -79,8 +79,8 @@ class DataMapper {
             calendar.set(GregorianCalendar.MILLISECOND, 0)
             alarm.completedAt = calendar.time
 
-            alarm.repeat = viewModel.repeat.get()
-            if(viewModel.repeat.get()) {
+            alarm.repeat = viewModel.repeat
+            if(alarm.repeat) {
                 alarm.monDay = viewModel.monDay.get()
                 alarm.tuesDay = viewModel.tuesDay.get()
                 alarm.wednesDay = viewModel.wednesDay.get()
@@ -90,8 +90,8 @@ class DataMapper {
                 alarm.sunDay = viewModel.sunDay.get()
             }
 
-            alarm.snooze = viewModel.snooze.get()
-            if(viewModel.snooze.get()) {
+            alarm.snooze = viewModel.snooze
+            if(alarm.snooze) {
                 alarm.snoozeInterval = viewModel.snoozeInterval.get()
                 alarm.snoozeCount = viewModel.snoozeCount.get()
             } else {
@@ -101,7 +101,7 @@ class DataMapper {
             alarm.usedSnoozeCount = 0
 
             alarm.mediaSrc = viewModel.mediaSrc
-            alarm.media = viewModel.sound.get()
+            alarm.media = viewModel.sound
             alarm.volume = viewModel.soundVolume.get()
             alarm.vibration = viewModel.vibration.get()
 
@@ -130,7 +130,6 @@ class DataMapper {
 
             item.calculateProgressedTime()
 
-//            item.activated.set(timer.activated)
             item.setActivated(timer.activated)
 
         }
