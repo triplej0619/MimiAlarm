@@ -12,6 +12,7 @@
         <item name="colorGradientEnd">@color/gradientEnd1</item>
         <item name="colorGradientMid">@color/gradientMid1</item>
         <item name="colorBg">@color/bg1</item>
+        <item name="android:windowBackground">@color/bg1</item>
         <item name="colorListDivider">@color/listDivider1</item>
     </style>
 
@@ -23,6 +24,7 @@
         <item name="colorGradientEnd">@color/gradientEnd2</item>
         <item name="colorGradientMid">@color/gradientMid2</item>
         <item name="colorBg">@color/bg2</item>
+        <item name="android:windowBackground">@color/bg2</item>
         <item name="colorListDivider">@color/listDivider2</item>
     </style>
 
@@ -34,6 +36,7 @@
         <item name="colorGradientEnd">@color/gradientEnd3</item>
         <item name="colorGradientMid">@color/gradientMid3</item>
         <item name="colorBg">@color/bg3</item>
+        <item name="android:windowBackground">@color/bg3</item>
         <item name="colorListDivider">@color/listDivider3</item>
     </style>
 
@@ -45,6 +48,7 @@
         <item name="colorGradientEnd">@color/gradientEnd4</item>
         <item name="colorGradientMid">@color/gradientMid4</item>
         <item name="colorBg">@color/bg4</item>
+        <item name="android:windowBackground">@color/bg4</item>
         <item name="colorListDivider">@color/listDivider4</item>
     </style>
 
@@ -56,6 +60,7 @@
         <item name="colorGradientEnd">@color/gradientEnd5</item>
         <item name="colorGradientMid">@color/gradientMid5</item>
         <item name="colorBg">@color/bg5</item>
+        <item name="android:windowBackground">@color/bg5</item>
         <item name="colorListDivider">@color/listDivider5</item>
     </style>
 
