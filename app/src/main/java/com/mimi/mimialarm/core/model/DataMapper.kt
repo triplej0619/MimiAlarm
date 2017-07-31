@@ -34,9 +34,7 @@ class DataMapper {
 
             viewModel.endTime = alarm.completedAt
 
-            if (alarm.snoozeCount != null && alarm.snoozeInterval != null) {
-                viewModel.snooze.set(true)
-            }
+            viewModel.snooze.set(alarm.snooze)
             viewModel.snoozeCount.set(alarm.snoozeCount ?: 0)
             viewModel.snoozeInterval.set(alarm.snoozeInterval ?: 0)
             viewModel.enable.set(alarm.enable)
@@ -82,17 +80,24 @@ class DataMapper {
             alarm.completedAt = calendar.time
 
             alarm.repeat = viewModel.repeat.get()
-            alarm.monDay = viewModel.monDay.get()
-            alarm.tuesDay = viewModel.tuesDay.get()
-            alarm.wednesDay = viewModel.wednesDay.get()
-            alarm.thursDay = viewModel.thursDay.get()
-            alarm.friDay = viewModel.friDay.get()
-            alarm.saturDay = viewModel.saturDay.get()
-            alarm.sunDay = viewModel.sunDay.get()
+            if(viewModel.repeat.get()) {
+                alarm.monDay = viewModel.monDay.get()
+                alarm.tuesDay = viewModel.tuesDay.get()
+                alarm.wednesDay = viewModel.wednesDay.get()
+                alarm.thursDay = viewModel.thursDay.get()
+                alarm.friDay = viewModel.friDay.get()
+                alarm.saturDay = viewModel.saturDay.get()
+                alarm.sunDay = viewModel.sunDay.get()
+            }
 
             alarm.snooze = viewModel.snooze.get()
-            alarm.snoozeInterval = viewModel.snoozeInterval.get()
-            alarm.snoozeCount = viewModel.snoozeCount.get()
+            if(viewModel.snooze.get()) {
+                alarm.snoozeInterval = viewModel.snoozeInterval.get()
+                alarm.snoozeCount = viewModel.snoozeCount.get()
+            } else {
+                alarm.snoozeInterval = 0
+                alarm.snoozeCount = 0
+            }
             alarm.usedSnoozeCount = 0
 
             alarm.mediaSrc = viewModel.mediaSrc
