@@ -35,6 +35,7 @@ class AlarmOnViewModel @Inject constructor(
     var snooze: ObservableBoolean = ObservableBoolean(true)
     var snoozeInterval: Int = 0
     var snoozeCount: Int = 0
+    var usedSnoozeCount: Int = 0
     var endTime: Date = Date()
     var enable: Boolean = false
     var sound: Boolean = true
@@ -50,6 +51,7 @@ class AlarmOnViewModel @Inject constructor(
 
     var alarm: MyAlarm? = null
     var finishInWindow = ObservableBoolean(true)
+    var willExpire = ObservableBoolean(false)
 
     init {
         finishInWindow.set(applicationDataManager.getAlarmCloseMethod() == 0)
@@ -57,6 +59,8 @@ class AlarmOnViewModel @Inject constructor(
 
     val finishViewCommand: Command = object : Command {
         override fun execute(arg: Any) {
+            updateEnableStatus()
+            setNextDayAlarm()
             uiManager.finishForegroundView()
         }
     }
@@ -78,13 +82,34 @@ class AlarmOnViewModel @Inject constructor(
         }
     }
 
+    fun updateEnableStatus() {
+        alarm?.let {
+            if((!alarm!!.snooze and !alarm!!.repeat)
+                    or
+                    (alarm!!.snooze and (usedSnoozeCount > snoozeCount))) {
+                alarm!!.enable = false
+            }
+            alarm!!.usedSnoozeCount = 0
+            dbManager.updateAlarm(alarm!!)
+        }
+    }
+
+    fun setNextDayAlarm() {
+        if(alarm!!.repeat) {
+            alarmManager.startAlarm(alarmId!!, TimeCalculator.getMilliSecondsForScheduling(alarm!!))
+            bus.post(ActivateAlarmEvent())
+        }
+    }
+
     fun resetAlarm() {
         LogUtils.printDebugLog(this@AlarmOnViewModel.javaClass, "resetAlarm()")
-        if(enable && alarm != null && alarm!!.usedSnoozeCount!! < alarm!!.snoozeCount!!) {
-            alarm?.usedSnoozeCount = alarm?.usedSnoozeCount?.inc()
-            dbManager.updateAlarm(alarm!!)
-            alarmManager.startAlarm(alarmId!!, TimeCalculator.getSnoozeTime(alarm!!) * 1000)
-            bus.post(ActivateAlarmEvent())
+        if(enable && alarm != null) {
+            if(alarm!!.snooze && usedSnoozeCount <= snoozeCount) {
+                alarmManager.startAlarm(alarmId!!, TimeCalculator.getSnoozeTime(alarm!!) * 1000)
+                bus.post(ActivateAlarmEvent())
+            } else {
+                setNextDayAlarm()
+            }
         }
     }
 
@@ -93,7 +118,14 @@ class AlarmOnViewModel @Inject constructor(
         if(alarmId != null) {
             alarm = dbManager.findAlarmWithId(alarmId)
             alarm?.let {
+                alarm!!.usedSnoozeCount = alarm!!.usedSnoozeCount!!.inc()
                 DataMapper.alarmToAlarmOnViewModel(alarm!!, this)
+                dbManager.updateAlarm(alarm!!)
+                if((!finishInWindow.get() and !snooze.get())
+                        or
+                        (usedSnoozeCount > snoozeCount)) {
+                    willExpire.set(true)
+                }
             }
         }
     }

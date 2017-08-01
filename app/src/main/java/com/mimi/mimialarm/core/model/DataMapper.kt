@@ -178,9 +178,10 @@ class DataMapper {
             viewModel.mediaSrc = alarm.mediaSrc ?: ""
             viewModel.soundVolume = alarm.volume ?: DEFAULT_VOLUME
 
-            viewModel.snooze.set(alarm.snooze)
             viewModel.snoozeInterval = alarm.snoozeInterval ?: 0
             viewModel.snoozeCount = alarm.snoozeCount ?: 0
+            viewModel.usedSnoozeCount = alarm.usedSnoozeCount ?: 0
+            viewModel.snooze.set(alarm.snooze and (viewModel.usedSnoozeCount <= viewModel.snoozeCount))
 
             viewModel.enable = alarm.enable
         }
