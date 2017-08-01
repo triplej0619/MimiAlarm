@@ -64,9 +64,8 @@ class TimerOnActivity : AppCompatActivity() {
         viewModel.timerId = intent.getIntExtra(TimerOnBroadcastReceiver.KEY_TIMER_ID, -1)
         viewModel.startCommand.execute(Unit)
 
-        // TODO disable for test
-//        playVibration()
-//        playRingtone()
+        playVibration()
+        playRingtone()
     }
 
     fun wakeUpScreen() {
