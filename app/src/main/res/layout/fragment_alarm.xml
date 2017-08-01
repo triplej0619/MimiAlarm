@@ -97,7 +97,7 @@
             app:rippleColor="#FFF"
             android:id="@+id/deleteAll"
             android:visibility="@{alarmViewModel.deleteMode ? View.VISIBLE : View.GONE}"
-            android:src="@drawable/icn_x"
+            android:src="@drawable/icn_trashall"
             android:clickable="true"
             android:layout_marginLeft="24dp"
             android:layout_margin="20dp"
