@@ -6,11 +6,12 @@ import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.TextView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mimi.mimialarm.R
@@ -36,7 +37,7 @@ import javax.inject.Inject
 class TimerFragment : LifecycleFragment() {
 
     private var listAdapter: TimerListAdapter? = null
-    var binding: FragmentTimerBinding? = null
+    lateinit var binding: FragmentTimerBinding
     @Inject
     lateinit var viewModel: TimerViewModel
     @Inject
@@ -62,17 +63,17 @@ class TimerFragment : LifecycleFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_timer, container, false)
         buildComponent().inject(this)
-        binding?.timerViewModel = viewModel
+        binding.timerViewModel = viewModel
 
         bus.register(this)
         initListView()
         initEditView()
 
-        return binding?.root
+        return binding.root
     }
 
     fun initListView() {
-        binding?.list?.layoutManager = LinearLayoutManager(activity)
+        binding.list.layoutManager = LinearLayoutManager(activity)
         listAdapter = TimerListAdapter(viewModel.timerList, R.layout.list_item_timer, object : IListItemClick {
             override fun clickEvent(v: View, pos: Int) {
                 viewModel.clickListItem(pos)
@@ -83,22 +84,22 @@ class TimerFragment : LifecycleFragment() {
             }
         })
 
-        binding?.list?.adapter = listAdapter
+        binding.list.adapter = listAdapter
 
         viewModel.loadTimerList()
     }
 
     fun initEditView() {
-        binding?.hour?.setSelectAllOnFocus(true)
-        binding?.minute?.setSelectAllOnFocus(true)
-        binding?.second?.setSelectAllOnFocus(true)
-        binding?.hour?.setOnClickListener{ binding?.hour?.selectAll() }
-        binding?.minute?.setOnClickListener{ binding?.minute?.selectAll() }
-        binding?.second?.setOnClickListener{ binding?.second?.selectAll() }
+        binding.hour.setSelectAllOnFocus(true)
+        binding.minute.setSelectAllOnFocus(true)
+        binding.second.setSelectAllOnFocus(true)
+        binding.hour.setOnClickListener{ binding.hour.selectAll() }
+        binding.minute.setOnClickListener{ binding.minute.selectAll() }
+        binding.second.setOnClickListener{ binding.second.selectAll() }
 
-        Observable.combineLatest(RxTextView.textChanges(binding?.hour as TextView),
-                RxTextView.textChanges(binding?.minute as TextView),
-                RxTextView.textChanges(binding?.second as TextView),
+        Observable.combineLatest(RxTextView.textChanges(binding.hour as TextView),
+                RxTextView.textChanges(binding.minute as TextView),
+                RxTextView.textChanges(binding.second as TextView),
                 Function3<CharSequence, CharSequence, CharSequence, Boolean> { t1, t2, t3 ->
                     var isEnabled: Boolean = false
                     if(!t1.isNullOrEmpty() && !t2.isNullOrEmpty() && !t3.isNullOrEmpty()) {
@@ -108,7 +109,7 @@ class TimerFragment : LifecycleFragment() {
                             isEnabled = true
                         }
                     }
-                    binding?.addTimer?.isEnabled = isEnabled
+                    binding.addTimer.isEnabled = isEnabled
                     false
                 }
             ).subscribe()
@@ -136,13 +137,13 @@ class TimerFragment : LifecycleFragment() {
 
     @Subscribe
     fun answerAddTimerEvent(event: AddTimerEvent) {
-        binding?.list?.smoothScrollToPosition(listAdapter!!.itemCount - 1)
+        binding.list.smoothScrollToPosition(listAdapter!!.itemCount - 1)
         keyboardHide()
     }
 
     fun keyboardHide() {
         val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding?.list?.windowToken, 0)
+        imm.hideSoftInputFromWindow(binding.list.windowToken, 0)
     }
 
     @Subscribe
