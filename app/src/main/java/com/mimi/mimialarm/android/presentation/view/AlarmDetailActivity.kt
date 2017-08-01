@@ -80,7 +80,17 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
             calendar.time = viewModel.endTime.get()
             binding.timePicker.currentHour = calendar.get(GregorianCalendar.HOUR_OF_DAY)
             binding.timePicker.currentMinute = calendar.get(GregorianCalendar.MINUTE)
+
+            val snoozeCountArray = resources.getStringArray(R.array.snoozeCountValue)
+            val snoozeIntervalArray = resources.getStringArray(R.array.snoozeTimeIntervalValue)
+            binding.snoozeCount.setSelection(getIndexInStringArray(viewModel.snoozeCount.get().toString(), snoozeCountArray))
+            binding.snoozeInterval.setSelection(getIndexInStringArray(viewModel.snoozeInterval.get().toString(), snoozeIntervalArray))
         }
+    }
+
+    fun getIndexInStringArray(value: String, array: Array<String>) : Int {
+        return (0..array.size-1).firstOrNull { array[it] == value }
+                ?: 0
     }
 
     fun init() {

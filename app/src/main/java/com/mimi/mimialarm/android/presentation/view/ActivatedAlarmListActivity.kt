@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -22,6 +23,7 @@ import com.mimi.mimialarm.databinding.ActivityActivatedAlarmListBinding
 import com.mimi.mimialarm.databinding.ListItemActivatedAlarmBinding
 import com.squareup.otto.Bus
 import io.realm.Realm
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import java.util.ArrayList
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -62,6 +64,10 @@ class ActivatedAlarmListActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
         init()
         viewModel.loadAlarmList()
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
