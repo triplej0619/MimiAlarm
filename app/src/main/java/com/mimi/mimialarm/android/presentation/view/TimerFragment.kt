@@ -93,9 +93,6 @@ class TimerFragment : LifecycleFragment() {
         binding.hour.setSelectAllOnFocus(true)
         binding.minute.setSelectAllOnFocus(true)
         binding.second.setSelectAllOnFocus(true)
-        binding.hour.setOnClickListener{ binding.hour.selectAll() }
-        binding.minute.setOnClickListener{ binding.minute.selectAll() }
-        binding.second.setOnClickListener{ binding.second.selectAll() }
 
         Observable.combineLatest(RxTextView.textChanges(binding.hour as TextView),
                 RxTextView.textChanges(binding.minute as TextView),

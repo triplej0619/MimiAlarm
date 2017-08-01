@@ -60,7 +60,9 @@ class BindingUtils {
                 if(minute > 0) {
                     text += " " + minute.toString() + view.context.getString(R.string.minute)
                 }
-                text += " " + second.toString() + view.context.getString(R.string.second)
+                if(second > 0) {
+                    text += " " + second.toString() + view.context.getString(R.string.second)
+                }
                 text += " " + view.context.getString(R.string.setting)
                 view.text = text
             }
