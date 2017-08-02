@@ -28,15 +28,15 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
         hour.set(TimeCalculator.getHourFromSeconds(field).toInt())
         minute.set(TimeCalculator.getMinuteFromSeconds(field).toInt())
         second.set(TimeCalculator.getSecondFromSeconds(field).toInt())
+//        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "hour : $hour, minute : $minute, second : $second")
     }
     var progressed: ObservableInt = ObservableInt(0)
-//    var paused: ObservableBoolean = ObservableBoolean(false)
-//    var stop: ObservableBoolean = ObservableBoolean(false)
     var deleteMode: ObservableBoolean = ObservableBoolean(false)
     var selectForDelete: ObservableBoolean = ObservableBoolean(false)
     var timeSubscription: Disposable? = null
     val timeObservable: Observable<Int>
     var baseTime: Long = 0
+    var firstDelay = true
 
     val changeSelectStatusCommand: Command = object : Command {
         override fun execute(arg: Any) {
@@ -52,15 +52,21 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
 
     init {
         timeObservable = Observable.create(ObservableOnSubscribe<Int> { e ->
-            LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "timeObservable - wholeTimeInSecond : $wholeTimeInSecond, id : $id")
-            if (wholeTimeInSecond > 0) {
-                wholeTimeInSecond -= 1
-                calculateProgressedTime()
-                e.onComplete()
+            LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "timeObservable - wholeTimeInSecond : $wholeTimeInSecond, id : $id, firstDelay : $firstDelay")
+            if(!firstDelay) {
+                if (wholeTimeInSecond > 0) {
+                    wholeTimeInSecond -= 1
+                    calculateProgressedTime()
+                    e.onComplete()
+                } else {
+                    firstDelay = true
+                    activated.set(false)
+                    pauseTimer()
+                    wholeTimeInSecond = baseTime
+                }
             } else {
-                activated.set(false)
-                pauseTimer()
-                wholeTimeInSecond = baseTime
+                firstDelay = false
+                e.onComplete()
             }
         }).repeatWhen({ t: Observable<Any> ->
             t.delay(1000, TimeUnit.MILLISECONDS)

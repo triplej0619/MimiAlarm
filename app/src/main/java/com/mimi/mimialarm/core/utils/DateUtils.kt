@@ -8,8 +8,12 @@ import java.util.*
 class DateUtils {
     companion object {
         fun getAfterDate(milliseconds: Int) : Date{
-            val afterDate: Date = Date()
-            afterDate.time = afterDate.time + milliseconds
+            return getAfterDate(Date(), milliseconds)
+        }
+
+        fun getAfterDate(baseDate: Date, milliseconds: Int) : Date{
+            val afterDate = Date()
+            afterDate.time = baseDate.time + milliseconds
             return afterDate
         }
     }

@@ -108,6 +108,12 @@ class DataMapper {
             alarm.enable = true
         }
 
+        fun timerToListItemViewModel(newTimer: MyTimer, bus: Bus, isAddedInUI: Boolean) : TimerListItemViewModel {
+            val listItem: TimerListItemViewModel = TimerListItemViewModel(bus)
+            timerToListItemViewModel(newTimer, listItem, isAddedInUI)
+            return listItem
+        }
+
         fun timerToListItemViewModel(newTimer: MyTimer, bus: Bus) : TimerListItemViewModel {
             val listItem: TimerListItemViewModel = TimerListItemViewModel(bus)
             timerToListItemViewModel(newTimer, listItem)
@@ -115,10 +121,14 @@ class DataMapper {
         }
 
         fun timerToListItemViewModel(timer: MyTimer, item: TimerListItemViewModel) {
+            timerToListItemViewModel(timer, item, false)
+        }
+
+        fun timerToListItemViewModel(timer: MyTimer, item: TimerListItemViewModel, isAddedInUI: Boolean) {
             item.id = timer.id
 
             var remainSeconds = timer.remainSeconds
-            if(timer.activated && timer.remainSeconds != timer.seconds) {
+            if(timer.activated and !isAddedInUI) {
                 remainSeconds = (timer.completedAt!!.time - Date().time) / 1000
             }
             item.hour.set(TimeCalculator.getHourFromSeconds(remainSeconds).toInt())
@@ -137,7 +147,6 @@ class DataMapper {
         fun viewModelToTimer(viewModel: TimerViewModel, id: Int): MyTimer? {
             val timer: MyTimer = MyTimer()
             timer.id = id
-            timer.createdAt = Date()
 
             var hourInt: Int = 0
             var minInt: Int = 0
@@ -153,7 +162,9 @@ class DataMapper {
             }
             timer.seconds = (hourInt * viewModel.HOUR_IN_SECONDS).toLong() + (minInt * viewModel.MINUTE_IN_SECONDS).toLong() + secInt.toLong()
             timer.remainSeconds = timer.seconds
-            timer.completedAt = DateUtils.getAfterDate(timer.seconds.toInt() * 1000)
+
+            timer.createdAt = Date()
+            timer.completedAt = DateUtils.getAfterDate(timer.createdAt!!, timer.seconds.toInt() * 1000)
 
             timer.activated = true
 

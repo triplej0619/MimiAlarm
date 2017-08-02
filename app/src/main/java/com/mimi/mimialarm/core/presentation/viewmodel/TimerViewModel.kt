@@ -150,17 +150,19 @@ class TimerViewModel @Inject constructor(
     }
 
     fun addTimer() {
+        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "addTimer()")
         val timer: MyTimer? = DataMapper.viewModelToTimer(this, dbManager.getNextTimerId())
         if(timer != null) {
+            alarmManager.startTimer(timer.id!!, timer.remainSeconds * SECOND_IN_MILLI)
             dbManager.addTimer(timer)
             addTimerListItem(timer)
-            alarmManager.startTimer(timer.id!!, timer.remainSeconds * SECOND_IN_MILLI)
             LogUtils.printDebugLog(this@TimerViewModel.javaClass, "addTimer() timer.remainSeconds : " + timer.remainSeconds)
         }
     }
 
     fun addTimerListItem(timer: MyTimer) {
-        val listItem: TimerListItemViewModel = DataMapper.timerToListItemViewModel(timer, bus)
+        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "addTimerListItem()")
+        val listItem: TimerListItemViewModel = DataMapper.timerToListItemViewModel(timer, bus, true)
         timerList.add(listItem)
         timerCount.set(timerCount.get() + 1)
         timerListLive.postValue(timerList)
@@ -235,15 +237,16 @@ class TimerViewModel @Inject constructor(
                 if (timer.remainSeconds == 0L) {
                     timer.remainSeconds = timer.seconds
                 }
+                alarmManager.startTimer(event.id, timer.remainSeconds * SECOND_IN_MILLI)
                 timer.completedAt = DateUtils.getAfterDate(timer.remainSeconds.toInt() * 1000)
+                timer.activated = true
                 dbManager.updateTimer(timer)
 
                 LogUtils.printDebugLog(this@TimerViewModel.javaClass, "answerChangeTimerStatusEvent() startTimer : " + timer.remainSeconds)
-                alarmManager.startTimer(event.id, timer.remainSeconds * SECOND_IN_MILLI)
             }
         } else {
-            pauseAndUpdateTimerTime(event.id, event.remainSeconds)
             alarmManager.cancelTimer(event.id)
+            pauseAndUpdateTimerTime(event.id, event.remainSeconds)
         }
     }
 
