@@ -84,6 +84,11 @@ class TimerOnActivity : AppCompatActivity() {
         vibrator?.cancel()
     }
 
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        viewModel.finishViewCommand.execute(Unit)
+    }
+
     fun playVibration() {
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         vibrator?.vibrate(longArrayOf(100, 1000), 0)

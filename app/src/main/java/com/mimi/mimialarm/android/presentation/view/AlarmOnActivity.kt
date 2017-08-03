@@ -100,10 +100,10 @@ class AlarmOnActivity : AppCompatActivity() {
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        if(viewModel.willExpire.get() and viewModel.finishInWindow.get()) {
-            viewModel.finishViewCommand.execute(Unit)
-        } else {
+        if(!viewModel.willExpire.get() and viewModel.snooze.get()) {
             viewModel.finishWithResetCommand.execute(Unit)
+        } else {
+            viewModel.finishViewCommand.execute(Unit)
         }
     }
 
