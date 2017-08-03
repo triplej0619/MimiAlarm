@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Vibrator
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.view.WindowManager
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
@@ -27,6 +28,10 @@ import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
 import java.util.*
 import javax.inject.Inject
+import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
+import android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+
+
 
 /**
  * Created by MihyeLee on 2017. 6. 29..
@@ -81,11 +86,25 @@ class AlarmOnActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
     }
 
+    override fun onResume() {
+        super.onResume()
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         bus.unregister(this)
         selectedRingtone?.stop()
         vibrator?.cancel()
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if(viewModel.willExpire.get() and viewModel.finishInWindow.get()) {
+            viewModel.finishViewCommand.execute(Unit)
+        } else {
+            viewModel.finishWithResetCommand.execute(Unit)
+        }
     }
 
     fun playVibration() {
@@ -100,18 +119,4 @@ class AlarmOnActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
     }
-
-//    @Subscribe
-//    fun answerCancelAlarmEvent(event: CancelAlarmEvent) {
-//        event.id?.let {
-//            ContextUtils.cancelAlarm(this, event.id!!, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
-//        }
-//    }
-
-//    @Subscribe
-//    fun answerResetAlarmEvent(event: ResetAlarmEvent) {
-//        val alarm: MyAlarm = dbManager.findAlarmWithId(event.id) ?: return
-//        val time: Long = TimeCalculator.getMilliSecondsForScheduling(alarm)
-//        ContextUtils.startAlarm<AlarmOnBroadcastReceiver>(this, event.id!!, time, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
-//    }
 }

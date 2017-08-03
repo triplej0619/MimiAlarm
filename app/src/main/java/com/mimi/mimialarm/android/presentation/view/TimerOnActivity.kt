@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.PowerManager
 import android.os.Vibrator
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.view.WindowManager
 import com.mimi.data.DBManager
 import com.mimi.mimialarm.R
@@ -70,6 +71,11 @@ class TimerOnActivity : AppCompatActivity() {
 
     fun wakeUpScreen() {
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
     }
 
     override fun onDestroy() {
