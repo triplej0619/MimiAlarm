@@ -130,6 +130,17 @@ class TimerFragment : LifecycleFragment() {
                 holder.binding.timerListItemViewModel = item
             }
         }
+
+        override fun onBindViewHolder(holder: CustomRecyclerViewHolder, position: Int) {
+            super.onBindViewHolder(holder, position)
+            if(holder.binding is ListItemTimerBinding) {
+                if(holder.binding.timerListItemViewModel.activated.get()) {
+                    holder.binding.remainTime.alpha = 1.0f
+                } else {
+                    holder.binding.remainTime.alpha = 0.5f
+                }
+            }
+        }
     }
 
     @Subscribe
