@@ -13,4 +13,7 @@
     <string name="alarm_on_thursday">목요일</string>
     <string name="alarm_on_friday">금요일</string>
     <string name="alarm_on_saturday">토요일</string>
+
+    <string name="alarm_on_kill_snooze">다시 알림 해제</string>
+    <string name="alarm_on_reset_snooze">다시 알림이 설정되었습니다.</string>
 </resources>

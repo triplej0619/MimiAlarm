@@ -38,6 +38,10 @@ class RealmDBManager : DBManager {
         return null
     }
 
+    override fun findAlarmWithIdAsync(id: Int?): MyAlarm? {
+        return null // TODO
+    }
+
     override fun deleteAlarmWithId(id: Int?) {
         if(id != null) {
             RealmDataUtils.deleteObject(realm, RealmDataUtils.findObjectWithId<MyAlarm>(realm, FIELD_ID, id))

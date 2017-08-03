@@ -1,5 +1,6 @@
 package com.mimi.mimialarm.android.presentation
 
+import com.mimi.mimialarm.android.infrastructure.service.AlarmDeactivateService
 import com.mimi.mimialarm.android.infrastructure.service.ReschedulingAlarmAfterBootService
 import com.mimi.mimialarm.android.infrastructure.service.TimerDeactivateService
 import com.mimi.mimialarm.android.presentation.view.*
@@ -23,5 +24,6 @@ interface ActivityComponent {
     fun inject(activatedAlarmListActivity: ActivatedAlarmListActivity)
 
     fun inject(timerDeactivateService: TimerDeactivateService)
+    fun inject(alarmDeactivateService: AlarmDeactivateService)
     fun inject(reschedulingAlarmAfterBootService: ReschedulingAlarmAfterBootService)
 }

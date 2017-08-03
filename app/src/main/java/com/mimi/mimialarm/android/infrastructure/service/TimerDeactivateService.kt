@@ -39,8 +39,7 @@ class TimerDeactivateService : IntentService("TimerDeactivateService") {
     }
 
     fun deactivateTimers() {
-
-        val realm = Realm.getDefaultInstance()
+        val realm = Realm.getDefaultInstance() // TODO
         realm.executeTransaction {
             RealmDataUtils.findObjects<MyTimer>(realm).forEach {
                 it.activated = false

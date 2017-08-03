@@ -62,6 +62,7 @@
         <receiver android:name=".android.infrastructure.service.TimerOnBroadcastReceiver" />
 
         <service android:name=".android.infrastructure.service.TimerDeactivateService" />
+        <service android:name=".android.infrastructure.service.AlarmDeactivateService" />
         <service android:name=".android.infrastructure.service.ReschedulingAlarmAfterBootService" />
 
     </application>

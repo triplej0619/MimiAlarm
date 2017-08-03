@@ -2,9 +2,13 @@ package com.mimi.mimialarm.android.presentation
 
 import android.app.Activity
 import android.app.Application
+import android.app.Notification
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.NotificationCompat
 import android.widget.Toast
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.presentation.view.ActivatedAlarmListActivity
@@ -14,6 +18,10 @@ import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.utils.Command
 import com.squareup.otto.Bus
 import javax.inject.Inject
+import android.app.PendingIntent
+import com.mimi.mimialarm.android.infrastructure.service.AlarmDeactivateService
+import com.mimi.mimialarm.android.presentation.view.MainActivity
+
 
 /**
  * Created by MihyeLee on 2017. 5. 25..
@@ -119,5 +127,32 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
         if(currentActivity != null) {
             Toast.makeText(currentActivity, msg, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun addNotification(msg: String, id: Int) {
+
+        val activityIntent = PendingIntent.getActivity(application, 999, Intent(application, MainActivity::class.java), PendingIntent.FLAG_ONE_SHOT)
+
+        val builder = NotificationCompat.Builder(application)
+        builder.setContentTitle(application.getString(R.string.alarm_on_reset_snooze))
+                .setContentText(msg)
+                .setSmallIcon(R.drawable.icn_alarm)
+                .setAutoCancel(true)
+                .setWhen(System.currentTimeMillis())
+                .setPriority(Notification.PRIORITY_MAX)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setCategory(Notification.CATEGORY_ALARM)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setContentIntent(activityIntent)
+
+        val dismissIntent = Intent(application, AlarmDeactivateService::class.java)
+        dismissIntent.action = AlarmDeactivateService.KEY_ACTION_KILL_SNOOZE
+//        dismissIntent.putExtra(AlarmDeactivateService.KEY_ACTION_KILL_SNOOZE, AlarmDeactivateService.KEY_ACTION_KILL_SNOOZE)
+        dismissIntent.putExtra(AlarmDeactivateService.KEY_ID, id)
+        val dismissPendingIndent = PendingIntent.getService(application, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        builder.addAction(R.drawable.icn_stop, application.getString(R.string.alarm_on_kill_snooze), dismissPendingIndent)
+
+        val nm : NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.notify(id, builder.build())
     }
 }

@@ -1,5 +1,6 @@
 package com.mimi.mimialarm.core.utils
 
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -15,6 +16,14 @@ class DateUtils {
             val afterDate = Date()
             afterDate.time = baseDate.time + milliseconds
             return afterDate
+        }
+
+        fun dateToFormattedString(date: Date?, format: String): String {
+            if (date != null) {
+                val dateFormat = SimpleDateFormat(format)
+                return dateFormat.format(date)
+            }
+            return ""
         }
     }
 }

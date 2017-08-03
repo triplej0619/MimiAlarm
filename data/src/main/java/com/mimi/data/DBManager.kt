@@ -10,6 +10,7 @@ interface DBManager {
     fun getNextAlarmId() : Int
     fun findAllAlarm() : List<MyAlarm>
     fun findAlarmWithId(id: Int?) : MyAlarm?
+    fun findAlarmWithIdAsync(id: Int?) : MyAlarm?
     fun deleteAlarmWithId(id: Int?)
     fun addAlarm(alarm: MyAlarm)
     fun updateAlarm(alarm: MyAlarm)
