@@ -109,6 +109,11 @@ class AlarmFragment : LifecycleFragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.cancelDeleteModeCommand.execute(Unit)
+    }
+
     @Subscribe
     fun answerBackPressed(event: BackPressedEvent) {
         if(event.tabType == Enums.MAIN_TAB.MAIN_ALARM) {
