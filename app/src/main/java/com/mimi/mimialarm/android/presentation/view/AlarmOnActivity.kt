@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
 import com.mimi.data.DBManager
-import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.infrastructure.service.AlarmOnBroadcastReceiver
 import com.mimi.mimialarm.android.presentation.ActivityComponent
@@ -19,17 +18,14 @@ import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
 import com.mimi.mimialarm.android.utils.ContextUtils
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
-import com.mimi.mimialarm.core.infrastructure.ResetAlarmEvent
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmOnViewModel
 import com.mimi.mimialarm.core.utils.Command
-import com.mimi.mimialarm.core.utils.TimeCalculator
 import com.mimi.mimialarm.databinding.ActivityAlarmOnBinding
 import com.squareup.otto.Bus
-import com.squareup.otto.Subscribe
 import java.util.*
 import javax.inject.Inject
-import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
-import android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+
+
 
 
 
@@ -86,9 +82,13 @@ class AlarmOnActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
     }
 
+    fun getSystemUIFlag() : Int = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+
     override fun onResume() {
         super.onResume()
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+        window.decorView.systemUiVisibility = getSystemUIFlag()
     }
 
     override fun onDestroy() {

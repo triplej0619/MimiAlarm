@@ -4,9 +4,7 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.media.Ringtone
 import android.media.RingtoneManager
-import android.net.Uri
 import android.os.Bundle
-import android.os.PowerManager
 import android.os.Vibrator
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -73,9 +71,13 @@ class TimerOnActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
     }
 
+    fun getSystemUIFlag() : Int = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+
     override fun onResume() {
         super.onResume()
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+        window.decorView.systemUiVisibility = getSystemUIFlag()
     }
 
     override fun onDestroy() {
