@@ -1,6 +1,7 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.databinding.ObservableBoolean
+import android.databinding.ObservableFloat
 import android.databinding.ObservableInt
 import com.mimi.mimialarm.android.utils.LogUtils
 import com.mimi.mimialarm.core.infrastructure.ChangeTimerStatusEvent
@@ -16,6 +17,9 @@ import java.util.concurrent.TimeUnit
  * Created by MihyeLee on 2017. 6. 22..
  */
 class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
+
+    val FULL_ALPHA = ObservableFloat(1.0f)
+    val HALF_ALPHA = ObservableFloat(0.5f)
 
     var id: Int? = null
     var activated: ObservableBoolean = ObservableBoolean(true)

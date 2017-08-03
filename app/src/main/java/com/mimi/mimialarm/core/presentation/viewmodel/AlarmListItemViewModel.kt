@@ -14,6 +14,9 @@ import java.util.*
 
 class AlarmListItemViewModel(val bus: Bus) : BaseViewModel() {
 
+    val FULL_ALPHA = ObservableFloat(1.0f)
+    val HALF_ALPHA = ObservableFloat(0.5f)
+
     var deleteMode: ObservableBoolean = ObservableBoolean(false)
     var selectForDelete: ObservableBoolean = ObservableBoolean(false)
 

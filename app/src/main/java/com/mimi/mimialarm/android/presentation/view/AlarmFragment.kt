@@ -107,17 +107,6 @@ class AlarmFragment : LifecycleFragment() {
                 holder.binding.alarmListItemViewModel = item
             }
         }
-
-        override fun onBindViewHolder(holder: CustomRecyclerViewHolder, position: Int) {
-            super.onBindViewHolder(holder, position)
-            if(holder.binding is ListItemAlarmBinding) {
-                if(holder.binding.alarmListItemViewModel.enable.get()) {
-                    holder.binding.time.alpha = 1f
-                } else {
-                    holder.binding.time.alpha = 0.5f
-                }
-            }
-        }
     }
 
     @Subscribe

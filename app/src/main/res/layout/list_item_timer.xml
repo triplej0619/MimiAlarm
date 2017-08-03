@@ -36,6 +36,7 @@
             <TextView
                 tools:text="01:15:55"
                 style="@style/Roboto.Thin.60.Gray1"
+                android:alpha="@{timerListItemViewModel.activated ? timerListItemViewModel.FULL_ALPHA : timerListItemViewModel.HALF_ALPHA}"
                 android:text='@{String.format("%02d:%02d:%02d", timerListItemViewModel.hour, timerListItemViewModel.minute, timerListItemViewModel.second)}'
                 android:id="@+id/remainTime"
                 android:includeFontPadding="false"

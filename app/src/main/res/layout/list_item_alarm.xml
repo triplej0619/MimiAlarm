@@ -27,6 +27,7 @@
                 style="@style/Roboto.Thin.60.Gray1"
                 tools:text="11:11"
                 android:id="@+id/time"
+                android:alpha="@{alarmListItemViewModel.enable ? alarmListItemViewModel.FULL_ALPHA : alarmListItemViewModel.HALF_ALPHA}"
                 android:text="@{alarmListItemViewModel.endTimeString}"
                 android:includeFontPadding="false"
                 android:layout_width="wrap_content"
