@@ -134,8 +134,8 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
         val activityIntent = PendingIntent.getActivity(application, 999, Intent(application, MainActivity::class.java), PendingIntent.FLAG_ONE_SHOT)
 
         val builder = NotificationCompat.Builder(application)
-        builder.setContentTitle(application.getString(R.string.alarm_on_reset_snooze))
-                .setContentText(msg)
+        builder.setContentText(application.getString(R.string.alarm_on_reset_snooze))
+                .setContentTitle(msg)
                 .setSmallIcon(R.drawable.icn_alarm)
                 .setAutoCancel(true)
                 .setWhen(System.currentTimeMillis())
