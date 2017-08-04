@@ -21,6 +21,7 @@ import javax.inject.Inject
 import android.app.PendingIntent
 import com.mimi.mimialarm.android.infrastructure.service.AlarmDeactivateService
 import com.mimi.mimialarm.android.presentation.view.MainActivity
+import com.mimi.mimialarm.android.utils.LogUtils
 
 
 /**
@@ -130,6 +131,7 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
     }
 
     override fun addNotification(msg: String, id: Int) {
+        LogUtils.printDebugLog(this@MimiActivityManager.javaClass, "addNotification() id : $id, msg : $msg")
 
         val activityIntent = PendingIntent.getActivity(application, 999, Intent(application, MainActivity::class.java), PendingIntent.FLAG_ONE_SHOT)
 
@@ -147,9 +149,8 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
 
         val dismissIntent = Intent(application, AlarmDeactivateService::class.java)
         dismissIntent.action = AlarmDeactivateService.KEY_ACTION_KILL_SNOOZE
-//        dismissIntent.putExtra(AlarmDeactivateService.KEY_ACTION_KILL_SNOOZE, AlarmDeactivateService.KEY_ACTION_KILL_SNOOZE)
         dismissIntent.putExtra(AlarmDeactivateService.KEY_ID, id)
-        val dismissPendingIndent = PendingIntent.getService(application, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val dismissPendingIndent = PendingIntent.getService(application, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         builder.addAction(R.drawable.icn_stop, application.getString(R.string.alarm_on_kill_snooze), dismissPendingIndent)
 
         val nm : NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
