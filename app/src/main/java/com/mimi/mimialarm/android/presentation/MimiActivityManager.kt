@@ -142,7 +142,7 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
                 .setAutoCancel(true)
                 .setWhen(System.currentTimeMillis())
                 .setPriority(Notification.PRIORITY_MAX)
-                .setDefaults(Notification.DEFAULT_ALL)
+                .setVibrate(longArrayOf(0L))
                 .setCategory(Notification.CATEGORY_ALARM)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setContentIntent(activityIntent)
