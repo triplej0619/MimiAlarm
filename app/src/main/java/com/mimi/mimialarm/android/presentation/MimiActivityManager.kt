@@ -138,8 +138,8 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
                                 PendingIntent.FLAG_ONE_SHOT)
 
         val builder = NotificationCompat.Builder(application)
-        builder.setContentText(application.getString(R.string.alarm_on_reset_snooze))
-                .setContentTitle(msg)
+        builder.setContentTitle(application.getString(R.string.alarm_on_reset_snooze))
+                .setContentText(msg)
                 .setSmallIcon(R.drawable.icn_alarm)
                 .setAutoCancel(true)
                 .setWhen(System.currentTimeMillis())
@@ -154,6 +154,34 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
         dismissIntent.putExtra(AlarmDeactivateService.KEY_ID, id)
         val dismissPendingIndent = PendingIntent.getService(application, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         builder.addAction(R.drawable.icn_stop, application.getString(R.string.alarm_on_kill_snooze), dismissPendingIndent)
+
+        val nm : NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.notify(id, builder.build())
+    }
+
+    override fun addPreNoticeNotification(msg: String, id: Int) {
+        LogUtil.printDebugLog(this@MimiActivityManager.javaClass, "addPreNoticeNotification() id : $id, msg : $msg")
+
+        val activityIntent = PendingIntent.getActivity(application, 999,
+                Intent(application, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP),
+                PendingIntent.FLAG_ONE_SHOT)
+
+        val builder = NotificationCompat.Builder(application)
+        builder.setContentTitle(application.getString(R.string.alarm_on_scheduled_alarm))
+                .setContentText(msg)
+                .setSmallIcon(R.drawable.icn_alarm)
+                .setAutoCancel(true)
+                .setWhen(System.currentTimeMillis())
+                .setPriority(Notification.PRIORITY_LOW)
+                .setCategory(Notification.CATEGORY_ALARM)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setContentIntent(activityIntent)
+
+        val dismissIntent = Intent(application, AlarmDeactivateService::class.java)
+        dismissIntent.action = AlarmDeactivateService.KEY_ACTION_CANCEL_ALARM
+        dismissIntent.putExtra(AlarmDeactivateService.KEY_ID, id)
+        val dismissPendingIndent = PendingIntent.getService(application, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        builder.addAction(R.drawable.icn_stop, application.getString(R.string.alarm_on_deactivate_alarm), dismissPendingIndent)
 
         val nm : NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.notify(id, builder.build())
