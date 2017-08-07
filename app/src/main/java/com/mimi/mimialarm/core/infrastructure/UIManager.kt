@@ -8,7 +8,7 @@ import com.mimi.mimialarm.core.utils.Command
  */
 interface UIManager {
     fun finishForegroundView()
-    fun addNotification(msg: String, id: Int)
+    fun addSnoozeNotification(msg: String, id: Int)
 
     fun startAlarmDetailViewForNew()
     fun startAlarmDetailViewForUpdate(alarmId: Int?)

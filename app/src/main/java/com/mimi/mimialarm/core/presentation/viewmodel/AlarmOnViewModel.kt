@@ -109,7 +109,7 @@ class AlarmOnViewModel @Inject constructor(
                 alarmManager.startAlarm(alarmId!!, TimeCalculator.getSnoozeTime(alarm!!) * 1000)
                 bus.post(ActivateAlarmEvent())
                 val text = String.format("(%d분 뒤) %s", alarm!!.snoozeInterval, DateUtil.dateToFormattedString(DateUtil.getAfterDate((TimeCalculator.getSnoozeTime(alarm!!) * 1000).toInt()), "HH:mm")) // TODO text -> resource
-                uiManager.addNotification(text, alarmId!!)
+                uiManager.addSnoozeNotification(text, alarmId!!)
             } else {
                 setNextDayAlarm()
             }
