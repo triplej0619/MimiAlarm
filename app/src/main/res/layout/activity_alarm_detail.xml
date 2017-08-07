@@ -186,7 +186,7 @@
                         <android.support.v7.widget.AppCompatSeekBar
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:id="@+id/soundVolume"
-                            android:thumb="@drawable/icn_theme_selected"
+                            android:thumb="@drawable/icn_volume"
                             android:layout_alignParentRight="true"
                             android:layout_below="@id/selectedSound"
                             android:max="100"
