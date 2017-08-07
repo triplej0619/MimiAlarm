@@ -1,6 +1,5 @@
 package com.mimi.mimialarm.android.presentation.view
 
-import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
@@ -14,8 +13,8 @@ import android.view.MenuItem
 import com.mimi.data.DBManager
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.presentation.*
-import com.mimi.mimialarm.android.utils.ContextUtils
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.ContextUtil
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.presentation.viewmodel.ActivatedAlarmListViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
@@ -56,7 +55,7 @@ class ActivatedAlarmListActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         buildComponent().inject(this)
-        setTheme(ContextUtils.getThemeId(dataManager.getCurrentTheme()))
+        setTheme(ContextUtil.getThemeId(dataManager.getCurrentTheme()))
 
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_activated_alarm_list)
@@ -93,7 +92,7 @@ class ActivatedAlarmListActivity : AppCompatActivity(), LifecycleRegistryOwner {
     }
 
     fun init() {
-        LogUtils.printDebugLog(this@ActivatedAlarmListActivity.javaClass, "init()")
+        LogUtil.printDebugLog(this@ActivatedAlarmListActivity.javaClass, "init()")
         realm = Realm.getDefaultInstance()
         binding.list.layoutManager = LinearLayoutManager(this)
         listAdapter = ActivatedAlarmListAdapter(viewModel.alarmList, R.layout.list_item_activated_alarm)

@@ -1,11 +1,7 @@
 package com.mimi.mimialarm.android.presentation.view
 
 import android.arch.lifecycle.LifecycleActivity
-import android.content.Context
 import android.databinding.DataBindingUtil
-import android.databinding.Observable
-import android.media.AudioAttributes
-import android.media.AudioManager
 import android.widget.TimePicker
 import com.jakewharton.rxbinding2.widget.RxAdapterView
 import com.mimi.mimialarm.R
@@ -17,8 +13,6 @@ import com.mimi.mimialarm.android.utils.BundleKey
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmDetailViewModel
 import com.mimi.mimialarm.databinding.ActivityAlarmDetailBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_alarm_detail.view.*
-import kotlinx.android.synthetic.main.activity_alarm_on.view.*
 import java.util.*
 import javax.inject.Inject
 import android.media.RingtoneManager
@@ -26,13 +20,12 @@ import android.net.Uri
 import android.support.v7.app.AlertDialog
 import kotlin.collections.HashMap
 import android.media.Ringtone
-import android.os.Build
 import android.support.v7.widget.AppCompatSeekBar
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import com.mimi.mimialarm.android.utils.ContextUtils
+import com.mimi.mimialarm.android.utils.ContextUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 
 
@@ -60,7 +53,7 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         buildComponent().inject(this)
-        setTheme(ContextUtils.getThemeId(dataManager.getCurrentTheme()))
+        setTheme(ContextUtil.getThemeId(dataManager.getCurrentTheme()))
 
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_detail)
@@ -263,7 +256,7 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
     }
 
     fun playRingtone(uri: Uri?, volume: Int) {
-        selectedRingtone = ContextUtils.getRingtone(this, uri, volume)
+        selectedRingtone = ContextUtil.getRingtone(this, uri, volume)
         selectedRingtone?.play()
     }
 

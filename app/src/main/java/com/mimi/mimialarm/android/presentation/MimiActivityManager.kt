@@ -21,7 +21,7 @@ import javax.inject.Inject
 import android.app.PendingIntent
 import com.mimi.mimialarm.android.infrastructure.service.AlarmDeactivateService
 import com.mimi.mimialarm.android.presentation.view.MainActivity
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.LogUtil
 
 
 /**
@@ -131,7 +131,7 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
     }
 
     override fun addNotification(msg: String, id: Int) {
-        LogUtils.printDebugLog(this@MimiActivityManager.javaClass, "addNotification() id : $id, msg : $msg")
+        LogUtil.printDebugLog(this@MimiActivityManager.javaClass, "addNotification() id : $id, msg : $msg")
 
         val activityIntent = PendingIntent.getActivity(application, 999, Intent(application, MainActivity::class.java), PendingIntent.FLAG_ONE_SHOT)
 

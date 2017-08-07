@@ -10,7 +10,7 @@ import com.mimi.mimialarm.android.presentation.ActivityComponent
 import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
-import com.mimi.mimialarm.android.utils.ContextUtils
+import com.mimi.mimialarm.android.utils.ContextUtil
 import com.mimi.mimialarm.core.presentation.viewmodel.SettingsViewModel
 import com.mimi.mimialarm.databinding.FragmentSettingsBinding
 import com.squareup.otto.Bus
@@ -21,7 +21,7 @@ import com.mimi.mimialarm.core.infrastructure.ShareToFriendsEvent
 import com.mimi.mimialarm.core.infrastructure.StartRewardedAdEvent
 import com.squareup.otto.Subscribe
 import android.content.Intent
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.ChagneThemeEvent
 import com.mimi.mimialarm.core.utils.Command
@@ -42,24 +42,24 @@ class SettingsFragment : android.support.v4.app.Fragment() {
 
     val rewardedVideoAdListener: RewardedVideoAdListener = object : RewardedVideoAdListener {
         override fun onRewardedVideoAdClosed() {
-            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdClosed()")
+            LogUtil.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdClosed()")
             loadAdVideo()
         }
 
         override fun onRewardedVideoAdLeftApplication() {
-            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdLeftApplication()")
+            LogUtil.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdLeftApplication()")
         }
 
         override fun onRewardedVideoAdLoaded() {
-            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdLoaded()")
+            LogUtil.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdLoaded()")
         }
 
         override fun onRewardedVideoAdOpened() {
-            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdOpened()")
+            LogUtil.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdOpened()")
         }
 
         override fun onRewarded(p0: RewardItem?) {
-            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewarded()")
+            LogUtil.printDebugLog(SettingsFragment::class.java, "onRewarded()")
             themeChangeCompletedCallback?.execute(Unit)
             themeChangeCompletedCallback = null
             dataManager.setCurrentTheme(nextThemeIndex)
@@ -67,11 +67,11 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         }
 
         override fun onRewardedVideoStarted() {
-            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoStarted()")
+            LogUtil.printDebugLog(SettingsFragment::class.java, "onRewardedVideoStarted()")
         }
 
         override fun onRewardedVideoAdFailedToLoad(p0: Int) {
-            LogUtils.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdFailedToLoad()")
+            LogUtil.printDebugLog(SettingsFragment::class.java, "onRewardedVideoAdFailedToLoad()")
             loadAdVideo()
             //Toast.makeText(this@SettingsFragment.context, R.string.settings_fail_to_load_ad, Toast.LENGTH_SHORT).show()
         }
@@ -101,7 +101,7 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         rewardedVideoAd?.rewardedVideoAdListener = rewardedVideoAdListener
         loadAdVideo()
 
-        viewModel.version.set(ContextUtils.getVersion(activity))
+        viewModel.version.set(ContextUtil.getVersion(activity))
     }
 
     fun loadAdVideo() {

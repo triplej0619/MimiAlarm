@@ -16,13 +16,12 @@ import com.mimi.mimialarm.android.presentation.ActivityComponent
 import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
-import com.mimi.mimialarm.android.utils.ContextUtils
+import com.mimi.mimialarm.android.utils.ContextUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmOnViewModel
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.databinding.ActivityAlarmOnBinding
 import com.squareup.otto.Bus
-import java.util.*
 import javax.inject.Inject
 
 
@@ -52,7 +51,7 @@ class AlarmOnActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         buildComponent().inject(this)
-        setTheme(ContextUtils.getThemeId(dataManager.getCurrentTheme()))
+        setTheme(ContextUtil.getThemeId(dataManager.getCurrentTheme()))
 
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_on)
@@ -113,7 +112,7 @@ class AlarmOnActivity : AppCompatActivity() {
     }
 
     fun playRingtone() {
-        selectedRingtone = ContextUtils.getRingtone(this, Uri.parse(viewModel.mediaSrc), viewModel.soundVolume)
+        selectedRingtone = ContextUtil.getRingtone(this, Uri.parse(viewModel.mediaSrc), viewModel.soundVolume)
         selectedRingtone?.play()
     }
 

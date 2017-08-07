@@ -8,7 +8,7 @@ import io.realm.RealmResults
 /**
  * Created by MihyeLee on 2017. 7. 3..
  */
-class RealmDataUtils {
+class RealmDataUtil {
     companion object {
         inline fun <reified T : RealmModel?> findObjects(realm: Realm) : RealmResults<T> {
             return realm.where(T::class.java).findAll()

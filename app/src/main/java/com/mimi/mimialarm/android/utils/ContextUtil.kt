@@ -19,7 +19,7 @@ import com.mimi.mimialarm.R
 /**
  * Created by MihyeLee on 2017. 6. 29..
  */
-class ContextUtils {
+class ContextUtil {
     companion object {
 
         fun getVersion(context: Context): String {

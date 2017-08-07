@@ -6,7 +6,7 @@ import java.util.*
 /**
  * Created by MihyeLee on 2017. 7. 20..
  */
-class DateUtils {
+class DateUtil {
     companion object {
         fun getAfterDate(milliseconds: Int) : Date{
             return getAfterDate(Date(), milliseconds)

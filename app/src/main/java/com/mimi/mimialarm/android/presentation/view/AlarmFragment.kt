@@ -23,7 +23,7 @@ import javax.inject.Inject
 import android.widget.Toast
 import com.mimi.data.DBManager
 import com.mimi.mimialarm.android.infrastructure.ChangePageEvent
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ActivateAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
@@ -127,7 +127,7 @@ class AlarmFragment : LifecycleFragment() {
 
     @Subscribe
     fun answerAddAlarmEvent(event: AddAlarmEvent) {
-        LogUtils.printDebugLog(this@AlarmFragment.javaClass, "answerAddAlarmEvent()")
+        LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerAddAlarmEvent()")
         viewModel.loadAlarmList()
         listAdapter?.addItem(listAdapter!!.itemCount - 1)
         binding.list.smoothScrollToPosition(listAdapter!!.itemCount - 1)
@@ -155,13 +155,13 @@ class AlarmFragment : LifecycleFragment() {
         } else {
             text = String.format("1%s %s", getString(R.string.minute), getString(R.string.msg_add_alarm_under_1min))
         }
-        LogUtils.printDebugLog(this@AlarmFragment.javaClass, "getAlarmScheduleString() $text")
+        LogUtil.printDebugLog(this@AlarmFragment.javaClass, "getAlarmScheduleString() $text")
         return text
     }
 
     @Subscribe
     fun answerUpdateAlarmEvent(event: UpdateAlarmEvent) {
-        LogUtils.printDebugLog(this@AlarmFragment.javaClass, "answerUpdateAlarmEvent()")
+        LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerUpdateAlarmEvent()")
         Toast.makeText(context, getAlarmScheduleString(event.seconds), Toast.LENGTH_SHORT).show()
     }
 
@@ -174,7 +174,7 @@ class AlarmFragment : LifecycleFragment() {
 
     @Subscribe
     fun answerActivateAlarmEvent(event: ActivateAlarmEvent) {
-        LogUtils.printDebugLog(this@AlarmFragment.javaClass, "answerActivateAlarmEvent()")
+        LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerActivateAlarmEvent()")
         viewModel.showActivatedAlarmList.set(true)
     }
 }

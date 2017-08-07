@@ -4,14 +4,13 @@ import android.app.IntentService
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import com.mimi.data.DBManager
-import com.mimi.data.RealmDataUtils
+import com.mimi.data.RealmDataUtil
 import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.android.presentation.ActivityComponent
 import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.utils.TimeCalculator
 import io.realm.Realm
@@ -38,12 +37,12 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
 
     override fun onCreate() {
         super.onCreate()
-        LogUtils.printDebugLog(this@AlarmDeactivateService.javaClass, "onCreate()")
+        LogUtil.printDebugLog(this@AlarmDeactivateService.javaClass, "onCreate()")
         buildComponent().inject(this)
     }
 
     override fun onHandleIntent(intent: Intent?) {
-        LogUtils.printDebugLog(this@AlarmDeactivateService.javaClass, "onHandleIntent() " + intent?.action)
+        LogUtil.printDebugLog(this@AlarmDeactivateService.javaClass, "onHandleIntent() " + intent?.action)
 
         intent?.let {
             when(intent.action) {
@@ -55,7 +54,7 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
     }
 
     fun killSnooze(id: Int) {
-        LogUtils.printDebugLog(this@AlarmDeactivateService.javaClass, "killSnooze() $id")
+        LogUtil.printDebugLog(this@AlarmDeactivateService.javaClass, "killSnooze() $id")
         if(id > -1) {
             val nm: NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nm.cancel(id)
@@ -67,7 +66,7 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
     fun resetSnoozeCount(id: Int) {
         val realm = Realm.getDefaultInstance() // TODO
         realm.executeTransaction {
-            val alarm = RealmDataUtils.findObjectWithId<MyAlarm>(realm, "id", id)
+            val alarm = RealmDataUtil.findObjectWithId<MyAlarm>(realm, "id", id)
             alarm?.let {
                 alarm.usedSnoozeCount = 0
                 setNextDayAlarm(alarm, id)

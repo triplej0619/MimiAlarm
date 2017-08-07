@@ -5,7 +5,7 @@ import android.util.Log
 /**
  * Created by MihyeLee on 2017. 7. 20..
  */
-class LogUtils {
+class LogUtil {
     companion object {
         val APP_NAME: String = "MimiAlarmLog"
 

@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_timer.*
 /**
  * Created by MihyeLee on 2017. 5. 31..
  */
-class BindingUtils {
+class BindingUtil {
     companion object {
         @BindingAdapter("bind:clickEvent")
         @JvmStatic

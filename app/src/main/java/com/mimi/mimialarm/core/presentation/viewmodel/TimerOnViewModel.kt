@@ -3,7 +3,7 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyTimer
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
@@ -36,7 +36,7 @@ class TimerOnViewModel(
     }
 
     fun loadAndDeactivatedTimer() {
-        LogUtils.printDebugLog(this@TimerOnViewModel.javaClass, "loadAndDeactivatedTimer")
+        LogUtil.printDebugLog(this@TimerOnViewModel.javaClass, "loadAndDeactivatedTimer")
 
         if(timerId != null) {
             val timer: MyTimer? = dbManager.findTimerWithId(timerId)

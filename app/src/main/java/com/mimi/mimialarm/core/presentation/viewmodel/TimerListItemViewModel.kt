@@ -3,7 +3,7 @@ package com.mimi.mimialarm.core.presentation.viewmodel
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableFloat
 import android.databinding.ObservableInt
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ChangeTimerStatusEvent
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.TimeCalculator
@@ -56,7 +56,7 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
 
     init {
         timeObservable = Observable.create(ObservableOnSubscribe<Int> { e ->
-            LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "timeObservable - wholeTimeInSecond : $wholeTimeInSecond, id : $id, firstDelay : $firstDelay")
+            LogUtil.printDebugLog(this@TimerListItemViewModel.javaClass, "timeObservable - wholeTimeInSecond : $wholeTimeInSecond, id : $id, firstDelay : $firstDelay")
             if(!firstDelay) {
                 if (wholeTimeInSecond > 0) {
                     wholeTimeInSecond -= 1
@@ -82,7 +82,7 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
     }
 
     fun setActivated(value: Boolean) {
-        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "setActivated() : $value, id : $id")
+        LogUtil.printDebugLog(this@TimerListItemViewModel.javaClass, "setActivated() : $value, id : $id")
         activated.set(value)
         if(value) {
             startTimer()
@@ -105,11 +105,11 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
 
             bus.post(ChangeTimerStatusEvent(id!!, activated.get(), TimeCalculator.getSecondsFromAll(hour.get().toLong(), minute.get().toLong(), second.get().toLong())))
         }
-        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "changeActivation() id : $id, " + activated.get())
+        LogUtil.printDebugLog(this@TimerListItemViewModel.javaClass, "changeActivation() id : $id, " + activated.get())
     }
 
     fun startTimer() {
-        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "startTimer() id : $id, wholeTimeInSecond : $wholeTimeInSecond")
+        LogUtil.printDebugLog(this@TimerListItemViewModel.javaClass, "startTimer() id : $id, wholeTimeInSecond : $wholeTimeInSecond")
         if(wholeTimeInSecond == 0L) {
             wholeTimeInSecond = baseTime
         }
@@ -119,7 +119,7 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
     }
 
     fun pauseTimer() {
-        LogUtils.printDebugLog(this@TimerListItemViewModel.javaClass, "pauseTimer() id : $id")
+        LogUtil.printDebugLog(this@TimerListItemViewModel.javaClass, "pauseTimer() id : $id")
         timeSubscription?.dispose()
         timeSubscription = null
     }

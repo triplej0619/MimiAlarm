@@ -3,7 +3,7 @@ package com.mimi.mimialarm.core.model
 import com.mimi.data.model.MyAlarm
 import com.mimi.data.model.MyTimer
 import com.mimi.mimialarm.core.presentation.viewmodel.*
-import com.mimi.mimialarm.core.utils.DateUtils
+import com.mimi.mimialarm.core.utils.DateUtil
 import com.mimi.mimialarm.core.utils.TimeCalculator
 import com.squareup.otto.Bus
 import java.util.*
@@ -167,7 +167,7 @@ class DataMapper {
             timer.remainSeconds = timer.seconds
 
             timer.createdAt = Date()
-            timer.completedAt = DateUtils.getAfterDate(timer.createdAt!!, timer.seconds.toInt() * 1000)
+            timer.completedAt = DateUtil.getAfterDate(timer.createdAt!!, timer.seconds.toInt() * 1000)
 
             timer.activated = true
 

@@ -4,7 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.StopAlarmItemEvent
 import com.mimi.mimialarm.core.model.DataMapper
@@ -33,7 +33,7 @@ class ActivatedAlarmListViewModel @Inject constructor(
     }
 
     fun loadAlarmList() {
-        LogUtils.printDebugLog(this@ActivatedAlarmListViewModel.javaClass, "loadAlarmList()")
+        LogUtil.printDebugLog(this@ActivatedAlarmListViewModel.javaClass, "loadAlarmList()")
         val alarms: List<MyAlarm> = dbManager.findAllAlarm().filter { it.usedSnoozeCount!! > 0 }
         alarms.forEach { alarmList.add(DataMapper.alarmToListItemViewModel(it, bus)) }
         alarmListLive.postValue(alarmList)
@@ -42,7 +42,7 @@ class ActivatedAlarmListViewModel @Inject constructor(
 
     @Subscribe
     fun answerStopAlarmItemEvent(event: StopAlarmItemEvent) {
-        LogUtils.printDebugLog(this@ActivatedAlarmListViewModel.javaClass, "answerStopAlarmItemEvent() : " + event.id)
+        LogUtil.printDebugLog(this@ActivatedAlarmListViewModel.javaClass, "answerStopAlarmItemEvent() : " + event.id)
 
         alarmManager.cancelAlarm(event.id)
 

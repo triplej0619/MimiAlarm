@@ -6,8 +6,6 @@ import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +17,7 @@ import com.mimi.mimialarm.core.infrastructure.AddTimerEvent
 import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
 import com.mimi.mimialarm.android.infrastructure.ChangePageEvent
 import com.mimi.mimialarm.android.presentation.*
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerListItemViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerViewModel
 import com.mimi.mimialarm.core.utils.Enums
@@ -90,26 +88,26 @@ class TimerFragment : LifecycleFragment() {
     }
 
     fun initEditView() {
-        binding.hour.setSelectAllOnFocus(true)
-        binding.minute.setSelectAllOnFocus(true)
-        binding.second.setSelectAllOnFocus(true)
-
-        Observable.combineLatest(RxTextView.textChanges(binding.hour as TextView),
-                RxTextView.textChanges(binding.minute as TextView),
-                RxTextView.textChanges(binding.second as TextView),
-                Function3<CharSequence, CharSequence, CharSequence, Boolean> { t1, t2, t3 ->
-                    var isEnabled: Boolean = false
-                    if(!t1.isNullOrEmpty() && !t2.isNullOrEmpty() && !t3.isNullOrEmpty()) {
-                        if(Integer.parseInt(t1.toString()) > 0 ||
-                                Integer.parseInt(t2.toString()) > 0 ||
-                                Integer.parseInt(t3.toString()) > 0) {
-                            isEnabled = true
-                        }
-                    }
-                    binding.addTimer.isEnabled = isEnabled
-                    false
-                }
-            ).subscribe()
+//        binding.hour.setSelectAllOnFocus(true)
+//        binding.minute.setSelectAllOnFocus(true)
+//        binding.second.setSelectAllOnFocus(true)
+//
+//        Observable.combineLatest(RxTextView.textChanges(binding.hour as TextView),
+//                RxTextView.textChanges(binding.minute as TextView),
+//                RxTextView.textChanges(binding.second as TextView),
+//                Function3<CharSequence, CharSequence, CharSequence, Boolean> { t1, t2, t3 ->
+//                    var isEnabled: Boolean = false
+//                    if(!t1.isNullOrEmpty() && !t2.isNullOrEmpty() && !t3.isNullOrEmpty()) {
+//                        if(Integer.parseInt(t1.toString()) > 0 ||
+//                                Integer.parseInt(t2.toString()) > 0 ||
+//                                Integer.parseInt(t3.toString()) > 0) {
+//                            isEnabled = true
+//                        }
+//                    }
+//                    binding.addTimer.isEnabled = isEnabled
+//                    false
+//                }
+//            ).subscribe()
     }
 
     override fun onDestroyView() {
@@ -145,7 +143,7 @@ class TimerFragment : LifecycleFragment() {
 
     @Subscribe
     fun answerBackPressed(event: BackPressedEvent) {
-        LogUtils.printDebugLog(this@TimerFragment.javaClass, "answerBackPressed()")
+        LogUtil.printDebugLog(this@TimerFragment.javaClass, "answerBackPressed()")
         if(event.tabType == Enums.MAIN_TAB.MAIN_TIMER) {
             if (viewModel.deleteMode.get()) {
                 viewModel.cancelDeleteModeCommand.execute(Unit)

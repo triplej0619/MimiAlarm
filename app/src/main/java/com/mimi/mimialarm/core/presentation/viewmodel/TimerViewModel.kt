@@ -6,14 +6,14 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyTimer
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.AddTimerEvent
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.ChangeTimerStatusEvent
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
-import com.mimi.mimialarm.core.utils.DateUtils
+import com.mimi.mimialarm.core.utils.DateUtil
 import com.mimi.mimialarm.core.utils.TextChanger
 import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
@@ -121,13 +121,13 @@ class TimerViewModel @Inject constructor(
     }
 
     fun reLoadTimerList() {
-        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "reLoadTimerList()")
+        LogUtil.printDebugLog(this@TimerViewModel.javaClass, "reLoadTimerList()")
         clear()
         loadTimerList()
     }
 
     fun loadTimerList() {
-        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "loadTimerList()")
+        LogUtil.printDebugLog(this@TimerViewModel.javaClass, "loadTimerList()")
         val timers: List<MyTimer> = dbManager.findAllTimer()
         for (timer in timers) {
             updateOrInsertListItem(timer)
@@ -137,7 +137,7 @@ class TimerViewModel @Inject constructor(
     }
 
     fun updateOrInsertListItem(timer: MyTimer) {
-        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "updateOrInsertListItem()")
+        LogUtil.printDebugLog(this@TimerViewModel.javaClass, "updateOrInsertListItem()")
 
         for (item in timerList) {
             if (item.id?.equals(timer.id) ?: false) {
@@ -150,18 +150,18 @@ class TimerViewModel @Inject constructor(
     }
 
     fun addTimer() {
-        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "addTimer()")
+        LogUtil.printDebugLog(this@TimerViewModel.javaClass, "addTimer()")
         val timer: MyTimer? = DataMapper.viewModelToTimer(this, dbManager.getNextTimerId())
         if(timer != null) {
             alarmManager.startTimer(timer.id!!, timer.remainSeconds * SECOND_IN_MILLI)
             dbManager.addTimer(timer)
             addTimerListItem(timer)
-            LogUtils.printDebugLog(this@TimerViewModel.javaClass, "addTimer() timer.remainSeconds : " + timer.remainSeconds)
+            LogUtil.printDebugLog(this@TimerViewModel.javaClass, "addTimer() timer.remainSeconds : " + timer.remainSeconds)
         }
     }
 
     fun addTimerListItem(timer: MyTimer) {
-        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "addTimerListItem()")
+        LogUtil.printDebugLog(this@TimerViewModel.javaClass, "addTimerListItem()")
         val listItem: TimerListItemViewModel = DataMapper.timerToListItemViewModel(timer, bus, true)
         timerList.add(listItem)
         timerCount.set(timerCount.get() + 1)
@@ -178,7 +178,7 @@ class TimerViewModel @Inject constructor(
     }
 
     fun deleteTimers() {
-        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "deleteTimers()")
+        LogUtil.printDebugLog(this@TimerViewModel.javaClass, "deleteTimers()")
         if(timerList.filter { it.selectForDelete.get() }.isEmpty()) {
             uiManager.showToast("선택된 타이머가 없습니다.") // TODO text -> resource
         } else {
@@ -188,7 +188,7 @@ class TimerViewModel @Inject constructor(
                         alarmManager.cancelTimer(it.id!!)
                         it.pauseTimer()
                         dbManager.deleteTimerWithId(it.id)
-                        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "deleteTimers() - cancelTimer : " + it.id)
+                        LogUtil.printDebugLog(this@TimerViewModel.javaClass, "deleteTimers() - cancelTimer : " + it.id)
                     }
             reLoadTimerList()
         }
@@ -196,12 +196,12 @@ class TimerViewModel @Inject constructor(
     }
 
     fun deleteAllTimer() {
-        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "deleteAllTimer()")
+        LogUtil.printDebugLog(this@TimerViewModel.javaClass, "deleteAllTimer()")
         timerList
                 .forEach {
                     alarmManager.cancelTimer(it.id!!)
                     it.pauseTimer()
-                    LogUtils.printDebugLog(this@TimerViewModel.javaClass, "deleteAllTimer() - cancelTimer : " + it.id)
+                    LogUtil.printDebugLog(this@TimerViewModel.javaClass, "deleteAllTimer() - cancelTimer : " + it.id)
                 }
         dbManager.deleteAllTimer()
         reLoadTimerList()
@@ -209,7 +209,7 @@ class TimerViewModel @Inject constructor(
     }
 
     fun clickListItem(position: Int) {
-        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "clickListItem() : $position")
+        LogUtil.printDebugLog(this@TimerViewModel.javaClass, "clickListItem() : $position")
         if(deleteMode.get()) {
             timerList[position].selectForDelete.set(!timerList[position].selectForDelete.get())
         }
@@ -229,7 +229,7 @@ class TimerViewModel @Inject constructor(
 
     @Subscribe
     fun answerChangeTimerStatusEvent(event: ChangeTimerStatusEvent) {
-        LogUtils.printDebugLog(this@TimerViewModel.javaClass, "answerChangeTimerStatusEvent() event : " + event.id + ", " + event.activated)
+        LogUtil.printDebugLog(this@TimerViewModel.javaClass, "answerChangeTimerStatusEvent() event : " + event.id + ", " + event.activated)
 
         if(event.activated) {
             val timer: MyTimer? = dbManager.findTimerWithId(event.id)
@@ -238,11 +238,11 @@ class TimerViewModel @Inject constructor(
                     timer.remainSeconds = timer.seconds
                 }
                 alarmManager.startTimer(event.id, timer.remainSeconds * SECOND_IN_MILLI)
-                timer.completedAt = DateUtils.getAfterDate(timer.remainSeconds.toInt() * 1000)
+                timer.completedAt = DateUtil.getAfterDate(timer.remainSeconds.toInt() * 1000)
                 timer.activated = true
                 dbManager.updateTimer(timer)
 
-                LogUtils.printDebugLog(this@TimerViewModel.javaClass, "answerChangeTimerStatusEvent() startTimer : " + timer.remainSeconds)
+                LogUtil.printDebugLog(this@TimerViewModel.javaClass, "answerChangeTimerStatusEvent() startTimer : " + timer.remainSeconds)
             }
         } else {
             alarmManager.cancelTimer(event.id)

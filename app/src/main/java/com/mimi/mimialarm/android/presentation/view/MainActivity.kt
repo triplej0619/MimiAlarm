@@ -2,7 +2,6 @@ package com.mimi.mimialarm.android.presentation.view
 
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -17,7 +16,7 @@ import com.mimi.mimialarm.android.presentation.ActivityComponent
 import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
-import com.mimi.mimialarm.android.utils.ContextUtils
+import com.mimi.mimialarm.android.utils.ContextUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.ChagneThemeEvent
 import com.mimi.mimialarm.core.utils.Command
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         buildComponent().inject(this)
-        setTheme(ContextUtils.getThemeId(dataManager.getCurrentTheme()))
+        setTheme(ContextUtil.getThemeId(dataManager.getCurrentTheme()))
 
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)

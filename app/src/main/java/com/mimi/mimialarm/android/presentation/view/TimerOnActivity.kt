@@ -16,8 +16,8 @@ import com.mimi.mimialarm.android.presentation.ActivityComponent
 import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
-import com.mimi.mimialarm.android.utils.ContextUtils
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.ContextUtil
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerOnViewModel
 import com.mimi.mimialarm.databinding.ActivityTimerOnBinding
@@ -46,9 +46,9 @@ class TimerOnActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        LogUtils.printDebugLog(this@TimerOnActivity.javaClass, "onCreate")
+        LogUtil.printDebugLog(this@TimerOnActivity.javaClass, "onCreate")
         buildComponent().inject(this)
-        setTheme(ContextUtils.getThemeId(dataManager.getCurrentTheme()))
+        setTheme(ContextUtil.getThemeId(dataManager.getCurrentTheme()))
 
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_timer_on)
@@ -97,7 +97,7 @@ class TimerOnActivity : AppCompatActivity() {
     }
 
     fun playRingtone() {
-        selectedRingtone = ContextUtils.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM), viewModel.DEFAULT_VOLUME)
+        selectedRingtone = ContextUtil.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM), viewModel.DEFAULT_VOLUME)
         selectedRingtone?.play()
     }
 

@@ -4,7 +4,7 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
-import com.mimi.mimialarm.android.utils.LogUtils
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ActivateAlarmEvent
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
@@ -12,7 +12,7 @@ import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.Command2
-import com.mimi.mimialarm.core.utils.DateUtils
+import com.mimi.mimialarm.core.utils.DateUtil
 import com.mimi.mimialarm.core.utils.TimeCalculator
 import com.squareup.otto.Bus
 import java.util.*
@@ -103,12 +103,12 @@ class AlarmOnViewModel @Inject constructor(
     }
 
     fun resetAlarm() {
-        LogUtils.printDebugLog(this@AlarmOnViewModel.javaClass, "resetAlarm()")
+        LogUtil.printDebugLog(this@AlarmOnViewModel.javaClass, "resetAlarm()")
         if(enable && alarm != null) {
             if(alarm!!.snooze && usedSnoozeCount <= snoozeCount) {
                 alarmManager.startAlarm(alarmId!!, TimeCalculator.getSnoozeTime(alarm!!) * 1000)
                 bus.post(ActivateAlarmEvent())
-                val text = String.format("(%d분 뒤) %s", alarm!!.snoozeInterval, DateUtils.dateToFormattedString(DateUtils.getAfterDate((TimeCalculator.getSnoozeTime(alarm!!) * 1000).toInt()), "HH:mm")) // TODO text -> resource
+                val text = String.format("(%d분 뒤) %s", alarm!!.snoozeInterval, DateUtil.dateToFormattedString(DateUtil.getAfterDate((TimeCalculator.getSnoozeTime(alarm!!) * 1000).toInt()), "HH:mm")) // TODO text -> resource
                 uiManager.addNotification(text, alarmId!!)
             } else {
                 setNextDayAlarm()
@@ -117,7 +117,7 @@ class AlarmOnViewModel @Inject constructor(
     }
 
     fun loadAlarm() {
-        LogUtils.printDebugLog(this@AlarmOnViewModel.javaClass, "loadAlarm()")
+        LogUtil.printDebugLog(this@AlarmOnViewModel.javaClass, "loadAlarm()")
         if(alarmId != null) {
             alarm = dbManager.findAlarmWithId(alarmId)
             alarm?.let {
