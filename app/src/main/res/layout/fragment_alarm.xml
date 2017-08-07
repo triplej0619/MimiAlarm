@@ -40,7 +40,7 @@
 
             <android.support.v7.widget.RecyclerView
                 tools:listitem="@layout/list_item_alarm"
-                tools:visibility="gone"
+                tools:visibility="visible"
                 android:id="@+id/list"
                 android:scrollbars="vertical"
                 android:fadeScrollbars="true"
@@ -50,13 +50,15 @@
                 android:scrollbarThumbVertical="@color/scrollbarVertical"
                 android:visibility="@{alarmViewModel.alarmCount > 0 ? View.VISIBLE : View.GONE}"
                 android:longClickable="true"
-                android:layout_marginBottom="88dp"
+                android:paddingBottom="88dp"
+                android:clipToPadding="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
 
         <TextView
             style="@style/Roboto.Regular.15.Gray1"
+            tools:visibility="gone"
             android:id="@+id/text1"
             android:visibility="@{alarmViewModel.alarmCount == 0 ? View.VISIBLE : View.GONE}"
             android:layout_centerInParent="true"

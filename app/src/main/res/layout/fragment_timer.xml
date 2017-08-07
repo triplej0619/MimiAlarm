@@ -134,6 +134,8 @@
                 tools:visibility="visible"
                 tools:listitem="@layout/list_item_timer"
                 android:id="@+id/list"
+                android:paddingBottom="88dp"
+                android:clipToPadding="false"
                 android:visibility="@{timerViewModel.timerCount > 0 ? View.VISIBLE : View.GONE}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
