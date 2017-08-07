@@ -31,6 +31,15 @@ class ContextUtil {
             }
         }
 
+        fun getVersionCode(context: Context): String {
+            try {
+                val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+                return packageInfo.versionCode.toString()
+            } catch (ex: PackageManager.NameNotFoundException) {
+                return ""
+            }
+        }
+
         fun turnOnScreen(context: Context) : PowerManager.WakeLock {
             val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
             val wake = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "WAKE_LOCK")

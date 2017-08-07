@@ -101,7 +101,7 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         rewardedVideoAd?.rewardedVideoAdListener = rewardedVideoAdListener
         loadAdVideo()
 
-        viewModel.version.set(ContextUtil.getVersion(activity))
+        viewModel.version.set(ContextUtil.getVersion(activity) + "." + ContextUtil.getVersionCode(activity))
     }
 
     fun loadAdVideo() {
