@@ -27,6 +27,9 @@ class TimeCalculator {
             val targetDate: GregorianCalendar = GregorianCalendar()
             today.time = Date()
             targetDate.time = alarm.completedAt
+            targetDate.set(GregorianCalendar.YEAR, today.get(GregorianCalendar.YEAR))
+            targetDate.set(GregorianCalendar.MONTH, today.get(GregorianCalendar.MONTH))
+            targetDate.set(GregorianCalendar.DAY_OF_MONTH, today.get(GregorianCalendar.DAY_OF_MONTH))
 
             if (alarm.repeat) {
                 val dayOfWeekMap: MutableMap<Int, Boolean> = HashMap()
@@ -51,7 +54,7 @@ class TimeCalculator {
                         jump = i
                         break
                     } else {
-                        dayOfWeek++
+                        dayOfWeek = plusDayOfWeek(dayOfWeek, 1)
                     }
                 }
                 targetDate.add(GregorianCalendar.DAY_OF_MONTH, jump)
