@@ -188,7 +188,7 @@ class AlarmFragment : LifecycleFragment() {
     fun answerDeleteAlarmEvent(event: DeleteAlarmEvent) {
         LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerDeleteAlarmEvent()")
         val nm: NotificationManager = activity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.cancel(id)
+        nm.cancel(event.id)
     }
 
 }
