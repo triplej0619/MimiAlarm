@@ -88,6 +88,9 @@ class DataMapper {
                 alarm.friDay = viewModel.friDay.get()
                 alarm.saturDay = viewModel.saturDay.get()
                 alarm.sunDay = viewModel.sunDay.get()
+                if(!alarm.monDay and !alarm.tuesDay and !alarm.wednesDay and !alarm.thursDay and !alarm.friDay and !alarm.saturDay and !alarm.sunDay) {
+                    alarm.repeat = false
+                }
             }
 
             alarm.snooze = viewModel.snooze
