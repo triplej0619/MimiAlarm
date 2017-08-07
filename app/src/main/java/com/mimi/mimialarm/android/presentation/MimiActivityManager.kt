@@ -133,7 +133,9 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
     override fun addNotification(msg: String, id: Int) {
         LogUtil.printDebugLog(this@MimiActivityManager.javaClass, "addNotification() id : $id, msg : $msg")
 
-        val activityIntent = PendingIntent.getActivity(application, 999, Intent(application, MainActivity::class.java), PendingIntent.FLAG_ONE_SHOT)
+        val activityIntent = PendingIntent.getActivity(application, 999,
+                                Intent(application, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP),
+                                PendingIntent.FLAG_ONE_SHOT)
 
         val builder = NotificationCompat.Builder(application)
         builder.setContentText(application.getString(R.string.alarm_on_reset_snooze))
