@@ -6,10 +6,7 @@ import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.android.utils.LogUtil
-import com.mimi.mimialarm.core.infrastructure.AlarmManager
-import com.mimi.mimialarm.core.infrastructure.ChangeAlarmStatusEvent
-import com.mimi.mimialarm.core.infrastructure.UIManager
-import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
+import com.mimi.mimialarm.core.infrastructure.*
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.TimeCalculator
@@ -158,6 +155,7 @@ class AlarmViewModel @Inject constructor(
                     .forEach {
                         dbManager.deleteAlarmWithId(it.id)
                         if (it.enable.get()) {
+                            bus.post(DeleteAlarmEvent(it.id!!))
                             alarmManager.cancelAlarm(it.id!!)
                         }
                     }
@@ -176,6 +174,7 @@ class AlarmViewModel @Inject constructor(
                     }
                 }
         dbManager.deleteAllAlarm()
+        bus.post(DeleteAllAlarmEvent())
         reLoadAlarmList()
         cancelDeleteModeCommand.execute(Unit)
     }
@@ -189,6 +188,7 @@ class AlarmViewModel @Inject constructor(
             if (event.activation) {
                 val time = TimeCalculator.getMilliSecondsForScheduling(alarm)
                 alarmManager.startAlarm(event.id, time)
+                alarmManager.startAlarmForPreNotice(event.id, time)
                 bus.post(UpdateAlarmEvent(time / 1000))
             } else {
                 alarm.usedSnoozeCount = 0

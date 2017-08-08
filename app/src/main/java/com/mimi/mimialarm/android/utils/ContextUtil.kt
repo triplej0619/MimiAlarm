@@ -93,7 +93,9 @@ class ContextUtil {
         fun <T> startAlarm(context: Context, alarmId: Int, time: Long, receiverClass: Class<T>, intentIdKey: String) {
             val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val alarmIntent = Intent(context, receiverClass)
-            alarmIntent.putExtra(intentIdKey, alarmId)
+            if(!intentIdKey.isNullOrEmpty()) {
+                alarmIntent.putExtra(intentIdKey, alarmId)
+            }
             val pendingIntent = PendingIntent.getBroadcast(context, alarmId, alarmIntent, 0)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -106,7 +108,9 @@ class ContextUtil {
         fun <T> cancelAlarm(context: Context, alarmId: Int, receiverClass: Class<T>, intentIdKey: String) {
             val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val alarmIntent = Intent(context, receiverClass)
-            alarmIntent.putExtra(intentIdKey, alarmId)
+            if(!intentIdKey.isNullOrEmpty()) {
+                alarmIntent.putExtra(intentIdKey, alarmId)
+            }
             val pendingIntent = PendingIntent.getBroadcast(context, alarmId, alarmIntent, 0)
 
             alarmManager.cancel(pendingIntent)

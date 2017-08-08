@@ -1,5 +1,6 @@
 package com.mimi.mimialarm.android.presentation.view
 
+import android.app.NotificationManager
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.media.Ringtone
@@ -61,11 +62,12 @@ class AlarmOnActivity : AppCompatActivity() {
     }
 
     fun init() {
+        viewModel.alarmId = intent.getIntExtra(AlarmOnBroadcastReceiver.KEY_ALARM_ID, -1)
+        deletePreNoticeNotification(viewModel.alarmId!!)
         wakeUpScreen()
 
         bus.register(this)
 
-        viewModel.alarmId = intent.getIntExtra(AlarmOnBroadcastReceiver.KEY_ALARM_ID, -1)
         viewModel.startCommand.execute(object : Command {
             override fun execute(arg: Any) {
                 playRingtone()
@@ -75,6 +77,11 @@ class AlarmOnActivity : AppCompatActivity() {
                 playVibration()
             }
         })
+    }
+
+    fun deletePreNoticeNotification(id: Int) {
+        val nm: NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.cancel(id)
     }
 
     fun wakeUpScreen() {

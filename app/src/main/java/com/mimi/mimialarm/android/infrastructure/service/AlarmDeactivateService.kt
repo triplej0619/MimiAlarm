@@ -14,6 +14,7 @@ import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.utils.TimeCalculator
 import io.realm.Realm
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -26,6 +27,7 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
     companion object {
         val KEY_ID = "KEY_ID"
         val KEY_ACTION_KILL_SNOOZE = "KEY_ACTION_KILL_SNOOZE"
+        val KEY_ACTION_CANCEL_ALARM = "KEY_ACTION_CANCEL_ALARM"
     }
 
     fun buildComponent(): ActivityComponent {
@@ -45,20 +47,61 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
         LogUtil.printDebugLog(this@AlarmDeactivateService.javaClass, "onHandleIntent() " + intent?.action)
 
         intent?.let {
+            val id = intent.getIntExtra(KEY_ID, -1)
             when(intent.action) {
                 KEY_ACTION_KILL_SNOOZE -> {
-                    killSnooze(intent.getIntExtra(KEY_ID, -1))
+                    killSnooze(id)
+                }
+                KEY_ACTION_CANCEL_ALARM -> {
+                    cancelAlarm(id)
+                    setNextAlarmAfterPreCancel(id)
                 }
             }
+        }
+    }
+
+    fun cancelAlarm(id: Int) {
+        LogUtil.printDebugLog(this@AlarmDeactivateService.javaClass, "cancelAlarm() $id")
+        if(id > -1) {
+            val nm: NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            nm.cancel(id)
+            alarmManager.cancelAlarm(id)
+        }
+    }
+
+    fun setNextAlarmAfterPreCancel(id: Int) {
+        LogUtil.printDebugLog(this@AlarmDeactivateService.javaClass, "setNextAlarmAfterPreCancel() $id")
+        val realm = Realm.getDefaultInstance() // TODO
+        var copiedAlarm: MyAlarm? = null
+        realm.executeTransaction {
+            val alarm = RealmDataUtil.findObjectWithId<MyAlarm>(realm, "id", id)
+            copiedAlarm = realm.copyFromRealm(alarm)
+        }
+        realm.close()
+
+        copiedAlarm?.let {
+            disableTodayOfWeekInAlarm(copiedAlarm!!)
+            setNextAlarm(copiedAlarm!!, id, true)
+        }
+    }
+
+    fun disableTodayOfWeekInAlarm(alarm: MyAlarm) {
+        val calendar = GregorianCalendar()
+        when(calendar.get(GregorianCalendar.DAY_OF_WEEK)) {
+            GregorianCalendar.MONDAY -> alarm.monDay = false
+            GregorianCalendar.TUESDAY -> alarm.tuesDay = false
+            GregorianCalendar.WEDNESDAY -> alarm.wednesDay = false
+            GregorianCalendar.THURSDAY -> alarm.thursDay = false
+            GregorianCalendar.FRIDAY -> alarm.friDay = false
+            GregorianCalendar.SATURDAY -> alarm.saturDay = false
+            GregorianCalendar.SUNDAY -> alarm.sunDay = false
         }
     }
 
     fun killSnooze(id: Int) {
         LogUtil.printDebugLog(this@AlarmDeactivateService.javaClass, "killSnooze() $id")
         if(id > -1) {
-            val nm: NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            nm.cancel(id)
-            alarmManager.cancelAlarm(id)
+            cancelAlarm(id)
             resetSnoozeCount(id)
         }
     }
@@ -67,17 +110,20 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
         val realm = Realm.getDefaultInstance() // TODO
         realm.executeTransaction {
             val alarm = RealmDataUtil.findObjectWithId<MyAlarm>(realm, "id", id)
-            alarm?.let {
-                alarm.usedSnoozeCount = 0
-                setNextDayAlarm(alarm, id)
-            }
+            alarm.usedSnoozeCount = 0
+            setNextAlarm(alarm, id, false)
         }
         realm.close()
     }
 
-    fun setNextDayAlarm(alarm: MyAlarm, id: Int) {
+    fun setNextAlarm(alarm: MyAlarm, id: Int, needPreNotice: Boolean) {
         if(alarm.repeat) {
-            alarmManager.startAlarm(id, TimeCalculator.getMilliSecondsForScheduling(alarm))
+            LogUtil.printDebugLog(this@AlarmDeactivateService.javaClass, "setNextAlarm() $id")
+            val time = TimeCalculator.getMilliSecondsForScheduling(alarm)
+            alarmManager.startAlarm(id, time)
+            if(needPreNotice) {
+                alarmManager.startAlarmForPreNotice(id, time)
+            }
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.mimi.mimialarm.android.presentation.view
 
+import android.app.NotificationManager
 import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -9,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mimi.mimialarm.R
-import com.mimi.mimialarm.core.infrastructure.AddAlarmEvent
 import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
 import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
@@ -24,9 +25,7 @@ import android.widget.Toast
 import com.mimi.data.DBManager
 import com.mimi.mimialarm.android.infrastructure.ChangePageEvent
 import com.mimi.mimialarm.android.utils.LogUtil
-import com.mimi.mimialarm.core.infrastructure.ActivateAlarmEvent
-import com.mimi.mimialarm.core.infrastructure.AlarmManager
-import com.mimi.mimialarm.core.infrastructure.UpdateAlarmEvent
+import com.mimi.mimialarm.core.infrastructure.*
 import com.mimi.mimialarm.core.utils.TimeCalculator
 import java.util.*
 
@@ -177,4 +176,19 @@ class AlarmFragment : LifecycleFragment() {
         LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerActivateAlarmEvent()")
         viewModel.showActivatedAlarmList.set(true)
     }
+
+    @Subscribe
+    fun answerDeleteAllAlarmEvent(event: DeleteAllAlarmEvent) {
+        LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerDeleteAllAlarmEvent()")
+        val nm: NotificationManager = activity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.cancelAll()
+    }
+
+    @Subscribe
+    fun answerDeleteAlarmEvent(event: DeleteAlarmEvent) {
+        LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerDeleteAlarmEvent()")
+        val nm: NotificationManager = activity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.cancel(event.id)
+    }
+
 }
