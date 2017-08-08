@@ -60,12 +60,10 @@ class TimeCalculator {
                 targetDate.add(GregorianCalendar.DAY_OF_MONTH, jump)
             }
 
-            if (today.timeInMillis < targetDate.timeInMillis) {
-                return targetDate.timeInMillis - today.timeInMillis
-            } else {
-                targetDate.add(GregorianCalendar.DAY_OF_MONTH, -1)
-                return today.timeInMillis - targetDate.timeInMillis
+            if (today.timeInMillis >= targetDate.timeInMillis) {
+                targetDate.add(GregorianCalendar.DAY_OF_MONTH, 1)
             }
+            return targetDate.timeInMillis - today.timeInMillis
         }
 
         fun plusDayOfWeek(current: Int, plusValue: Int) : Int {
