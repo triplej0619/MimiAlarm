@@ -47,6 +47,7 @@ class ReschedulingAlarmAfterBootService : IntentService("ReschedulingAlarmAfterB
                     LogUtil.printDebugLog(this@ReschedulingAlarmAfterBootService.javaClass, "rescheduleAlarm() id : " + it.id)
                     val time = TimeCalculator.getMilliSecondsForScheduling(it)
                     alarmManager.startAlarm(it.id!!, time)
+                    alarmManager.startAlarmForPreNotice(it.id!!, time)
                 }
         realm.close()
     }

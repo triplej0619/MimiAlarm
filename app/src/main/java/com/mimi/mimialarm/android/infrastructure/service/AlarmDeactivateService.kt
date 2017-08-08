@@ -81,7 +81,7 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
 
         copiedAlarm?.let {
             disableTodayOfWeekInAlarm(copiedAlarm!!)
-            setNextAlarm(copiedAlarm!!, id)
+            setNextAlarm(copiedAlarm!!, id, true)
         }
     }
 
@@ -111,15 +111,19 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
         realm.executeTransaction {
             val alarm = RealmDataUtil.findObjectWithId<MyAlarm>(realm, "id", id)
             alarm.usedSnoozeCount = 0
-            setNextAlarm(alarm, id)
+            setNextAlarm(alarm, id, false)
         }
         realm.close()
     }
 
-    fun setNextAlarm(alarm: MyAlarm, id: Int) {
+    fun setNextAlarm(alarm: MyAlarm, id: Int, needPreNotice: Boolean) {
         if(alarm.repeat) {
             LogUtil.printDebugLog(this@AlarmDeactivateService.javaClass, "setNextAlarm() $id")
-            alarmManager.startAlarm(id, TimeCalculator.getMilliSecondsForScheduling(alarm))
+            val time = TimeCalculator.getMilliSecondsForScheduling(alarm)
+            alarmManager.startAlarm(id, time)
+            if(needPreNotice) {
+                alarmManager.startAlarmForPreNotice(id, time)
+            }
         }
     }
 }

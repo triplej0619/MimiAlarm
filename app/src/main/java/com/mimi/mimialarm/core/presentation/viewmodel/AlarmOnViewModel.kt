@@ -97,7 +97,9 @@ class AlarmOnViewModel @Inject constructor(
 
     fun setNextDayAlarm() {
         if(alarm!!.repeat) {
-            alarmManager.startAlarm(alarmId!!, TimeCalculator.getMilliSecondsForScheduling(alarm!!))
+            val time = TimeCalculator.getMilliSecondsForScheduling(alarm!!)
+            alarmManager.startAlarm(alarmId!!, time)
+            alarmManager.startAlarmForPreNotice(alarmId!!, time)
             bus.post(ActivateAlarmEvent())
         }
     }

@@ -188,6 +188,7 @@ class AlarmViewModel @Inject constructor(
             if (event.activation) {
                 val time = TimeCalculator.getMilliSecondsForScheduling(alarm)
                 alarmManager.startAlarm(event.id, time)
+                alarmManager.startAlarmForPreNotice(event.id, time)
                 bus.post(UpdateAlarmEvent(time / 1000))
             } else {
                 alarm.usedSnoozeCount = 0

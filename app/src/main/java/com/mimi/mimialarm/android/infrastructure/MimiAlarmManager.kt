@@ -30,14 +30,21 @@ class MimiAlarmManager(val context: Context) : AlarmManager {
         }
     }
 
-    override fun startAlarm(id: Int, time: Long) {
+    override fun startAlarmForPreNotice(id: Int, time: Long) {
         try {
-            ContextUtil.startAlarm<AlarmOnBroadcastReceiver>(context, id, time, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
             var noticeTime = 0L
             if(time > HOUR_IN_MILLI) {
                 noticeTime = time - HOUR_IN_MILLI
             }
             ContextUtil.startAlarm<NoticeAlarmBroadcastReceiver>(context, id, noticeTime, NoticeAlarmBroadcastReceiver::class.java, NoticeAlarmBroadcastReceiver.KEY_ALARM_ID)
+        } catch (ex: Exception) {
+            Log.e(this::class.java.simpleName, ex.toString())
+        }
+    }
+
+    override fun startAlarm(id: Int, time: Long) {
+        try {
+            ContextUtil.startAlarm<AlarmOnBroadcastReceiver>(context, id, time, AlarmOnBroadcastReceiver::class.java, AlarmOnBroadcastReceiver.KEY_ALARM_ID)
         } catch (ex: Exception) {
             Log.e(this::class.java.simpleName, ex.toString())
         }
