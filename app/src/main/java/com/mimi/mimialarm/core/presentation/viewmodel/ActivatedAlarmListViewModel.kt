@@ -49,6 +49,9 @@ class ActivatedAlarmListViewModel @Inject constructor(
         val alarm = dbManager.findAlarmWithId(event.id)
         alarm?.let {
             alarm.usedSnoozeCount = 0
+            if(!alarm.repeat) {
+                alarm.enable = false
+            }
             dbManager.updateAlarm(alarm)
         }
         alarmList.remove(alarmList.find { it.id == event.id })

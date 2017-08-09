@@ -67,6 +67,18 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
             nm.cancel(id)
             alarmManager.cancelAlarm(id)
         }
+        disableAlarm(id)
+    }
+
+    fun disableAlarm(id: Int) {
+        val realm = Realm.getDefaultInstance() // TODO
+        realm.executeTransaction {
+            val alarm = RealmDataUtil.findObjectWithId<MyAlarm>(realm, "id", id)
+            if(!alarm.repeat) {
+                alarm.enable = false
+            }
+        }
+        realm.close()
     }
 
     fun setNextAlarmAfterPreCancel(id: Int) {
