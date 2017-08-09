@@ -97,7 +97,7 @@ class TimerOnActivity : AppCompatActivity() {
     }
 
     fun playRingtone() {
-        selectedRingtone = ContextUtil.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM), viewModel.DEFAULT_VOLUME)
+        selectedRingtone = ContextUtil.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM), dataManager.getTimerVolume())
         selectedRingtone?.play()
     }
 

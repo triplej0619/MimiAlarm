@@ -9,8 +9,11 @@ import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
  */
 class AndroidApplicationDataManager(context: Context) : ApplicationDataManager {
 
+    val DEFAULT_VOLUME = 70
+
     val KEY_CURRENT_THEME = "KEY_CURRENT_THEME"
     val KEY_ALARM_CLOSE_METHOD = "KEY_ALARM_CLOSE_METHOD"
+    val KEY_TIMER_VOLUME = "KEY_TIMER_VOLUME"
 
     val PREF_NAME = "MIMI_ALARM_PREF"
 
@@ -28,4 +31,7 @@ class AndroidApplicationDataManager(context: Context) : ApplicationDataManager {
 
     override fun setAlarmCloseMethod(method: Int) = pref.edit().putInt(KEY_ALARM_CLOSE_METHOD, method).apply()
 
+    override fun getTimerVolume(): Int = pref.getInt(KEY_TIMER_VOLUME, DEFAULT_VOLUME)
+
+    override fun setTimerVolume(volume: Int) = pref.edit().putInt(KEY_TIMER_VOLUME, volume).apply()
 }

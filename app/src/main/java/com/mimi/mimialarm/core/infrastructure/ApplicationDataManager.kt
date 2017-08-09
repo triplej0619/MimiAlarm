@@ -9,4 +9,7 @@ interface ApplicationDataManager {
 
     fun getAlarmCloseMethod() : Int
     fun setAlarmCloseMethod(method: Int)
+
+    fun getTimerVolume() : Int
+    fun setTimerVolume(volume: Int)
 }

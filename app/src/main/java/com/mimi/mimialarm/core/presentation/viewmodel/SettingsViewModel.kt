@@ -1,8 +1,10 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
+import android.databinding.Bindable
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import com.mimi.mimialarm.BR
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.ShareToFriendsEvent
 import com.mimi.mimialarm.core.infrastructure.StartRewardedAdEvent
@@ -19,10 +21,20 @@ class SettingsViewModel @Inject constructor(
         private val bus: Bus,
         private val applicationDataManager: ApplicationDataManager
 ) : BaseViewModel() {
+    val DEFAULT_VOLUME = 70
+
     var version: ObservableField<String> = ObservableField("")
     var themeList: ObservableArrayList<Boolean> = ObservableArrayList()
     var themeSelectedIndex: Int = 0
     var alarmCloseMethod: ObservableInt = ObservableInt(0)
+    var timerVolume: Int = DEFAULT_VOLUME
+    @Bindable get() = field
+    set(value) {
+        field = value
+        applicationDataManager.setTimerVolume(field)
+        notifyPropertyChanged(BR.timerVolume)
+    }
+
 
     val changeTheme1Command: Command = object : Command {
         override fun execute(arg: Any) {
@@ -75,6 +87,7 @@ class SettingsViewModel @Inject constructor(
         themeSelectedIndex = applicationDataManager.getCurrentTheme()
         themeList[themeSelectedIndex] = true
         alarmCloseMethod.set(applicationDataManager.getAlarmCloseMethod())
+        timerVolume = applicationDataManager.getTimerVolume()
     }
 
     fun changeSelectedTheme(newIndex: Int, oldIndex: Int) {

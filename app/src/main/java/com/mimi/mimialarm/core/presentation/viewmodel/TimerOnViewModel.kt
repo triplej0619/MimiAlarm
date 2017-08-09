@@ -16,8 +16,6 @@ class TimerOnViewModel(
         private val dbManager: DBManager
 ) : BaseViewModel() {
 
-    val DEFAULT_VOLUME: Int = 70
-
     var timerId: Int? = null
     var hour: ObservableInt = ObservableInt(0)
     var minute: ObservableInt = ObservableInt(0)

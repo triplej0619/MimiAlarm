@@ -112,6 +112,7 @@
                     android:layout_height="wrap_content" />
             </android.support.constraint.ConstraintLayout>
 
+            <!--테마 변경-->
             <TextView
                 style="@style/NotoSans.Regular.15.Gray1"
                 android:paddingLeft="16dp"
@@ -177,6 +178,29 @@
                     android:layout_height="40dp" />
             </RadioGroup>
 
+            <!--타이머 볼륨-->
+            <TextView
+                style="@style/NotoSans.Regular.15.Gray1"
+                android:paddingLeft="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/settings_timer_volume"
+                android:layout_width="match_parent"
+                android:layout_height="46dp" />
+            <RelativeLayout
+                android:background="@android:color/white"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="72dp">
+                <android.support.v7.widget.AppCompatSeekBar
+                    android:progress="@={settingsViewModel.timerVolume}"
+                    android:thumb="@drawable/icn_volume"
+                    android:layout_centerInParent="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <!--추천하기-->
             <TextView
                 style="@style/NotoSans.Regular.15.Gray1"
                 android:paddingLeft="16dp"
@@ -196,6 +220,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="72dp" />
 
+            <!--버전-->
             <TextView
                 style="@style/NotoSans.Regular.15.Gray1"
                 android:paddingLeft="16dp"
