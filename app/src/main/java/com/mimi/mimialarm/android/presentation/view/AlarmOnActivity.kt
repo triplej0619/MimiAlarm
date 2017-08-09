@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil
 import android.media.Ringtone
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.os.Vibrator
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -18,6 +19,7 @@ import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
 import com.mimi.mimialarm.android.utils.ContextUtil
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmOnViewModel
 import com.mimi.mimialarm.core.utils.Command
@@ -27,12 +29,12 @@ import javax.inject.Inject
 
 
 
-
-
 /**
  * Created by MihyeLee on 2017. 6. 29..
  */
 class AlarmOnActivity : AppCompatActivity() {
+
+    val TERMINATE_TIME = 1000 * 30
 
     lateinit var binding: ActivityAlarmOnBinding
     @Inject lateinit var viewModel: AlarmOnViewModel
@@ -50,6 +52,14 @@ class AlarmOnActivity : AppCompatActivity() {
                 .build()
     }
 
+    val terminateHandler: Handler = Handler(Handler.Callback { msg ->
+        LogUtil.printDebugLog(this@AlarmOnActivity.javaClass, "terminateHandler receive msg")
+        msg?.let {
+            this@AlarmOnActivity.finish()
+        }
+        false
+    })
+
     override fun onCreate(savedInstanceState: Bundle?) {
         buildComponent().inject(this)
         setTheme(ContextUtil.getThemeId(dataManager.getCurrentTheme()))
@@ -59,6 +69,14 @@ class AlarmOnActivity : AppCompatActivity() {
         binding.alarmOnViewModel = viewModel
 
         init()
+        setTerminateTimer()
+    }
+
+    fun setTerminateTimer() {
+        if(dataManager.getAlarmCloseTiming() != 0) {
+            LogUtil.printDebugLog(this@AlarmOnActivity.javaClass, "setTerminateTimer()")
+            terminateHandler.sendEmptyMessageDelayed(0, TERMINATE_TIME.toLong())
+        }
     }
 
     fun init() {
@@ -102,6 +120,7 @@ class AlarmOnActivity : AppCompatActivity() {
         bus.unregister(this)
         selectedRingtone?.stop()
         vibrator?.cancel()
+        terminateHandler.removeMessages(0)
     }
 
     override fun onUserLeaveHint() {

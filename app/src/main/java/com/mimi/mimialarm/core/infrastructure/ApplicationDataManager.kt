@@ -12,4 +12,7 @@ interface ApplicationDataManager {
 
     fun getTimerVolume() : Int
     fun setTimerVolume(volume: Int)
+
+    fun getAlarmCloseTiming() : Int
+    fun setAlarmCloseTiming(timingIndex: Int)
 }

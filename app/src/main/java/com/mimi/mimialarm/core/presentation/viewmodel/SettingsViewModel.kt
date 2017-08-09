@@ -27,6 +27,7 @@ class SettingsViewModel @Inject constructor(
     var themeList: ObservableArrayList<Boolean> = ObservableArrayList()
     var themeSelectedIndex: Int = 0
     var alarmCloseMethod: ObservableInt = ObservableInt(0)
+    var alarmCloseTiming: ObservableInt = ObservableInt(0)
     var timerVolume: Int = DEFAULT_VOLUME
     @Bindable get() = field
     set(value) {
@@ -73,6 +74,18 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    val changeAlarmCloseTiming30sAfterCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            changeAlarmCloseTiming(1)
+        }
+    }
+
+    val changeAlarmCloseTimingWaitMeCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            changeAlarmCloseTiming(0)
+        }
+    }
+
     val shareToFriendsCommand: Command = object : Command {
         override fun execute(arg: Any) {
             bus.post(ShareToFriendsEvent())
@@ -87,6 +100,7 @@ class SettingsViewModel @Inject constructor(
         themeSelectedIndex = applicationDataManager.getCurrentTheme()
         themeList[themeSelectedIndex] = true
         alarmCloseMethod.set(applicationDataManager.getAlarmCloseMethod())
+        alarmCloseTiming.set(applicationDataManager.getAlarmCloseTiming())
         timerVolume = applicationDataManager.getTimerVolume()
     }
 
@@ -106,6 +120,11 @@ class SettingsViewModel @Inject constructor(
     fun changeAlarmCloseMethod(methodIndex: Int) {
         applicationDataManager.setAlarmCloseMethod(methodIndex)
         alarmCloseMethod.set(methodIndex)
+    }
+
+    fun changeAlarmCloseTiming(index: Int) {
+        applicationDataManager.setAlarmCloseTiming(index)
+        alarmCloseTiming.set(index)
     }
 
     fun release() {

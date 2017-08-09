@@ -10,6 +10,10 @@
     <string name="settings_fail_to_load_ad">일시적인 오류로 광고를 불러오지 못했습니다. 다시 시도해주세요.</string>
     <string name="settings_ad_video_not_load_yet">광고영상이 아직 로딩되지 않았습니다. 잠시만 기다려주세요.</string>
 
+    <string name="settings_alarm_terminate_timing">알람 종료 시점 설정</string>
+    <string name="settings_alarm_terminate_timing_30s">30초 울리고 종료</string>
+    <string name="settings_alarm_terminate_timing_wait_me">내가 끌 때까지 종료 안함</string>
+
     <string name="settings_timer_volume">타이머 볼륨 설정</string>
 
     <string name="settings_app_recommend">추천하기</string>

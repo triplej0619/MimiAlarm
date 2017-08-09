@@ -13,6 +13,7 @@ class AndroidApplicationDataManager(context: Context) : ApplicationDataManager {
 
     val KEY_CURRENT_THEME = "KEY_CURRENT_THEME"
     val KEY_ALARM_CLOSE_METHOD = "KEY_ALARM_CLOSE_METHOD"
+    val KEY_ALARM_CLOSE_TIMING = "KEY_ALARM_CLOSE_TIMING"
     val KEY_TIMER_VOLUME = "KEY_TIMER_VOLUME"
 
     val PREF_NAME = "MIMI_ALARM_PREF"
@@ -30,6 +31,10 @@ class AndroidApplicationDataManager(context: Context) : ApplicationDataManager {
     override fun getAlarmCloseMethod(): Int = pref.getInt(KEY_ALARM_CLOSE_METHOD, 0)
 
     override fun setAlarmCloseMethod(method: Int) = pref.edit().putInt(KEY_ALARM_CLOSE_METHOD, method).apply()
+
+    override fun getAlarmCloseTiming(): Int = pref.getInt(KEY_ALARM_CLOSE_TIMING, 0)
+
+    override fun setAlarmCloseTiming(timingIndex: Int) = pref.edit().putInt(KEY_ALARM_CLOSE_TIMING, timingIndex).apply()
 
     override fun getTimerVolume(): Int = pref.getInt(KEY_TIMER_VOLUME, DEFAULT_VOLUME)
 
