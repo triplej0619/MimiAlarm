@@ -62,6 +62,31 @@ class SettingsViewModel @Inject constructor(
             changeSelectedTheme(4, themeSelectedIndex)
         }
     }
+    val changeTheme6Command: Command = object : Command {
+        override fun execute(arg: Any) {
+            changeSelectedTheme(5, themeSelectedIndex)
+        }
+    }
+    val changeTheme7Command: Command = object : Command {
+        override fun execute(arg: Any) {
+            changeSelectedTheme(6, themeSelectedIndex)
+        }
+    }
+    val changeTheme8Command: Command = object : Command {
+        override fun execute(arg: Any) {
+            changeSelectedTheme(7, themeSelectedIndex)
+        }
+    }
+    val changeTheme9Command: Command = object : Command {
+        override fun execute(arg: Any) {
+            changeSelectedTheme(8, themeSelectedIndex)
+        }
+    }
+    val changeTheme10Command: Command = object : Command {
+        override fun execute(arg: Any) {
+            changeSelectedTheme(9, themeSelectedIndex)
+        }
+    }
 
     val changeAlarmCloseMethodInWindowCommand: Command = object : Command {
         override fun execute(arg: Any) {
@@ -94,7 +119,7 @@ class SettingsViewModel @Inject constructor(
 
     init {
         bus.register(this)
-        for (index in 0..5) {
+        for (index in 0..10) {
             themeList.add(false)
         }
         themeSelectedIndex = applicationDataManager.getCurrentTheme()

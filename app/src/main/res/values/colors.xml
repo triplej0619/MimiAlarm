@@ -45,6 +45,51 @@
     <color name="bg5">#EBE9EC</color>
     <color name="listDivider5">#eaeaea</color>
 
+    <!--theme 6-->
+    <color name="colorPrimary6">#9055A2</color>
+    <color name="colorPrimaryDark6">#9055A2</color>
+    <color name="colorAccent6">#3287B8</color>
+    <color name="gradientEnd6">#B9094A</color>
+    <color name="gradientMid6">#964A96</color>
+    <color name="bg6">#F4EEF3</color>
+    <color name="listDivider6">#eaeaea</color>
+
+    <!--theme 7-->
+    <color name="colorPrimary7">#F1BBBA</color>
+    <color name="colorPrimaryDark7">#F1BBBA</color>
+    <color name="colorAccent7">#D16198</color>
+    <color name="gradientEnd7">#FF88B0</color>
+    <color name="gradientMid7">#F3B3B8</color>
+    <color name="bg7">#F5F1F4</color>
+    <color name="listDivider7">#eaeaea</color>
+
+    <!--theme 8-->
+    <color name="colorPrimary8">#11B3C8</color>
+    <color name="colorPrimaryDark8">#11B3C8</color>
+    <color name="colorAccent8">#45E886</color>
+    <color name="gradientEnd8">#8370DD</color>
+    <color name="gradientMid8">#20A9CB</color>
+    <color name="bg8">#F1F4F5</color>
+    <color name="listDivider8">#eaeaea</color>
+
+    <!--theme 9-->
+    <color name="colorPrimary9">#404146</color>
+    <color name="colorPrimaryDark9">#404146</color>
+    <color name="colorAccent9">#6099C6</color>
+    <color name="gradientEnd9">#485679</color>
+    <color name="gradientMid9">#42454E</color>
+    <color name="bg9">#E5E6E8</color>
+    <color name="listDivider9">#eaeaea</color>
+
+    <!--theme 10-->
+    <color name="colorPrimary10">#46494F</color>
+    <color name="colorPrimaryDark10">#46494F</color>
+    <color name="colorAccent10">#FFA2A3</color>
+    <color name="gradientEnd10">#2E2F34</color>
+    <color name="gradientMid10">#42454E</color>
+    <color name="bg10">#F1F1F1</color>
+    <color name="listDivider10">#eaeaea</color>
+
 
 
     <!--etc-->

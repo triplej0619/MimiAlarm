@@ -64,6 +64,66 @@
         <item name="colorListDivider">@color/listDivider5</item>
     </style>
 
+    <style name="AppTheme6" parent="MimiBaseTheme">
+        <item name="colorPrimary">@color/colorPrimary6</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark6</item>
+        <item name="colorAccent">@color/colorAccent6</item>
+        <item name="colorControlNormal">@color/colorAccent6</item>
+        <item name="colorGradientEnd">@color/gradientEnd6</item>
+        <item name="colorGradientMid">@color/gradientMid6</item>
+        <item name="colorBg">@color/bg6</item>
+        <item name="android:windowBackground">@color/bg6</item>
+        <item name="colorListDivider">@color/listDivider6</item>
+    </style>
+
+    <style name="AppTheme7" parent="MimiBaseTheme">
+        <item name="colorPrimary">@color/colorPrimary7</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark7</item>
+        <item name="colorAccent">@color/colorAccent7</item>
+        <item name="colorControlNormal">@color/colorAccent7</item>
+        <item name="colorGradientEnd">@color/gradientEnd7</item>
+        <item name="colorGradientMid">@color/gradientMid7</item>
+        <item name="colorBg">@color/bg7</item>
+        <item name="android:windowBackground">@color/bg7</item>
+        <item name="colorListDivider">@color/listDivider7</item>
+    </style>
+
+    <style name="AppTheme8" parent="MimiBaseTheme">
+        <item name="colorPrimary">@color/colorPrimary8</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark8</item>
+        <item name="colorAccent">@color/colorAccent8</item>
+        <item name="colorControlNormal">@color/colorAccent8</item>
+        <item name="colorGradientEnd">@color/gradientEnd8</item>
+        <item name="colorGradientMid">@color/gradientMid8</item>
+        <item name="colorBg">@color/bg8</item>
+        <item name="android:windowBackground">@color/bg8</item>
+        <item name="colorListDivider">@color/listDivider8</item>
+    </style>
+
+    <style name="AppTheme9" parent="MimiBaseTheme">
+        <item name="colorPrimary">@color/colorPrimary9</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark9</item>
+        <item name="colorAccent">@color/colorAccent9</item>
+        <item name="colorControlNormal">@color/colorAccent9</item>
+        <item name="colorGradientEnd">@color/gradientEnd9</item>
+        <item name="colorGradientMid">@color/gradientMid9</item>
+        <item name="colorBg">@color/bg9</item>
+        <item name="android:windowBackground">@color/bg9</item>
+        <item name="colorListDivider">@color/listDivider9</item>
+    </style>
+
+    <style name="AppTheme10" parent="MimiBaseTheme">
+        <item name="colorPrimary">@color/colorPrimary10</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark10</item>
+        <item name="colorAccent">@color/colorAccent10</item>
+        <item name="colorControlNormal">@color/colorAccent10</item>
+        <item name="colorGradientEnd">@color/gradientEnd10</item>
+        <item name="colorGradientMid">@color/gradientMid10</item>
+        <item name="colorBg">@color/bg10</item>
+        <item name="android:windowBackground">@color/bg10</item>
+        <item name="colorListDivider">@color/listDivider10</item>
+    </style>
+
     <style name="CustomEditInTimer" parent="Widget.AppCompat.EditText">
         <item name="android:textSize">60sp</item>
         <item name="android:textColor">@android:color/white</item>

@@ -53,6 +53,11 @@ class ContextUtil {
                 2 -> return R.style.AppTheme3
                 3 -> return R.style.AppTheme4
                 4 -> return R.style.AppTheme5
+                5 -> return R.style.AppTheme6
+                6 -> return R.style.AppTheme7
+                7 -> return R.style.AppTheme8
+                8 -> return R.style.AppTheme9
+                9 -> return R.style.AppTheme10
                 else -> return R.style.AppTheme1
             }
         }

@@ -105,6 +105,7 @@ class SettingsFragment : android.support.v4.app.Fragment() {
     }
 
     fun loadAdVideo() {
+        LogUtil.printDebugLog(SettingsFragment::class.java, "loadAdVideo()")
         rewardedVideoAd?.loadAd(getString(R.string.test_ad_rewarded_video), AdRequest.Builder().build())
     }
 

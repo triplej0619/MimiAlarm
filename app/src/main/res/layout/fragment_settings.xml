@@ -176,6 +176,62 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp" />
             </RadioGroup>
+            <RadioGroup
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="72dp">
+                <RadioButton
+                    app:clickEvent="@{settingsViewModel.changeTheme6Command}"
+                    android:id="@+id/theme6"
+                    android:checked="@{settingsViewModel.themeList[5]}"
+                    android:background="@drawable/selector_theme_btn6"
+                    android:button="@android:color/transparent"
+                    android:layout_gravity="center"
+                    android:layout_margin="16dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <RadioButton
+                    app:clickEvent="@{settingsViewModel.changeTheme7Command}"
+                    android:id="@+id/theme7"
+                    android:checked="@{settingsViewModel.themeList[6]}"
+                    android:background="@drawable/selector_theme_btn7"
+                    android:button="@android:color/transparent"
+                    android:layout_gravity="center"
+                    android:layout_margin="16dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <RadioButton
+                    app:clickEvent="@{settingsViewModel.changeTheme8Command}"
+                    android:id="@+id/theme8"
+                    android:checked="@{settingsViewModel.themeList[7]}"
+                    android:background="@drawable/selector_theme_btn8"
+                    android:button="@android:color/transparent"
+                    android:layout_gravity="center"
+                    android:layout_margin="16dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <RadioButton
+                    app:clickEvent="@{settingsViewModel.changeTheme9Command}"
+                    android:id="@+id/theme9"
+                    android:checked="@{settingsViewModel.themeList[8]}"
+                    android:background="@drawable/selector_theme_btn9"
+                    android:button="@android:color/transparent"
+                    android:layout_gravity="center"
+                    android:layout_margin="16dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <RadioButton
+                    app:clickEvent="@{settingsViewModel.changeTheme10Command}"
+                    android:id="@+id/theme10"
+                    android:checked="@{settingsViewModel.themeList[9]}"
+                    android:background="@drawable/selector_theme_btn10"
+                    android:button="@android:color/transparent"
+                    android:layout_gravity="center"
+                    android:layout_margin="16dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+            </RadioGroup>
 
             <!--타이머 볼륨-->
             <TextView
