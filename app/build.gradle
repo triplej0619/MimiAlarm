@@ -18,7 +18,7 @@ android {
         applicationId "com.mimi.mimialarm"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 6
+        versionCode 7
         versionName "0.9"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
