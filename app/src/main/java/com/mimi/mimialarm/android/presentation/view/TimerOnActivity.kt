@@ -39,7 +39,7 @@ class TimerOnActivity : AppCompatActivity() {
     @Inject lateinit var dataManager: ApplicationDataManager
 
     var vibrator: Vibrator? = null
-    lateinit var player: MediaPlayer
+    var player: MediaPlayer? = null
 
     fun buildComponent(): ActivityComponent {
         return DaggerActivityComponent.builder()
@@ -85,8 +85,8 @@ class TimerOnActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        player.stop()
-        player.release()
+        player?.stop()
+        player?.release()
         vibrator?.cancel()
     }
 
@@ -103,11 +103,11 @@ class TimerOnActivity : AppCompatActivity() {
     fun playRingtone() {
         ContextUtil.setAlarmVolume(this, dataManager.getTimerVolume())
         player = MediaPlayer()
-        player.setAudioStreamType(AudioManager.STREAM_ALARM)
-        player.setDataSource(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
-        player.isLooping = true
-        player.prepare()
-        player.start()
+        player?.setAudioStreamType(AudioManager.STREAM_ALARM)
+        player?.setDataSource(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
+        player?.isLooping = true
+        player?.prepare()
+        player?.start()
     }
 
     override fun onBackPressed() {

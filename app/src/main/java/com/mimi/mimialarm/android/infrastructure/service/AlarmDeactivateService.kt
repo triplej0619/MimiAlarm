@@ -12,7 +12,9 @@ import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
 import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
+import com.mimi.mimialarm.core.infrastructure.RefreshAlarmListEvent
 import com.mimi.mimialarm.core.utils.TimeCalculator
+import com.squareup.otto.Bus
 import io.realm.Realm
 import java.util.*
 import javax.inject.Inject
@@ -23,6 +25,7 @@ import javax.inject.Inject
 class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
 
     @Inject lateinit var alarmManager: AlarmManager
+    @Inject lateinit var bus: Bus
 
     companion object {
         val KEY_ID = "KEY_ID"
@@ -79,6 +82,7 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
             }
         }
         realm.close()
+        bus.post(RefreshAlarmListEvent())
     }
 
     fun setNextAlarmAfterPreCancel(id: Int) {

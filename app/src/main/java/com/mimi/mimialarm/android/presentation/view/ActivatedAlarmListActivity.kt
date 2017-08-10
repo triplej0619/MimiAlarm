@@ -62,6 +62,10 @@ class ActivatedAlarmListActivity : AppCompatActivity(), LifecycleRegistryOwner {
         binding.activatedAlarmListViewModel = viewModel
 
         init()
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.loadAlarmList()
     }
 

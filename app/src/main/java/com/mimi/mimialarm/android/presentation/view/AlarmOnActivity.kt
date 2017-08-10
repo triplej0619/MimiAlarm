@@ -45,7 +45,7 @@ class AlarmOnActivity : AppCompatActivity() {
     @Inject lateinit var dataManager: ApplicationDataManager
 
     var vibrator: Vibrator? = null
-    lateinit var player: MediaPlayer
+    var player: MediaPlayer? = null
 
     fun buildComponent(): ActivityComponent {
         return DaggerActivityComponent.builder()
@@ -120,8 +120,8 @@ class AlarmOnActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         bus.unregister(this)
-        player.stop()
-        player.release()
+        player?.stop()
+        player?.release()
         vibrator?.cancel()
         terminateHandler.removeMessages(0)
     }
@@ -143,11 +143,11 @@ class AlarmOnActivity : AppCompatActivity() {
     fun playRingtone() {
         ContextUtil.setAlarmVolume(this, viewModel.soundVolume)
         player = MediaPlayer()
-        player.setAudioStreamType(AudioManager.STREAM_ALARM)
-        player.setDataSource(this, Uri.parse(viewModel.mediaSrc))
-        player.isLooping = true
-        player.prepare()
-        player.start()
+        player?.setAudioStreamType(AudioManager.STREAM_ALARM)
+        player?.setDataSource(this, Uri.parse(viewModel.mediaSrc))
+        player?.isLooping = true
+        player?.prepare()
+        player?.start()
     }
 
     override fun onBackPressed() {
