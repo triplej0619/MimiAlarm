@@ -292,7 +292,7 @@
                     style="@style/NotoSans.Regular.15.Gray1"
                     app:clickEvent="@{settingsViewModel.changeAlarmCloseTiming30sAfterCommand}"
                     android:checked="@{settingsViewModel.alarmCloseTiming == 1 ? true : false}"
-                    android:text="@string/settings_alarm_terminate_timing_30s"
+                    android:text="@string/settings_alarm_terminate_timing_60s"
                     android:layout_centerVertical="true"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
