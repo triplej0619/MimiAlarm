@@ -75,7 +75,7 @@ class RealmDBManager : DBManager {
     }
 
     override fun addTimer(timer: MyTimer) {
-        RealmDataUtil.insertObjectWithId(realm, timer)
+        RealmDataUtil.insertObjectWithIdAsync(timer)
     }
 
     override fun updateTimer(timer: MyTimer) {

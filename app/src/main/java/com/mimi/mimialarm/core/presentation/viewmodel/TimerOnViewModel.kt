@@ -34,7 +34,7 @@ class TimerOnViewModel(
     }
 
     fun loadAndDeactivatedTimer() {
-        LogUtil.printDebugLog(this@TimerOnViewModel.javaClass, "loadAndDeactivatedTimer")
+        LogUtil.printDebugLog(this@TimerOnViewModel.javaClass, "loadAndDeactivatedTimer : $timerId")
 
         if(timerId != null) {
             val timer: MyTimer? = dbManager.findTimerWithId(timerId)
