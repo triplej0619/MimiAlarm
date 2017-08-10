@@ -16,8 +16,11 @@
 
     <string name="settings_timer_volume">타이머 볼륨 설정</string>
 
+    <string name="settings_send_user_report">의견 보내기</string>
+    <string name="settings_send_user_report_to_developer">개발자에게 알람 앱에 대한 버그나 의견을 전달 해주세요.</string>
+
     <string name="settings_app_recommend">추천하기</string>
-    <string name="settings_app_recommend_to_friends">친구에게 알람앱을 추천해주세요</string>
+    <string name="settings_app_recommend_to_friends">친구에게 알람앱을 추천 해주세요.</string>
 
     <string name="settings_app_version">버전</string>
     <string name="settings_share_app">알람앱 공유하기</string>

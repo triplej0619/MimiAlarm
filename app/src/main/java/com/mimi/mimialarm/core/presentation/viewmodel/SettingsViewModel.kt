@@ -5,6 +5,7 @@ import android.databinding.ObservableArrayList
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.mimi.mimialarm.BR
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.ShareToFriendsEvent
 import com.mimi.mimialarm.core.infrastructure.StartRewardedAdEvent
@@ -22,6 +23,7 @@ class SettingsViewModel @Inject constructor(
         private val applicationDataManager: ApplicationDataManager
 ) : BaseViewModel() {
     val DEFAULT_VOLUME = 70
+    val USER_REPORT_URL = "https://docs.google.com/forms/d/e/1FAIpQLScuzJozcWCAqiLe62NN58TIZkmMC7R0CFPoI3GGAUUhpm79BA/viewform?usp=sf_link"
 
     var version: ObservableField<String> = ObservableField("")
     var themeList: ObservableArrayList<Boolean> = ObservableArrayList()
@@ -117,6 +119,12 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    val sendUserReportCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            sendUserReport()
+        }
+    }
+
     init {
         bus.register(this)
         for (index in 0..10) {
@@ -154,5 +162,10 @@ class SettingsViewModel @Inject constructor(
 
     fun release() {
         bus.unregister(this)
+    }
+
+    fun sendUserReport() {
+        LogUtil.printDebugLog(this@SettingsViewModel.javaClass, "sendUserReport()")
+        uiManager.startWebBrowserWithUrl(USER_REPORT_URL)
     }
 }

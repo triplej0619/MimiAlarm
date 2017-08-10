@@ -19,9 +19,13 @@ import com.mimi.mimialarm.core.utils.Command
 import com.squareup.otto.Bus
 import javax.inject.Inject
 import android.app.PendingIntent
+import android.net.Uri
 import com.mimi.mimialarm.android.infrastructure.service.AlarmDeactivateService
 import com.mimi.mimialarm.android.presentation.view.MainActivity
 import com.mimi.mimialarm.android.utils.LogUtil
+import android.support.v4.content.ContextCompat.startActivity
+
+
 
 
 /**
@@ -30,7 +34,6 @@ import com.mimi.mimialarm.android.utils.LogUtil
 
 class MimiActivityManager @Inject constructor(private val application: MimiAlarmApplication, private val bus: Bus)
     : Application.ActivityLifecycleCallbacks, UIManager {
-
     private var currentActivity: Activity? = null
 
     init {
@@ -107,27 +110,23 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
     }
 
     override fun showAlertDialog(msg: String, title: String, cancelable: Boolean, okCallback: Command?, cancelCallback: Command?) {
-        if(currentActivity != null) {
-            val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(currentActivity!!)
-            if(title.isNotEmpty()) {
-                alertDialogBuilder.setTitle(title)
-            }
-            alertDialogBuilder.setMessage(msg)
-            alertDialogBuilder.setCancelable(cancelable)
-            okCallback.let {
-                alertDialogBuilder.setPositiveButton(R.string.ok) { dialog, which -> okCallback?.execute(Unit) }
-            }
-            cancelCallback.let {
-                alertDialogBuilder.setNegativeButton(R.string.cancel) { dialog, which -> cancelCallback?.execute(Unit) }
-            }
-            alertDialogBuilder.create().show()
+        val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(application)
+        if(title.isNotEmpty()) {
+            alertDialogBuilder.setTitle(title)
         }
+        alertDialogBuilder.setMessage(msg)
+        alertDialogBuilder.setCancelable(cancelable)
+        okCallback.let {
+            alertDialogBuilder.setPositiveButton(R.string.ok) { dialog, which -> okCallback?.execute(Unit) }
+        }
+        cancelCallback.let {
+            alertDialogBuilder.setNegativeButton(R.string.cancel) { dialog, which -> cancelCallback?.execute(Unit) }
+        }
+        alertDialogBuilder.create().show()
     }
 
     override fun showToast(msg: String) {
-        if(currentActivity != null) {
-            Toast.makeText(currentActivity, msg, Toast.LENGTH_SHORT).show()
-        }
+        Toast.makeText(application, msg, Toast.LENGTH_SHORT).show()
     }
 
     override fun addSnoozeNotification(msg: String, id: Int) {
@@ -186,4 +185,10 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
         val nm : NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.notify(id, builder.build())
     }
+
+    override fun startWebBrowserWithUrl(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        currentActivity?.startActivity(intent)
+    }
+
 }

@@ -19,4 +19,6 @@ interface UIManager {
     fun showAlertDialog(msg: String, title: String, cancelable: Boolean, okCallback: Command?, cancelCallback: Command?)
 
     fun showToast(msg: String)
+
+    fun startWebBrowserWithUrl(url: String)
 }

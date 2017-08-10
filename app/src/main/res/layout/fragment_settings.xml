@@ -298,6 +298,26 @@
                     android:layout_height="match_parent" />
             </RelativeLayout>
 
+            <!--의견 보내기-->
+            <TextView
+                style="@style/NotoSans.Regular.15.Gray1"
+                android:paddingLeft="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/settings_send_user_report"
+                android:layout_width="match_parent"
+                android:layout_height="46dp" />
+            <TextView
+                style="@style/NotoSans.Regular.16.Gray1"
+                app:clickEvent="@{settingsViewModel.sendUserReportCommand}"
+                android:background="@drawable/selector_bg_list_item"
+                android:drawableRight="@drawable/icn_arrow_right"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/settings_send_user_report_to_developer"
+                android:layout_width="match_parent"
+                android:layout_height="72dp" />
+
             <!--추천하기-->
             <TextView
                 style="@style/NotoSans.Regular.15.Gray1"
