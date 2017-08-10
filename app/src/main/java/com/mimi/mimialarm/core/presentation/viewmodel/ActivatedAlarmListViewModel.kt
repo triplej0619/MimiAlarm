@@ -8,6 +8,7 @@ import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.StopAlarmItemEvent
 import com.mimi.mimialarm.core.model.DataMapper
+import com.mimi.mimialarm.core.utils.Command
 import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
 import javax.inject.Inject
@@ -28,8 +29,22 @@ class ActivatedAlarmListViewModel @Inject constructor(
         bus.register(this)
     }
 
+    val ReLoadAlarmListCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            clear()
+            loadAlarmList()
+        }
+    }
+
     fun release() {
         bus.unregister(this)
+    }
+
+    fun clear() {
+        LogUtil.printDebugLog(this@ActivatedAlarmListViewModel.javaClass, "clear()")
+        alarmList.clear()
+        alarmCount.set(0)
+        alarmListLive.postValue(alarmList)
     }
 
     fun loadAlarmList() {

@@ -13,6 +13,7 @@ import com.mimi.mimialarm.android.presentation.ViewModelModule
 import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.RefreshAlarmListEvent
+import com.mimi.mimialarm.core.infrastructure.ResetAlarmSnoozeCountEvent
 import com.mimi.mimialarm.core.utils.TimeCalculator
 import com.squareup.otto.Bus
 import io.realm.Realm
@@ -74,15 +75,16 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
     }
 
     fun disableAlarm(id: Int) {
+        LogUtil.printDebugLog(this@AlarmDeactivateService.javaClass, "disableAlarm() $id")
         val realm = Realm.getDefaultInstance() // TODO
         realm.executeTransaction {
             val alarm = RealmDataUtil.findObjectWithId<MyAlarm>(realm, "id", id)
             if(!alarm.repeat) {
                 alarm.enable = false
+                bus.post(RefreshAlarmListEvent())
             }
         }
         realm.close()
-        bus.post(RefreshAlarmListEvent())
     }
 
     fun setNextAlarmAfterPreCancel(id: Int) {
@@ -130,6 +132,7 @@ class AlarmDeactivateService : IntentService("AlarmDeactivateService") {
             setNextAlarm(alarm, id, false)
         }
         realm.close()
+        bus.post(ResetAlarmSnoozeCountEvent(id))
     }
 
     fun setNextAlarm(alarm: MyAlarm, id: Int, needPreNotice: Boolean) {

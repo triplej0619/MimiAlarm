@@ -16,11 +16,14 @@ import com.mimi.mimialarm.android.presentation.*
 import com.mimi.mimialarm.android.utils.ContextUtil
 import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
+import com.mimi.mimialarm.core.infrastructure.RefreshAlarmListEvent
+import com.mimi.mimialarm.core.infrastructure.ResetAlarmSnoozeCountEvent
 import com.mimi.mimialarm.core.presentation.viewmodel.ActivatedAlarmListViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
 import com.mimi.mimialarm.databinding.ActivityActivatedAlarmListBinding
 import com.mimi.mimialarm.databinding.ListItemActivatedAlarmBinding
 import com.squareup.otto.Bus
+import com.squareup.otto.Subscribe
 import io.realm.Realm
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import java.util.ArrayList
@@ -36,7 +39,6 @@ class ActivatedAlarmListActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private lateinit var listAdapter: ActivatedAlarmListAdapter
 
     lateinit var binding: ActivityActivatedAlarmListBinding
-    var realm: Realm by Delegates.notNull<Realm>()
     @Inject lateinit var dbManager: DBManager
     @Inject lateinit var dataManager: ApplicationDataManager
     @Inject lateinit var bus: Bus
@@ -66,7 +68,7 @@ class ActivatedAlarmListActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadAlarmList()
+        viewModel.ReLoadAlarmListCommand.execute(Unit)
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -97,7 +99,8 @@ class ActivatedAlarmListActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     fun init() {
         LogUtil.printDebugLog(this@ActivatedAlarmListActivity.javaClass, "init()")
-        realm = Realm.getDefaultInstance()
+        bus.register(this)
+
         binding.list.layoutManager = LinearLayoutManager(this)
         listAdapter = ActivatedAlarmListAdapter(viewModel.alarmList, R.layout.list_item_activated_alarm)
 //        listAdapter = ActivatedAlarmListAdapter(RealmDataUtils.findObjects<MyAlarm>(realm), R.layout.list_item_activated_alarm)
@@ -108,7 +111,7 @@ class ActivatedAlarmListActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     override fun onDestroy() {
         super.onDestroy()
-        realm.close()
+        bus.unregister(this)
         viewModel.release()
     }
 
@@ -153,4 +156,12 @@ class ActivatedAlarmListActivity : AppCompatActivity(), LifecycleRegistryOwner {
 //            return CustomRecyclerViewHolder(itemView, null, null)
 //        }
 //    }
+
+    @Subscribe
+    fun answerResetAlarmSnoozeCountEvent(event: ResetAlarmSnoozeCountEvent) {
+        LogUtil.printDebugLog(this@ActivatedAlarmListActivity.javaClass, "answerResetAlarmSnoozeCountEvent()")
+        runOnUiThread {
+            viewModel.ReLoadAlarmListCommand.execute(Unit)
+        }
+    }
 }

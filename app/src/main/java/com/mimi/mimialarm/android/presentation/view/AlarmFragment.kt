@@ -193,7 +193,7 @@ class AlarmFragment : LifecycleFragment() {
 
     @Subscribe
     fun answerRefreshAlarmListEvent(event: RefreshAlarmListEvent) {
-        LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerDeleteAlarmEvent()")
+        LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerRefreshAlarmListEvent()")
         activity.runOnUiThread {
             viewModel.loadAlarmList()
         }
