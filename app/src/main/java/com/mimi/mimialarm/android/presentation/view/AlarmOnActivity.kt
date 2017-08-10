@@ -55,7 +55,7 @@ class AlarmOnActivity : AppCompatActivity() {
     val terminateHandler: Handler = Handler(Handler.Callback { msg ->
         LogUtil.printDebugLog(this@AlarmOnActivity.javaClass, "terminateHandler receive msg")
         msg?.let {
-            this@AlarmOnActivity.finish()
+            viewModel.finishWithResetCommand.execute(null)
         }
         false
     })
