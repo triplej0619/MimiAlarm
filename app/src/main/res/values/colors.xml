@@ -46,12 +46,12 @@
     <color name="listDivider5">#eaeaea</color>
 
     <!--theme 6-->
-    <color name="colorPrimary6">#9055A2</color>
-    <color name="colorPrimaryDark6">#9055A2</color>
-    <color name="colorAccent6">#3287B8</color>
-    <color name="gradientEnd6">#B9094A</color>
-    <color name="gradientMid6">#964A96</color>
-    <color name="bg6">#F4EEF3</color>
+    <color name="colorPrimary6">#4EA1D3</color>
+    <color name="colorPrimaryDark6">#4EA1D3</color>
+    <color name="colorAccent6">#E85A71</color>
+    <color name="gradientEnd6">#4ECBD3</color>
+    <color name="gradientMid6">#4EA7D3</color>
+    <color name="bg6">#F4F4F4</color>
     <color name="listDivider6">#eaeaea</color>
 
     <!--theme 7-->
