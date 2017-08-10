@@ -17,7 +17,10 @@ class AlarmOnBroadcastReceiver : WakefulBroadcastReceiver() {
         LogUtil.printDebugLog(this@AlarmOnBroadcastReceiver.javaClass, "onReceive")
 
         val newIntent: Intent = Intent(context, AlarmOnActivity::class.java)
-        intent?.let { newIntent.putExtra(KEY_ALARM_ID, intent.getIntExtra(KEY_ALARM_ID, -1)) }
+        intent?.let {
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            newIntent.putExtra(KEY_ALARM_ID, intent.getIntExtra(KEY_ALARM_ID, -1))
+        }
         context?.startActivity(newIntent)
     }
 }

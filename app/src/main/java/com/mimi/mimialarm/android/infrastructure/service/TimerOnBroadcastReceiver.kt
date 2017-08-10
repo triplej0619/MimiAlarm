@@ -18,7 +18,10 @@ class TimerOnBroadcastReceiver : WakefulBroadcastReceiver() {
         LogUtil.printDebugLog(this@TimerOnBroadcastReceiver.javaClass, "onReceive")
 
         val newIntent: Intent = Intent(context, TimerOnActivity::class.java)
-        intent?.let { newIntent.putExtra(KEY_TIMER_ID, intent.getIntExtra(KEY_TIMER_ID, -1)) }
+        intent?.let {
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            newIntent.putExtra(KEY_TIMER_ID, intent.getIntExtra(KEY_TIMER_ID, -1))
+        }
         context?.startActivity(newIntent)
     }
 }
