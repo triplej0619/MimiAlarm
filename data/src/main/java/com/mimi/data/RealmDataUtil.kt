@@ -49,6 +49,14 @@ class RealmDataUtil {
             }
         }
 
+        fun <T : RealmModel?> insertOrUpdateObjectAsync(obj: T) {
+            val realm = Realm.getDefaultInstance()
+            realm.executeTransaction {
+                it.insertOrUpdate(obj)
+            }
+            realm.close()
+        }
+
         fun <T : RealmModel?> insertObjectWithId(realm: Realm, obj: T) {
             realm.executeTransaction {
                 realm.insert(obj)
@@ -57,9 +65,9 @@ class RealmDataUtil {
 
         fun <T : RealmModel?> insertObjectWithIdAsync(obj: T) {
             val realm = Realm.getDefaultInstance()
-            realm.executeTransactionAsync ({
-                realm2 -> realm2?.insert(obj)
-            })
+            realm.executeTransactionAsync {
+                it.insert(obj)
+            }
             realm.close()
         }
     }

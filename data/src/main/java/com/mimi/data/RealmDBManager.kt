@@ -76,10 +76,12 @@ class RealmDBManager : DBManager {
 
     override fun addTimer(timer: MyTimer) {
         RealmDataUtil.insertObjectWithIdAsync(timer)
+//        RealmDataUtil.insertObjectWithId(realm, timer)
     }
 
     override fun updateTimer(timer: MyTimer) {
-        RealmDataUtil.insertOrUpdateObject(realm, timer)
+        RealmDataUtil.insertOrUpdateObjectAsync(timer)
+//        RealmDataUtil.insertOrUpdateObject(realm, timer)
     }
 
     override fun deleteAllTimer() : Boolean = RealmDataUtil.deleteClass<MyTimer>(realm)
