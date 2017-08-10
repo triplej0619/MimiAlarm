@@ -85,9 +85,7 @@ class AlarmOnViewModel @Inject constructor(
 
     fun updateEnableStatus() {
         alarm?.let {
-            if((!alarm!!.snooze and !alarm!!.repeat)
-                    or
-                    (alarm!!.snooze and (usedSnoozeCount > snoozeCount))) {
+            if(!alarm!!.repeat) {
                 alarm!!.enable = false
             }
             alarm!!.usedSnoozeCount = 0
