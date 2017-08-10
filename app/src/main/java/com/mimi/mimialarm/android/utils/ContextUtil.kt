@@ -72,6 +72,13 @@ class ContextUtil {
             }
         }
 
+        fun setAlarmVolume(context: Context, value: Int) : Float {
+            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            val calculatedVolume = value.toFloat() / 100.0f * audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM).toFloat()
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, calculatedVolume.toInt(), 0)
+            return calculatedVolume
+        }
+
         fun getRingtone(context: Context, uri: Uri?, volume: Int) : Ringtone? {
             var ringtone: Ringtone? = null
             if(uri != null) {
@@ -84,9 +91,7 @@ class ContextUtil {
                     } else {
                         ringtone?.streamType = AudioManager.STREAM_ALARM
                     }
-                    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                    val calculatedVolume: Float = volume.toFloat() / 100.0f * audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM).toFloat()
-                    audioManager.setStreamVolume(AudioManager.STREAM_ALARM, calculatedVolume.toInt(), 0)
+                    setAlarmVolume(context, volume)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     return null

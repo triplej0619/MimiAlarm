@@ -3,6 +3,8 @@ package com.mimi.mimialarm.android.presentation.view
 import android.app.NotificationManager
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.media.Ringtone
 import android.net.Uri
 import android.os.Bundle
@@ -42,8 +44,8 @@ class AlarmOnActivity : AppCompatActivity() {
     @Inject lateinit var dbManager: DBManager
     @Inject lateinit var dataManager: ApplicationDataManager
 
-    var selectedRingtone: Ringtone? = null
     var vibrator: Vibrator? = null
+    lateinit var player: MediaPlayer
 
     fun buildComponent(): ActivityComponent {
         return DaggerActivityComponent.builder()
@@ -55,7 +57,7 @@ class AlarmOnActivity : AppCompatActivity() {
     val terminateHandler: Handler = Handler(Handler.Callback { msg ->
         LogUtil.printDebugLog(this@AlarmOnActivity.javaClass, "terminateHandler receive msg")
         msg?.let {
-            viewModel.finishWithResetCommand.execute(null)
+            viewModel.finishWithResetCommand.execute(Unit)
         }
         false
     })
@@ -118,7 +120,8 @@ class AlarmOnActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         bus.unregister(this)
-        selectedRingtone?.stop()
+        player.stop()
+        player.release()
         vibrator?.cancel()
         terminateHandler.removeMessages(0)
     }
@@ -138,8 +141,13 @@ class AlarmOnActivity : AppCompatActivity() {
     }
 
     fun playRingtone() {
-        selectedRingtone = ContextUtil.getRingtone(this, Uri.parse(viewModel.mediaSrc), viewModel.soundVolume)
-        selectedRingtone?.play()
+        ContextUtil.setAlarmVolume(this, viewModel.soundVolume)
+        player = MediaPlayer()
+        player.setAudioStreamType(AudioManager.STREAM_ALARM)
+        player.setDataSource(this, Uri.parse(viewModel.mediaSrc))
+        player.isLooping = true
+        player.prepare()
+        player.start()
     }
 
     override fun onBackPressed() {

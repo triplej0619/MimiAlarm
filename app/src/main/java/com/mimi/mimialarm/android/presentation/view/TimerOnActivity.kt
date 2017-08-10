@@ -2,8 +2,11 @@ package com.mimi.mimialarm.android.presentation.view
 
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.media.Ringtone
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Vibrator
 import android.support.v7.app.AppCompatActivity
@@ -35,8 +38,8 @@ class TimerOnActivity : AppCompatActivity() {
     @Inject lateinit var dbManager: DBManager
     @Inject lateinit var dataManager: ApplicationDataManager
 
-    var selectedRingtone: Ringtone? = null
     var vibrator: Vibrator? = null
+    lateinit var player: MediaPlayer
 
     fun buildComponent(): ActivityComponent {
         return DaggerActivityComponent.builder()
@@ -82,7 +85,8 @@ class TimerOnActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        selectedRingtone?.stop()
+        player.stop()
+        player.release()
         vibrator?.cancel()
     }
 
@@ -97,8 +101,13 @@ class TimerOnActivity : AppCompatActivity() {
     }
 
     fun playRingtone() {
-        selectedRingtone = ContextUtil.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM), dataManager.getTimerVolume())
-        selectedRingtone?.play()
+        ContextUtil.setAlarmVolume(this, dataManager.getTimerVolume())
+        player = MediaPlayer()
+        player.setAudioStreamType(AudioManager.STREAM_ALARM)
+        player.setDataSource(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
+        player.isLooping = true
+        player.prepare()
+        player.start()
     }
 
     override fun onBackPressed() {
