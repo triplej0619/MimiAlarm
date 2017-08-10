@@ -18,7 +18,7 @@
         android:layout_height="match_parent">
         
         <View
-            android:background="@drawable/bg_tab_gradient1"
+            android:background="@drawable/bg_gradient"
             android:layout_marginBottom="112dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
