@@ -33,12 +33,11 @@
                 android:textColor="@drawable/selector_text_focus_color"
                 android:inputType="number"
                 android:text="@={timerViewModel.hour}"
-                android:minWidth="70dp"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:maxLength="2"
                 android:nextFocusDown="@+id/minute"
-                android:layout_width="wrap_content"
+                android:layout_width="76dp"
                 android:layout_height="wrap_content" />
             <EditText
                 style="@style/CustomEditInTimer"
@@ -50,12 +49,11 @@
                 android:textColor="@drawable/selector_text_focus_color"
                 android:inputType="number"
                 android:text="@={timerViewModel.minute}"
-                android:minWidth="70dp"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:maxLength="2"
                 android:nextFocusDown="@+id/second"
-                android:layout_width="wrap_content"
+                android:layout_width="76dp"
                 android:layout_height="wrap_content"/>
             <EditText
                 style="@style/CustomEditInTimer"
@@ -67,11 +65,10 @@
                 android:textColor="@drawable/selector_text_focus_color"
                 android:inputType="number"
                 android:text="@={timerViewModel.second}"
-                android:minWidth="70dp"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:maxLength="2"
-                android:layout_width="wrap_content"
+                android:layout_width="76dp"
                 android:layout_height="wrap_content" />
             <android.support.design.widget.FloatingActionButton
                 app:clickEvent="@{timerViewModel.addTimerCommand}"
