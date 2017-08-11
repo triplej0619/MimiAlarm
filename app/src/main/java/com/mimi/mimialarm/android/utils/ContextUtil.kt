@@ -40,15 +40,15 @@ class ContextUtil {
             }
         }
 
-        fun turnOnScreen(context: Context) : PowerManager.WakeLock {
+        fun turnOnScreen(context: Context): PowerManager.WakeLock {
             val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
             val wake = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "WAKE_LOCK")
             wake.acquire()
             return wake
         }
 
-        fun getThemeId(index: Int) : Int{
-            when(index) {
+        fun getThemeId(index: Int): Int {
+            when (index) {
                 1 -> return R.style.AppTheme2
                 2 -> return R.style.AppTheme3
                 3 -> return R.style.AppTheme4
@@ -72,16 +72,16 @@ class ContextUtil {
             }
         }
 
-        fun setAlarmVolume(context: Context, value: Int) : Float {
+        fun setAlarmVolume(context: Context, value: Int): Float {
             val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
             val calculatedVolume = value.toFloat() / 100.0f * audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM).toFloat()
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, calculatedVolume.toInt(), 0)
             return calculatedVolume
         }
 
-        fun getRingtone(context: Context, uri: Uri?, volume: Int) : Ringtone? {
+        fun getRingtone(context: Context, uri: Uri?, volume: Int): Ringtone? {
             var ringtone: Ringtone? = null
-            if(uri != null) {
+            if (uri != null) {
                 try {
                     ringtone = RingtoneManager.getRingtone(context, uri)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -103,22 +103,23 @@ class ContextUtil {
         fun <T> startAlarm(context: Context, alarmId: Int, time: Long, receiverClass: Class<T>, intentIdKey: String) {
             val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val alarmIntent = Intent(context, receiverClass)
-            if(!intentIdKey.isNullOrEmpty()) {
+            if (!intentIdKey.isNullOrEmpty()) {
                 alarmIntent.putExtra(intentIdKey, alarmId)
             }
             val pendingIntent = PendingIntent.getBroadcast(context, alarmId, alarmIntent, 0)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
-            } else {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
-            }
+            alarmManager.setAlarmClock(AlarmManager.AlarmClockInfo(System.currentTimeMillis() + time, pendingIntent), pendingIntent)
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
+//            } else {
+//                alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pendingIntent)
+//            }
         }
 
         fun <T> cancelAlarm(context: Context, alarmId: Int, receiverClass: Class<T>, intentIdKey: String) {
             val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val alarmIntent = Intent(context, receiverClass)
-            if(!intentIdKey.isNullOrEmpty()) {
+            if (!intentIdKey.isNullOrEmpty()) {
                 alarmIntent.putExtra(intentIdKey, alarmId)
             }
             val pendingIntent = PendingIntent.getBroadcast(context, alarmId, alarmIntent, 0)
@@ -132,11 +133,12 @@ class ContextUtil {
             alarmIntent.putExtra(intentIdKey, id)
             val pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, 0)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + time, pendingIntent)
-            } else {
-                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + time, pendingIntent)
-            }
+            alarmManager.setAlarmClock(AlarmManager.AlarmClockInfo(System.currentTimeMillis() + time, pendingIntent), pendingIntent)
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + time, pendingIntent)
+//            } else {
+//                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + time, pendingIntent)
+//            }
         }
     }
 }
