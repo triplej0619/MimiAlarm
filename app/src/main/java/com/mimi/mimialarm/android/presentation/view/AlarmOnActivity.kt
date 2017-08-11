@@ -57,7 +57,11 @@ class AlarmOnActivity : AppCompatActivity() {
     val terminateHandler: Handler = Handler(Handler.Callback { msg ->
         LogUtil.printDebugLog(this@AlarmOnActivity.javaClass, "terminateHandler receive msg")
         msg?.let {
-            viewModel.finishWithResetCommand.execute(Unit)
+            if(viewModel.snooze.get() && !viewModel.willExpire.get()) {
+                viewModel.finishWithResetCommand.execute(Unit)
+            } else {
+                viewModel.finishViewCommand.execute(Unit)
+            }
         }
         false
     })
