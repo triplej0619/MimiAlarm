@@ -1,5 +1,6 @@
 package com.mimi.mimialarm.android.presentation.view
 
+import android.app.NotificationManager
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
@@ -18,6 +19,7 @@ import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.RefreshAlarmListEvent
 import com.mimi.mimialarm.core.infrastructure.ResetAlarmSnoozeCountEvent
+import com.mimi.mimialarm.core.infrastructure.StopAlarmItemEvent
 import com.mimi.mimialarm.core.presentation.viewmodel.ActivatedAlarmListViewModel
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmListItemViewModel
 import com.mimi.mimialarm.databinding.ActivityActivatedAlarmListBinding
@@ -163,5 +165,12 @@ class ActivatedAlarmListActivity : AppCompatActivity(), LifecycleRegistryOwner {
         runOnUiThread {
             viewModel.ReLoadAlarmListCommand.execute(Unit)
         }
+    }
+
+    @Subscribe
+    fun answerStopAlarmItemEvent(event: StopAlarmItemEvent) {
+        LogUtil.printDebugLog(this@ActivatedAlarmListActivity.javaClass, "answerStopAlarmItemEvent()")
+        val nm: NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.cancel(event.id)
     }
 }
