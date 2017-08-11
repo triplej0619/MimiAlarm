@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.mimi.mimialarm.BuildConfig
 import com.mimi.mimialarm.R
 import com.mimi.mimialarm.android.infrastructure.BackPressedEvent
 import com.mimi.mimialarm.android.infrastructure.ChangePageEvent
@@ -58,10 +59,11 @@ class MainActivity : AppCompatActivity() {
 
         MobileAds.initialize(applicationContext, getString(R.string.adsmob_id))
 
-        val adRequest = AdRequest.Builder()
-                .addTestDevice("A9BE77B32D16C6F3BD1C2609FA36BE9C") // TODO remove test code
-                .build()
-        binding?.adView?.loadAd(adRequest)
+        val adRequestBuild = AdRequest.Builder()
+        if(BuildConfig.DEBUG) {
+            adRequestBuild.addTestDevice("A9BE77B32D16C6F3BD1C2609FA36BE9C")
+        }
+        binding?.adView?.loadAd(adRequestBuild.build())
 
         setupViewPager()
     }
