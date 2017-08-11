@@ -106,15 +106,13 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
                     }
                 })
 
-        binding.timePicker?.setOnTimeChangedListener(object : TimePicker.OnTimeChangedListener {
-            override fun onTimeChanged(view: TimePicker?, hourOfDay: Int, minute: Int) {
-                val calendar: GregorianCalendar = GregorianCalendar()
-                calendar.set(GregorianCalendar.HOUR_OF_DAY, hourOfDay)
-                calendar.set(GregorianCalendar.MINUTE, minute)
+        binding.timePicker?.setOnTimeChangedListener { view, hourOfDay, minute ->
+            val calendar: GregorianCalendar = GregorianCalendar()
+            calendar.set(GregorianCalendar.HOUR_OF_DAY, hourOfDay)
+            calendar.set(GregorianCalendar.MINUTE, minute)
 
-                viewModel.endTime.set(calendar.time)
-            }
-        })
+            viewModel.endTime.set(calendar.time)
+        }
 
         loadRingtones()
         binding.selectedSound.setOnClickListener {
