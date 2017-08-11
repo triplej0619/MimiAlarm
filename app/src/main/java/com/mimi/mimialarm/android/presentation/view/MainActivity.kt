@@ -2,6 +2,7 @@ package com.mimi.mimialarm.android.presentation.view
 
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.databinding.ObservableField
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -18,6 +19,7 @@ import com.mimi.mimialarm.android.presentation.DaggerActivityComponent
 import com.mimi.mimialarm.android.presentation.MimiAlarmApplication
 import com.mimi.mimialarm.android.presentation.ViewModelModule
 import com.mimi.mimialarm.android.utils.ContextUtil
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.ChagneThemeEvent
 import com.mimi.mimialarm.core.utils.Command
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     var viewPagerAdapter: CustomViewPagerAdapter? = null
     var binding: ActivityMainBinding? = null
+    var adBannerId: ObservableField<String> = ObservableField("")
 
     fun buildComponent(): ActivityComponent {
         return DaggerActivityComponent.builder()
@@ -47,11 +50,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         buildComponent().inject(this)
         setTheme(ContextUtil.getThemeId(dataManager.getCurrentTheme()))
+        setAdInfo()
 
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
         init()
+    }
+
+    fun setAdInfo() {
+        if(BuildConfig.DEBUG) {
+            adBannerId.set(getString(R.string.test_ad_banner))
+        } else {
+            adBannerId.set(getString(R.string.ad_main_bottom_banner))
+        }
+        LogUtil.printDebugLog(MainActivity::class.java, "loadAdVideo() : $adBannerId")
     }
 
     fun init() {

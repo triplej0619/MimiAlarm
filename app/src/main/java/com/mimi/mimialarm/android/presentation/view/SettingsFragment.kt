@@ -21,6 +21,7 @@ import com.mimi.mimialarm.core.infrastructure.ShareToFriendsEvent
 import com.mimi.mimialarm.core.infrastructure.StartRewardedAdEvent
 import com.squareup.otto.Subscribe
 import android.content.Intent
+import com.mimi.mimialarm.BuildConfig
 import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
 import com.mimi.mimialarm.core.infrastructure.ChagneThemeEvent
@@ -32,6 +33,7 @@ import com.mimi.mimialarm.core.utils.Command
  */
 class SettingsFragment : android.support.v4.app.Fragment() {
 
+    var adVideoId = ""
     var rewardedVideoAd: RewardedVideoAd? = null
     var binding: FragmentSettingsBinding? = null
     var nextThemeIndex: Int = 0
@@ -85,6 +87,7 @@ class SettingsFragment : android.support.v4.app.Fragment() {
     }
 
     override fun onCreateView(inflater: android.view.LayoutInflater?, container: android.view.ViewGroup?, savedInstanceState: android.os.Bundle?): android.view.View? {
+        setAdInfo()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false)
         buildComponent().inject(this)
         binding?.settingsViewModel = viewModel
@@ -96,6 +99,14 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         return binding?.root
     }
 
+    fun setAdInfo() {
+        if(BuildConfig.DEBUG) {
+            adVideoId = getString(R.string.test_ad_rewarded_video)
+        } else {
+            adVideoId = getString(R.string.ad_change_theme)
+        }
+    }
+
     fun init() {
         rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(context)
         rewardedVideoAd?.rewardedVideoAdListener = rewardedVideoAdListener
@@ -105,8 +116,8 @@ class SettingsFragment : android.support.v4.app.Fragment() {
     }
 
     fun loadAdVideo() {
-        LogUtil.printDebugLog(SettingsFragment::class.java, "loadAdVideo()")
-        rewardedVideoAd?.loadAd(getString(R.string.test_ad_rewarded_video), AdRequest.Builder().build())
+        LogUtil.printDebugLog(SettingsFragment::class.java, "loadAdVideo() : $adVideoId")
+        rewardedVideoAd?.loadAd(adVideoId, AdRequest.Builder().build())
     }
 
     override fun onDestroy() {
