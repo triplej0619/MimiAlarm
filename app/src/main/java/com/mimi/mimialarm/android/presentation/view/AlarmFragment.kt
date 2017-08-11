@@ -28,6 +28,9 @@ import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.*
 import com.mimi.mimialarm.core.utils.TimeCalculator
 import java.util.*
+import android.content.Intent
+
+
 
 
 /**
@@ -198,5 +201,13 @@ class AlarmFragment : LifecycleFragment() {
             viewModel.loadAlarmList()
         }
     }
+
+    @Subscribe
+    fun answerChangeAlarmStatusEvent(event: ChangeAlarmStatusEvent) {
+        LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerChangeAlarmStatusEvent()")
+        val nm: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.cancel(event.id)
+    }
+
 
 }
