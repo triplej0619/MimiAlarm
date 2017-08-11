@@ -87,4 +87,10 @@ class RealmDBManager : DBManager {
     override fun deleteAllTimer() : Boolean = RealmDataUtil.deleteClass<MyTimer>(realm)
 
     override fun deleteAllAlarm() : Boolean = RealmDataUtil.deleteClass<MyAlarm>(realm)
+
+    override fun isSameStatusAllAlarm(status: Boolean): Boolean {
+        val list = RealmDataUtil.findObjects<MyAlarm>(realm)
+        return list.filter { it.enable != status }.isEmpty()
+    }
+
 }

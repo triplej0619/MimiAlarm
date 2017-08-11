@@ -15,6 +15,7 @@ interface DBManager {
     fun addAlarm(alarm: MyAlarm)
     fun updateAlarm(alarm: MyAlarm)
     fun deleteAllAlarm() : Boolean
+    fun isSameStatusAllAlarm(status: Boolean) : Boolean
 
     fun getNextTimerId() : Int
     fun findAllTimer() : List<MyTimer>
