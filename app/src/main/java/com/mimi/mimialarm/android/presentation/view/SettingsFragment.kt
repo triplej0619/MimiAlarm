@@ -122,6 +122,7 @@ class SettingsFragment : android.support.v4.app.Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        rewardedVideoAd?.rewardedVideoAdListener = null
         rewardedVideoAd?.destroy(this@SettingsFragment.context)
         bus.unregister(this)
         viewModel.release()
