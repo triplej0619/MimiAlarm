@@ -2,6 +2,7 @@ package com.mimi.mimialarm.android.presentation.view
 
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -37,8 +38,8 @@ class MainActivity : AppCompatActivity() {
     @Inject lateinit var dataManager: ApplicationDataManager
 
     var viewPagerAdapter: CustomViewPagerAdapter? = null
-    var binding: ActivityMainBinding? = null
-    var adBannerId: ObservableField<String> = ObservableField("")
+    lateinit var binding: ActivityMainBinding
+    var adBannerForTest = ObservableBoolean(true)
 
     fun buildComponent(): ActivityComponent {
         return DaggerActivityComponent.builder()
@@ -50,21 +51,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         buildComponent().inject(this)
         setTheme(ContextUtil.getThemeId(dataManager.getCurrentTheme()))
-        setAdInfo()
 
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        binding.mainActivity = this
 
         init()
-    }
-
-    fun setAdInfo() {
-        if(BuildConfig.DEBUG) {
-            adBannerId.set(getString(R.string.test_ad_banner))
-        } else {
-            adBannerId.set(getString(R.string.ad_main_bottom_banner))
-        }
-        LogUtil.printDebugLog(MainActivity::class.java, "loadAdVideo() : $adBannerId")
     }
 
     fun init() {
@@ -75,8 +67,13 @@ class MainActivity : AppCompatActivity() {
         val adRequestBuild = AdRequest.Builder()
         if(BuildConfig.DEBUG) {
             adRequestBuild.addTestDevice("A9BE77B32D16C6F3BD1C2609FA36BE9C")
+            adBannerForTest.set(true)
+            binding.adViewTest.loadAd(adRequestBuild.build())
+        } else {
+            adBannerForTest.set(false)
+            binding.adViewProduction.loadAd(adRequestBuild.build())
         }
-        binding?.adView?.loadAd(adRequestBuild.build())
+        LogUtil.printDebugLog(MainActivity::class.java, "setAdInfo() : $adBannerForTest")
 
         setupViewPager()
     }
@@ -89,25 +86,25 @@ class MainActivity : AppCompatActivity() {
     fun setupViewPager() {
         viewPagerAdapter = CustomViewPagerAdapter(supportFragmentManager);
 
-        binding?.viewpager?.adapter = viewPagerAdapter
-        binding?.viewpager?.offscreenPageLimit = 2
+        binding.viewpager.adapter = viewPagerAdapter
+        binding.viewpager.offscreenPageLimit = 2
 
         viewPagerAdapter?.addItem(AlarmFragment())
         viewPagerAdapter?.addItem(TimerFragment())
         viewPagerAdapter?.addItem(SettingsFragment())
 
-        binding?.tabs?.setupWithViewPager(binding?.viewpager)
-        for (i in 0..binding!!.tabs.tabCount - 1) {
-            binding?.tabs?.getTabAt(i)?.setCustomView(R.layout.custom_img_tab)
+        binding.tabs?.setupWithViewPager(binding.viewpager)
+        for (i in 0..binding.tabs.tabCount - 1) {
+            binding.tabs?.getTabAt(i)?.setCustomView(R.layout.custom_img_tab)
             var iconIndex = R.drawable.icn_alarm
             when(i) {
                 1 -> iconIndex = R.drawable.icn_timer
                 2 -> iconIndex = R.drawable.icn_menu
             }
-            binding?.tabs?.getTabAt(i)?.customView?.findViewById(R.id.tabIcon)?.setBackgroundResource(iconIndex)
+            binding.tabs?.getTabAt(i)?.customView?.findViewById(R.id.tabIcon)?.setBackgroundResource(iconIndex)
         }
 
-        binding?.viewpager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        binding.viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
 
@@ -126,8 +123,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(binding!!.viewpager.currentItem < 2) {
-            bus.post(BackPressedEvent(Enums.MAIN_TAB.valueOf(binding!!.viewpager.currentItem),
+        if(binding.viewpager.currentItem < 2) {
+            bus.post(BackPressedEvent(Enums.MAIN_TAB.valueOf(binding.viewpager.currentItem),
                 object : Command {
                 override fun execute(arg: Any) {
                     this@MainActivity.finish()
