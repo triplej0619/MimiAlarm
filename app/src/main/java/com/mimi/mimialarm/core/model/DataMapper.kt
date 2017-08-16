@@ -184,7 +184,7 @@ class DataMapper {
             viewModel.hour.set(calendar.get(GregorianCalendar.HOUR))
             viewModel.minute.set(calendar.get(GregorianCalendar.MINUTE))
             viewModel.day.set(calendar.get(GregorianCalendar.DAY_OF_MONTH))
-            viewModel.dayOfWeek.set(calendar.get(GregorianCalendar.DAY_OF_WEEK))
+            viewModel.dayOfWeek.set(calendar.get(GregorianCalendar.DAY_OF_WEEK) - 1)
             viewModel.month.set(calendar.get(GregorianCalendar.MONTH) + 1)
 
             viewModel.vibration = alarm.vibration
