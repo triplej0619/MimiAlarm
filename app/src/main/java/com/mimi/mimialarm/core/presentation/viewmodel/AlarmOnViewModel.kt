@@ -37,7 +37,6 @@ class AlarmOnViewModel @Inject constructor(
     var snoozeInterval: Int = 0
     var snoozeCount: Int = 0
     var usedSnoozeCount: Int = 0
-    var endTime: Date = Date()
     var enable: Boolean = false
     var sound: Boolean = true
     var vibration: Boolean = true

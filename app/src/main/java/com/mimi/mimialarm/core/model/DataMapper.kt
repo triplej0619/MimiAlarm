@@ -175,9 +175,7 @@ class DataMapper {
         }
 
         fun alarmToAlarmOnViewModel(alarm: MyAlarm, viewModel: AlarmOnViewModel) {
-            viewModel.endTime = alarm.completedAt!!
             val calendar: GregorianCalendar = GregorianCalendar()
-            calendar.time = alarm.completedAt
             if(calendar.get(GregorianCalendar.HOUR_OF_DAY) < 12) {
                 viewModel.isAm.set(true)
             }
