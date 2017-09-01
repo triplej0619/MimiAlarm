@@ -9,6 +9,7 @@ import com.mimi.data.model.MyTimer
 interface DBManager {
     fun getNextAlarmId() : Int
     fun findAllAlarm() : List<MyAlarm>
+    fun findAllAlarmSorted(comparable: Comparable<MyAlarm>) : List<MyAlarm>
     fun findAlarmWithId(id: Int?) : MyAlarm?
     fun findAlarmWithIdAsync(id: Int?) : MyAlarm?
     fun deleteAlarmWithId(id: Int?)

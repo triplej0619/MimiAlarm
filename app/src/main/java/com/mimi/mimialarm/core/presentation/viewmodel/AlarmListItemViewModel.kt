@@ -4,6 +4,7 @@ import android.databinding.*
 import com.mimi.mimialarm.core.infrastructure.ChangeAlarmStatusEvent
 import com.mimi.mimialarm.core.infrastructure.StopAlarmItemEvent
 import com.mimi.mimialarm.core.utils.Command
+import com.mimi.mimialarm.core.utils.DateUtil
 import com.squareup.otto.Bus
 import java.text.SimpleDateFormat
 import java.util.*
@@ -12,7 +13,7 @@ import java.util.*
  * Created by MihyeLee on 2017. 5. 24..
  */
 
-class AlarmListItemViewModel(val bus: Bus) : BaseViewModel() {
+class AlarmListItemViewModel(val bus: Bus) : BaseViewModel(), Comparable<AlarmListItemViewModel> {
 
     val FULL_ALPHA = ObservableFloat(1.0f)
     val HALF_ALPHA = ObservableFloat(0.5f)
@@ -82,5 +83,21 @@ class AlarmListItemViewModel(val bus: Bus) : BaseViewModel() {
 
     fun stop() {
         bus.post(StopAlarmItemEvent(id!!))
+    }
+
+    override fun compareTo(other: AlarmListItemViewModel): Int {
+        val myTime = GregorianCalendar()
+        myTime.time = endTime
+        val yourTime = GregorianCalendar()
+        yourTime.time = other.endTime
+
+        if((myTime.get(GregorianCalendar.HOUR_OF_DAY) > yourTime.get(GregorianCalendar.HOUR_OF_DAY)) and
+                (myTime.get(GregorianCalendar.MINUTE) > yourTime.get(GregorianCalendar.MINUTE))) {
+            return 1
+        } else if((myTime.get(GregorianCalendar.HOUR_OF_DAY) == yourTime.get(GregorianCalendar.HOUR_OF_DAY)) and
+                (myTime.get(GregorianCalendar.MINUTE) == yourTime.get(GregorianCalendar.MINUTE))) {
+            return 0
+        }
+        return -1
     }
 }

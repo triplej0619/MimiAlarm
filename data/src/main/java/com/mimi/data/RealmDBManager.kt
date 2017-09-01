@@ -9,6 +9,9 @@ import io.realm.Realm
  */
 class RealmDBManager : DBManager {
     val FIELD_ID = "id"
+    val FIELD_COMPLETED_AT = "completedAt"
+    val FIELD_SECONDS = "seconds"
+
     lateinit var realm: Realm
 
     fun setRealm(realm: Realm) : RealmDBManager {
@@ -27,6 +30,11 @@ class RealmDBManager : DBManager {
     }
 
     override fun findAllAlarm(): List<MyAlarm> {
+        val results = RealmDataUtil.findObjects<MyAlarm>(realm)
+        return realm.copyFromRealm(results.toList())
+    }
+
+    override fun findAllAlarmSorted(comparable: Comparable<MyAlarm>): List<MyAlarm> {
         val results = RealmDataUtil.findObjects<MyAlarm>(realm)
         return realm.copyFromRealm(results.toList())
     }

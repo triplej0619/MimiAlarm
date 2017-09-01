@@ -56,12 +56,10 @@ class AlarmFragment : LifecycleFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.alarmListLive.observe(this, object : Observer<ArrayList<AlarmListItemViewModel>> {
-            override fun onChanged(t: ArrayList<AlarmListItemViewModel>?) {
-                listAdapter?.notifyDataSetChanged()
-            }
-
-        })
+        viewModel.alarmListLive.observe(this,
+                Observer<MutableList<AlarmListItemViewModel>> {
+                    listAdapter?.notifyDataSetChanged()
+                })
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -84,7 +84,7 @@ class TimerFragment : LifecycleFragment() {
 
         binding.list.adapter = listAdapter
 
-        viewModel.loadTimerList()
+//        viewModel.loadTimerList()
     }
 
     fun initEditView() {
@@ -118,6 +118,7 @@ class TimerFragment : LifecycleFragment() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.reLoadTimerList()
     }
 
     protected inner class TimerListAdapter(items: List<TimerListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick, longClick: IListItemClick)
