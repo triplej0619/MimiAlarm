@@ -169,7 +169,10 @@ class TimerViewModel @Inject constructor(
         timerCount.set(timerCount.get() + 1)
         timerListLive.postValue(timerList)
 
-        bus.post(AddTimerEvent())
+        try {
+            bus.post(AddTimerEvent())
+        } catch (ex: Exception) {
+        }
     }
 
     fun setDeleteMode(mode: Boolean) {

@@ -41,7 +41,8 @@ class RealmDBManager : DBManager {
 
     override fun findAlarmWithId(id: Int?): MyAlarm? {
         if(id != null) {
-            return realm.copyFromRealm(RealmDataUtil.findObjectWithId<MyAlarm>(realm, FIELD_ID, id))
+            val findObj: MyAlarm? = RealmDataUtil.findObjectWithId<MyAlarm>(realm, FIELD_ID, id)
+            findObj?.let { return realm.copyFromRealm(findObj) }
         }
         return null
     }
@@ -63,7 +64,8 @@ class RealmDBManager : DBManager {
 
     override fun findTimerWithId(id: Int?): MyTimer? {
         if(id != null) {
-            return realm.copyFromRealm(RealmDataUtil.findObjectWithId<MyTimer>(realm, FIELD_ID, id))
+            val findObj: MyTimer? = RealmDataUtil.findObjectWithId<MyTimer>(realm, FIELD_ID, id)
+            findObj?.let { return realm.copyFromRealm(findObj) }
         }
         return null
     }
