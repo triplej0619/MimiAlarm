@@ -125,10 +125,21 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel(), Comparable<TimerLi
     }
 
     override fun compareTo(other: TimerListItemViewModel): Int {
-        if(this.second.get() > other.second.get()) {
+        if(this.wholeTimeInSecond > other.wholeTimeInSecond) {
             return 1
-        } else if(this.second.get() == other.second.get()) {
-            return 0
+        } else if(this.wholeTimeInSecond == other.wholeTimeInSecond) {
+            return compareId(other)
+        }
+        return -1
+    }
+
+    private fun compareId(other: TimerListItemViewModel): Int {
+        id?.let {
+            if(other.id != null) {
+                return id!!.compareTo(other.id!!)
+            } else {
+                return 1
+            }
         }
         return -1
     }

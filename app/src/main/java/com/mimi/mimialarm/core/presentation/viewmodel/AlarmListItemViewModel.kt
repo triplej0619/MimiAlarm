@@ -1,6 +1,7 @@
 package com.mimi.mimialarm.core.presentation.viewmodel
 
 import android.databinding.*
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ChangeAlarmStatusEvent
 import com.mimi.mimialarm.core.infrastructure.StopAlarmItemEvent
 import com.mimi.mimialarm.core.utils.Command
@@ -91,12 +92,30 @@ class AlarmListItemViewModel(val bus: Bus) : BaseViewModel(), Comparable<AlarmLi
         val yourTime = GregorianCalendar()
         yourTime.time = other.endTime
 
-        if((myTime.get(GregorianCalendar.HOUR_OF_DAY) > yourTime.get(GregorianCalendar.HOUR_OF_DAY)) and
-                (myTime.get(GregorianCalendar.MINUTE) > yourTime.get(GregorianCalendar.MINUTE))) {
+        LogUtil.printDebugLog(this@AlarmListItemViewModel.javaClass, "compareTo() " + myTime.time.toString() + ", other : " + yourTime.time.toString())
+
+        if ((myTime.get(GregorianCalendar.HOUR_OF_DAY) > yourTime.get(GregorianCalendar.HOUR_OF_DAY)) or
+                ((myTime.get(GregorianCalendar.HOUR_OF_DAY) >= yourTime.get(GregorianCalendar.HOUR_OF_DAY)) and
+                        (myTime.get(GregorianCalendar.MINUTE) > yourTime.get(GregorianCalendar.MINUTE)))
+            ) {
+            LogUtil.printDebugLog(this@AlarmListItemViewModel.javaClass, "compareTo() 1")
             return 1
-        } else if((myTime.get(GregorianCalendar.HOUR_OF_DAY) == yourTime.get(GregorianCalendar.HOUR_OF_DAY)) and
+        } else if ((myTime.get(GregorianCalendar.HOUR_OF_DAY) == yourTime.get(GregorianCalendar.HOUR_OF_DAY)) and
                 (myTime.get(GregorianCalendar.MINUTE) == yourTime.get(GregorianCalendar.MINUTE))) {
-            return 0
+            LogUtil.printDebugLog(this@AlarmListItemViewModel.javaClass, "compareTo() 0")
+            return compareId(other)
+        }
+        LogUtil.printDebugLog(this@AlarmListItemViewModel.javaClass, "compareTo() -1")
+        return -1
+    }
+
+    private fun compareId(other: AlarmListItemViewModel): Int {
+        id?.let {
+            if(other.id != null) {
+                return id!!.compareTo(other.id!!)
+            } else {
+                return 1
+            }
         }
         return -1
     }
