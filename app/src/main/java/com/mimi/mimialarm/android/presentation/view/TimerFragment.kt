@@ -124,6 +124,19 @@ class TimerFragment : LifecycleFragment() {
     protected inner class TimerListAdapter(items: List<TimerListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick, longClick: IListItemClick)
         : CustomRecyclerViewAdapter<TimerListItemViewModel>(items, layoutId, itemClickEvent, longClick) {
 
+        fun getItemIndex(timerId: Int?) : Int {
+            var index = 0
+            timerId?.let {
+                items?.forEachIndexed { i, listItemViewModel ->
+                    if(listItemViewModel.id != null && listItemViewModel.id == timerId) {
+                        index = i
+                        return@forEachIndexed
+                    }
+                }
+            }
+            return index;
+        }
+
         override fun setViewModel(holder: CustomRecyclerViewHolder, item: TimerListItemViewModel) {
             if(holder.binding is ListItemTimerBinding) {
                 holder.binding.timerListItemViewModel = item
@@ -133,7 +146,10 @@ class TimerFragment : LifecycleFragment() {
 
     @Subscribe
     fun answerAddTimerEvent(event: AddTimerEvent) {
-        binding.list.smoothScrollToPosition(listAdapter!!.itemCount - 1)
+        event.id?.let {
+            val index = listAdapter?.getItemIndex(event.id) ?: 0
+            binding.list.smoothScrollToPosition(index)
+        }
         keyboardHide()
     }
 

@@ -170,7 +170,7 @@ class TimerViewModel @Inject constructor(
         timerListLive.postValue(timerList)
 
         try {
-            bus.post(AddTimerEvent())
+            bus.post(AddTimerEvent(timer.id))
         } catch (ex: Exception) {
         }
     }
