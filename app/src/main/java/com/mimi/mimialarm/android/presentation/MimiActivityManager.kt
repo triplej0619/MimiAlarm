@@ -110,19 +110,25 @@ class MimiActivityManager @Inject constructor(private val application: MimiAlarm
     }
 
     override fun showAlertDialog(msg: String, title: String, cancelable: Boolean, okCallback: Command?, cancelCallback: Command?) {
-        val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(application)
-        if (title.isNotEmpty()) {
-            alertDialogBuilder.setTitle(title)
+        try {
+            currentActivity?.let {
+                val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(currentActivity!!)
+                if (title.isNotEmpty()) {
+                    alertDialogBuilder.setTitle(title)
+                }
+                alertDialogBuilder.setMessage(msg)
+                alertDialogBuilder.setCancelable(cancelable)
+                okCallback.let {
+                    alertDialogBuilder.setPositiveButton(R.string.ok) { dialog, which -> okCallback?.execute(Unit) }
+                }
+                cancelCallback.let {
+                    alertDialogBuilder.setNegativeButton(R.string.cancel) { dialog, which -> cancelCallback?.execute(Unit) }
+                }
+                alertDialogBuilder.create().show()
+            }
+        } catch (ex: Exception) {
+            LogUtil.printDebugLog(this@MimiActivityManager.javaClass, "showAlertDialog() ex : " + ex.message)
         }
-        alertDialogBuilder.setMessage(msg)
-        alertDialogBuilder.setCancelable(cancelable)
-        okCallback.let {
-            alertDialogBuilder.setPositiveButton(R.string.ok) { dialog, which -> okCallback?.execute(Unit) }
-        }
-        cancelCallback.let {
-            alertDialogBuilder.setNegativeButton(R.string.cancel) { dialog, which -> cancelCallback?.execute(Unit) }
-        }
-        alertDialogBuilder.create().show()
     }
 
     override fun showToast(msg: String) {
