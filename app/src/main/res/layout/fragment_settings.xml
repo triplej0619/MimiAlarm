@@ -123,6 +123,7 @@
                 android:id="@+id/themeGroup"
                 android:background="@android:color/white"
                 android:orientation="horizontal"
+                android:gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="72dp">
                 <RadioButton
@@ -178,6 +179,7 @@
             </RadioGroup>
             <RadioGroup
                 android:background="@android:color/white"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="72dp">

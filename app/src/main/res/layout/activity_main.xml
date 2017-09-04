@@ -5,6 +5,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="mainActivity"
+            type="com.mimi.mimialarm.android.presentation.view.MainActivity" />
+    </data>
+
+
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -63,13 +71,24 @@
                 </LinearLayout>
 
                 <com.google.android.gms.ads.AdView
-                    android:id="@+id/adView"
+                    android:visibility="@{mainActivity.adBannerForTest ? View.VISIBLE : View.GONE}"
+                    android:id="@+id/adViewTest"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     app:adSize="BANNER"
                     app:adUnitId="@string/test_ad_banner" />
+
+                <com.google.android.gms.ads.AdView
+                    android:visibility="@{mainActivity.adBannerForTest ? View.GONE : View.VISIBLE}"
+                    android:id="@+id/adViewProduction"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    app:adSize="BANNER"
+                    app:adUnitId="@string/ad_main_bottom_banner" />
 
             </RelativeLayout>
         </android.support.design.widget.CoordinatorLayout>

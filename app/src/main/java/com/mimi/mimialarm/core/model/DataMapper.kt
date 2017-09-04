@@ -175,16 +175,14 @@ class DataMapper {
         }
 
         fun alarmToAlarmOnViewModel(alarm: MyAlarm, viewModel: AlarmOnViewModel) {
-            viewModel.endTime = alarm.completedAt!!
             val calendar: GregorianCalendar = GregorianCalendar()
-            calendar.time = alarm.completedAt
             if(calendar.get(GregorianCalendar.HOUR_OF_DAY) < 12) {
                 viewModel.isAm.set(true)
             }
             viewModel.hour.set(calendar.get(GregorianCalendar.HOUR))
             viewModel.minute.set(calendar.get(GregorianCalendar.MINUTE))
             viewModel.day.set(calendar.get(GregorianCalendar.DAY_OF_MONTH))
-            viewModel.dayOfWeek.set(calendar.get(GregorianCalendar.DAY_OF_WEEK))
+            viewModel.dayOfWeek.set(calendar.get(GregorianCalendar.DAY_OF_WEEK) - 1)
             viewModel.month.set(calendar.get(GregorianCalendar.MONTH) + 1)
 
             viewModel.vibration = alarm.vibration
