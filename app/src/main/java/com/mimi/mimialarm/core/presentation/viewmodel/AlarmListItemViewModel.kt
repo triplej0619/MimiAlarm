@@ -36,7 +36,7 @@ class AlarmListItemViewModel(val bus: Bus) : BaseViewModel(), Comparable<AlarmLi
     set(value) {
         field = value
 
-        val dateFormat = SimpleDateFormat("hh:mm", Locale.KOREA)
+        val dateFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
         endTimeString.set(dateFormat.format(value))
 
         val calendar: GregorianCalendar = GregorianCalendar()
