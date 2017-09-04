@@ -179,7 +179,7 @@ class DataMapper {
             if(calendar.get(GregorianCalendar.HOUR_OF_DAY) < 12) {
                 viewModel.isAm.set(true)
             }
-            viewModel.hour.set(calendar.get(GregorianCalendar.HOUR))
+            viewModel.hour.set(calendar.get(GregorianCalendar.HOUR_OF_DAY))
             viewModel.minute.set(calendar.get(GregorianCalendar.MINUTE))
             viewModel.day.set(calendar.get(GregorianCalendar.DAY_OF_MONTH))
             viewModel.dayOfWeek.set(calendar.get(GregorianCalendar.DAY_OF_WEEK) - 1)

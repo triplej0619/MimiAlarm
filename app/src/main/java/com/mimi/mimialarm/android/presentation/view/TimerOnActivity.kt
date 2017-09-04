@@ -4,9 +4,7 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.media.Ringtone
 import android.media.RingtoneManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Vibrator
 import android.support.v7.app.AppCompatActivity
@@ -22,9 +20,11 @@ import com.mimi.mimialarm.android.presentation.ViewModelModule
 import com.mimi.mimialarm.android.utils.ContextUtil
 import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
+import com.mimi.mimialarm.core.infrastructure.FailedLoadDataEvent
 import com.mimi.mimialarm.core.presentation.viewmodel.TimerOnViewModel
 import com.mimi.mimialarm.databinding.ActivityTimerOnBinding
 import com.squareup.otto.Bus
+import com.squareup.otto.Subscribe
 import javax.inject.Inject
 
 /**
@@ -61,6 +61,8 @@ class TimerOnActivity : AppCompatActivity() {
     }
 
     fun init() {
+        bus.register(this)
+
         wakeUpScreen()
 
         viewModel.timerId = intent.getIntExtra(TimerOnBroadcastReceiver.KEY_TIMER_ID, -1)
@@ -85,6 +87,7 @@ class TimerOnActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        bus.unregister(this)
         player?.stop()
         player?.release()
         vibrator?.cancel()
@@ -111,5 +114,11 @@ class TimerOnActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+    }
+
+    @Subscribe
+    public fun answerFailedLoadDataEvent(event: FailedLoadDataEvent) {
+        LogUtil.printDebugLog(this@TimerOnActivity.javaClass, "answerFailedLoadDataEvent()")
+        finish()
     }
 }

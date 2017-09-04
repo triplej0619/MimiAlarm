@@ -9,10 +9,10 @@ import android.view.ViewGroup
  */
 
 abstract class CustomRecyclerViewAdapter<T> : RecyclerView.Adapter<CustomRecyclerViewHolder> {
-    private val layoutId: Int
-    private var items: List<T>? = null
-    private var itemClick: IListItemClick? = null
-    private var longClick: IListItemClick? = null
+    protected val layoutId: Int
+    protected var items: List<T>? = null
+    protected var itemClick: IListItemClick? = null
+    protected var longClick: IListItemClick? = null
 
     constructor(items: List<T>?, layoutId: Int) {
         this.items = items

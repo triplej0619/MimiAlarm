@@ -5,17 +5,13 @@ import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyAlarm
 import com.mimi.mimialarm.android.utils.LogUtil
-import com.mimi.mimialarm.core.infrastructure.ActivateAlarmEvent
-import com.mimi.mimialarm.core.infrastructure.AlarmManager
-import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
-import com.mimi.mimialarm.core.infrastructure.UIManager
+import com.mimi.mimialarm.core.infrastructure.*
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.Command2
 import com.mimi.mimialarm.core.utils.DateUtil
 import com.mimi.mimialarm.core.utils.TimeCalculator
 import com.squareup.otto.Bus
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -119,7 +115,7 @@ class AlarmOnViewModel @Inject constructor(
         LogUtil.printDebugLog(this@AlarmOnViewModel.javaClass, "loadAlarm()")
         if(alarmId != null) {
             alarm = dbManager.findAlarmWithId(alarmId)
-            alarm?.let {
+            if(alarm != null) {
                 alarm!!.usedSnoozeCount = alarm!!.usedSnoozeCount!!.inc()
                 DataMapper.alarmToAlarmOnViewModel(alarm!!, this)
                 dbManager.updateAlarm(alarm!!)
@@ -128,6 +124,8 @@ class AlarmOnViewModel @Inject constructor(
                         (usedSnoozeCount > snoozeCount)) {
                     willExpire.set(true)
                 }
+            } else {
+                bus.post(FailedLoadDataEvent(FailedLoadDataEvent.DATA_TYPE.ALARM))
             }
         }
     }

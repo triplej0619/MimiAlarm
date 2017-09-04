@@ -147,6 +147,7 @@ class TimerViewModel @Inject constructor(
         }
 
         timerList.add(DataMapper.timerToListItemViewModel(timer, bus))
+        timerList.sortBy { it }
     }
 
     fun addTimer() {
@@ -164,10 +165,14 @@ class TimerViewModel @Inject constructor(
         LogUtil.printDebugLog(this@TimerViewModel.javaClass, "addTimerListItem()")
         val listItem: TimerListItemViewModel = DataMapper.timerToListItemViewModel(timer, bus, true)
         timerList.add(listItem)
+        timerList.sortBy { it }
         timerCount.set(timerCount.get() + 1)
         timerListLive.postValue(timerList)
 
-        bus.post(AddTimerEvent())
+        try {
+            bus.post(AddTimerEvent(timer.id))
+        } catch (ex: Exception) {
+        }
     }
 
     fun setDeleteMode(mode: Boolean) {

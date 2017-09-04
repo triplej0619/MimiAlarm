@@ -23,10 +23,12 @@ import com.mimi.mimialarm.android.presentation.ViewModelModule
 import com.mimi.mimialarm.android.utils.ContextUtil
 import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
+import com.mimi.mimialarm.core.infrastructure.FailedLoadDataEvent
 import com.mimi.mimialarm.core.presentation.viewmodel.AlarmOnViewModel
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.databinding.ActivityAlarmOnBinding
 import com.squareup.otto.Bus
+import com.squareup.otto.Subscribe
 import javax.inject.Inject
 
 
@@ -155,5 +157,11 @@ class AlarmOnActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+    }
+
+    @Subscribe
+    public fun answerFailedLoadDataEvent(event: FailedLoadDataEvent) {
+        LogUtil.printDebugLog(this@AlarmOnActivity.javaClass, "answerFailedLoadDataEvent()")
+        finish()
     }
 }

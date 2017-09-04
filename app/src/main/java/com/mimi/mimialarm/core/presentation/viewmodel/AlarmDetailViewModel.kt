@@ -164,7 +164,7 @@ class AlarmDetailViewModel @Inject constructor(
             val time = TimeCalculator.getMilliSecondsForScheduling(savedAlarm!!)
             alarmManager.startAlarm(id!!, time)
             alarmManager.startAlarmForPreNotice(id!!, time)
-            bus.post(UpdateAlarmEvent(time / 1000))
+            bus.post(UpdateAlarmEvent(id, time / 1000))
         }
         closeView()
     }

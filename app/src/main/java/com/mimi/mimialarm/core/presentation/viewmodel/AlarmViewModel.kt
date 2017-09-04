@@ -12,7 +12,10 @@ import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.TimeCalculator
 import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
+import java.util.*
 import javax.inject.Inject
+import kotlin.Comparator
+import kotlin.collections.ArrayList
 
 /**
  * Created by MihyeLee on 2017. 5. 24..
@@ -27,8 +30,8 @@ class AlarmViewModel @Inject constructor(
 
     var deleteMode: ObservableBoolean = ObservableBoolean(false)
     var alarmCount: ObservableInt = ObservableInt(0)
-    var alarmListLive: MutableLiveData<ArrayList<AlarmListItemViewModel>> = MutableLiveData()
-    var alarmList: ArrayList<AlarmListItemViewModel> = ArrayList<AlarmListItemViewModel>()
+    var alarmListLive: MutableLiveData<MutableList<AlarmListItemViewModel>> = MutableLiveData()
+    var alarmList: MutableList<AlarmListItemViewModel> = ArrayList<AlarmListItemViewModel>()
     var showActivatedAlarmList = ObservableBoolean(false)
 
     val addAlarmCommand: Command = object : Command {
@@ -105,6 +108,7 @@ class AlarmViewModel @Inject constructor(
         for (alarm in alarms) {
             updateOrInsertListItem(alarm)
         }
+        alarmList.sort()
         showActivatedAlarmList.set(alarms.filter { it.usedSnoozeCount!! > 0 }.isNotEmpty())
         alarmListLive.postValue(alarmList)
         alarmCount.set(alarms.size)
@@ -189,7 +193,7 @@ class AlarmViewModel @Inject constructor(
                 val time = TimeCalculator.getMilliSecondsForScheduling(alarm)
                 alarmManager.startAlarm(event.id, time)
                 alarmManager.startAlarmForPreNotice(event.id, time)
-                bus.post(UpdateAlarmEvent(time / 1000))
+                bus.post(UpdateAlarmEvent(event.id, time / 1000))
             } else {
                 alarm.usedSnoozeCount = 0
                 alarmManager.cancelAlarm(event.id)

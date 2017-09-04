@@ -41,7 +41,7 @@ class AlarmFragment : LifecycleFragment() {
     val MINUTE: Int = 60
 
     private var listAdapter: AlarmListAdapter? = null
-    lateinit var binding: FragmentAlarmBinding
+    private lateinit var binding: FragmentAlarmBinding
     @Inject lateinit var viewModel: AlarmViewModel
     @Inject lateinit var bus: Bus
     @Inject lateinit var dbManager: DBManager
@@ -56,12 +56,10 @@ class AlarmFragment : LifecycleFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.alarmListLive.observe(this, object : Observer<ArrayList<AlarmListItemViewModel>> {
-            override fun onChanged(t: ArrayList<AlarmListItemViewModel>?) {
-                listAdapter?.notifyDataSetChanged()
-            }
-
-        })
+        viewModel.alarmListLive.observe(this,
+                Observer<MutableList<AlarmListItemViewModel>> {
+                    listAdapter?.notifyDataSetChanged()
+                })
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -104,6 +102,19 @@ class AlarmFragment : LifecycleFragment() {
     private inner class AlarmListAdapter(items: List<AlarmListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick, longClick: IListItemClick)
         : CustomRecyclerViewAdapter<AlarmListItemViewModel>(items, layoutId, itemClickEvent, longClick) {
 
+        fun getItemIndex(alarmId: Int?) : Int {
+            var index = 0
+            alarmId?.let {
+                items?.forEachIndexed { i, alarmListItemViewModel ->
+                    if(alarmListItemViewModel.id != null && alarmListItemViewModel.id == alarmId) {
+                        index = i
+                        return@forEachIndexed
+                    }
+                }
+            }
+            return index;
+        }
+
         override fun setViewModel(holder: CustomRecyclerViewHolder, item: AlarmListItemViewModel) {
             if(holder.binding is ListItemAlarmBinding) {
                 holder.binding.alarmListItemViewModel = item
@@ -130,11 +141,12 @@ class AlarmFragment : LifecycleFragment() {
     @Subscribe
     fun answerAddAlarmEvent(event: AddAlarmEvent) {
         LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerAddAlarmEvent()")
-        viewModel.loadAlarmList()
-        listAdapter?.addItem(listAdapter!!.itemCount - 1)
-        binding.list.smoothScrollToPosition(listAdapter!!.itemCount - 1)
-
         Toast.makeText(context, getAlarmScheduleString(event.seconds), Toast.LENGTH_SHORT).show()
+
+        viewModel.loadAlarmList()
+        val index = listAdapter?.getItemIndex(event.id)
+        listAdapter?.addItem(index ?: 0)
+        binding.list.smoothScrollToPosition(index?: 0)
     }
 
     fun getAlarmScheduleString(second: Long) : String{
@@ -165,6 +177,10 @@ class AlarmFragment : LifecycleFragment() {
     fun answerUpdateAlarmEvent(event: UpdateAlarmEvent) {
         LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerUpdateAlarmEvent()")
         Toast.makeText(context, getAlarmScheduleString(event.seconds), Toast.LENGTH_SHORT).show()
+
+        viewModel.loadAlarmList()
+        val index = listAdapter?.getItemIndex(event.id)
+        binding.list.smoothScrollToPosition(index?: 0)
     }
 
     @Subscribe

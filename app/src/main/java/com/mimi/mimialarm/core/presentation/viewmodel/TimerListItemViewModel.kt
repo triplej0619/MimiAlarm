@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by MihyeLee on 2017. 6. 22..
  */
-class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
+class TimerListItemViewModel(val bus: Bus) : BaseViewModel(), Comparable<TimerListItemViewModel> {
 
     val FULL_ALPHA = ObservableFloat(1.0f)
     val HALF_ALPHA = ObservableFloat(0.5f)
@@ -122,5 +122,25 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel() {
         LogUtil.printDebugLog(this@TimerListItemViewModel.javaClass, "pauseTimer() id : $id")
         timeSubscription?.dispose()
         timeSubscription = null
+    }
+
+    override fun compareTo(other: TimerListItemViewModel): Int {
+        if(this.baseTime > other.baseTime) {
+            return 1
+        } else if(this.baseTime == other.baseTime) {
+            return compareId(other)
+        }
+        return -1
+    }
+
+    private fun compareId(other: TimerListItemViewModel): Int {
+        id?.let {
+            if(other.id != null) {
+                return id!!.compareTo(other.id!!)
+            } else {
+                return 1
+            }
+        }
+        return -1
     }
 }

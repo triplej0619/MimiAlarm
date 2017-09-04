@@ -28,8 +28,8 @@ class ViewModelModule {
             = AlarmOnViewModel(uiManager, dbManager, alarmManager, bus, applicationDataManager)
 
     @Provides
-    fun provideTimerOnViewModel(uiManager: UIManager, dbManager: DBManager): TimerOnViewModel
-            = TimerOnViewModel(uiManager, dbManager)
+    fun provideTimerOnViewModel(uiManager: UIManager, dbManager: DBManager, bus: Bus): TimerOnViewModel
+            = TimerOnViewModel(uiManager, dbManager, bus)
 
     @Provides
     fun provideSettingsViewModel(uiManager: UIManager, bus: Bus, applicationDataManager: ApplicationDataManager): SettingsViewModel
