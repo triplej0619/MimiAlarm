@@ -25,7 +25,8 @@ class AlarmViewModel @Inject constructor(
         private val uiManager: UIManager,
         private val dbManager: DBManager,
         private val alarmManager: AlarmManager,
-        private val bus: Bus
+        private val bus: Bus,
+        private val localizedTextManager: LocalizedTextManager
 ) : BaseViewModel() {
 
     var deleteMode: ObservableBoolean = ObservableBoolean(false)
@@ -58,7 +59,7 @@ class AlarmViewModel @Inject constructor(
 
     val deleteAlarmsCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            uiManager.showAlertDialog("정말 삭제하시겠습니까?", "", true, object: Command { // TODO text -> string resource
+            uiManager.showAlertDialog(localizedTextManager.getText(MimiAlarmTextCode.DELETE_PART), "", true, object: Command {
                 override fun execute(arg: Any) {
                     deleteAlarms()
                 }
@@ -68,7 +69,7 @@ class AlarmViewModel @Inject constructor(
 
     val deleteAllCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            uiManager.showAlertDialog("전부 삭제하시겠습니까?", "", true, object: Command { // TODO text -> string resource
+            uiManager.showAlertDialog(localizedTextManager.getText(MimiAlarmTextCode.DELETE_ALL), "", true, object: Command {
                 override fun execute(arg: Any) {
                     deleteAllAlarm()
                 }
@@ -152,7 +153,7 @@ class AlarmViewModel @Inject constructor(
     fun deleteAlarms() {
         LogUtil.printDebugLog(this@AlarmViewModel.javaClass, "deleteAlarms()")
         if(alarmList.filter { it.selectForDelete.get() }.isEmpty()) {
-            uiManager.showToast("선택된 알람이 없습니다.") // TODO text -> resource
+            uiManager.showToast(localizedTextManager.getText(MimiAlarmTextCode.NO_SELECTED_ALARM))
         } else {
             alarmList
                     .filter { it.selectForDelete.get() }

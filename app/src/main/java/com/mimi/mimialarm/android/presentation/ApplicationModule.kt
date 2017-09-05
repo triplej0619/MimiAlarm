@@ -3,9 +3,11 @@ package com.mimi.mimialarm.android.presentation
 import com.mimi.data.DBManager
 import com.mimi.data.RealmDBManager
 import com.mimi.mimialarm.android.infrastructure.AndroidApplicationDataManager
+import com.mimi.mimialarm.android.infrastructure.AndroidLocalizedTextManager
 import com.mimi.mimialarm.android.infrastructure.MimiAlarmManager
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
+import com.mimi.mimialarm.core.infrastructure.LocalizedTextManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.squareup.otto.Bus
 import com.squareup.otto.ThreadEnforcer
@@ -34,4 +36,7 @@ class ApplicationModule(private val application: MimiAlarmApplication) {
 
     @Provides @Singleton
     fun provideApplicationDataManager(): ApplicationDataManager = AndroidApplicationDataManager(application)
+
+    @Provides @Singleton
+    fun provideLocalizedTextManager(): LocalizedTextManager = AndroidLocalizedTextManager(application)
 }

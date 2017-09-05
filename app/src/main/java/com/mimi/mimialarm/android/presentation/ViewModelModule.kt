@@ -3,6 +3,7 @@ package com.mimi.mimialarm.android.presentation
 import com.mimi.data.DBManager
 import com.mimi.mimialarm.core.infrastructure.AlarmManager
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
+import com.mimi.mimialarm.core.infrastructure.LocalizedTextManager
 import com.mimi.mimialarm.core.infrastructure.UIManager
 import com.mimi.mimialarm.core.presentation.viewmodel.*
 import com.squareup.otto.Bus
@@ -16,8 +17,8 @@ import dagger.Provides
 @Module
 class ViewModelModule {
     @Provides
-    fun provideAlarmViewModel(uiManager: UIManager, dbManager: DBManager, alarmManager: AlarmManager, bus: Bus): AlarmViewModel
-            = AlarmViewModel(uiManager, dbManager, alarmManager, bus)
+    fun provideAlarmViewModel(uiManager: UIManager, dbManager: DBManager, alarmManager: AlarmManager, bus: Bus, localizedTextManager: LocalizedTextManager): AlarmViewModel
+            = AlarmViewModel(uiManager, dbManager, alarmManager, bus, localizedTextManager)
 
     @Provides
     fun provideAlarmDetailViewModel(uiManager: UIManager, bus: Bus, dbManager: DBManager, alarmManager: AlarmManager): AlarmDetailViewModel
