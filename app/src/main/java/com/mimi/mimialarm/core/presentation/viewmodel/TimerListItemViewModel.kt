@@ -10,7 +10,9 @@ import com.mimi.mimialarm.core.utils.TimeCalculator
 import com.squareup.otto.Bus
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 /**
@@ -74,7 +76,7 @@ class TimerListItemViewModel(val bus: Bus) : BaseViewModel(), Comparable<TimerLi
             }
         }).repeatWhen({ t: Observable<Any> ->
             t.delay(1000, TimeUnit.MILLISECONDS)
-        })
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     }
 
     fun release() {
