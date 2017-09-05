@@ -20,13 +20,16 @@ import android.net.Uri
 import android.support.v7.app.AlertDialog
 import kotlin.collections.HashMap
 import android.media.Ringtone
+import android.os.Build
 import android.support.v7.widget.AppCompatSeekBar
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import com.mimi.mimialarm.android.utils.ContextUtil
+import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.ApplicationDataManager
+import com.mimi.mimialarm.core.utils.Command
 
 
 /**
@@ -43,6 +46,26 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
     var selectedRingtone: Ringtone? = null
     var ringtoneIndex: Int = 0
     var ringtoneIndexPrev: Int = 0
+    var init = false
+
+
+    val addOrUpdateAlarmCommand: Command = object : Command {
+        override fun execute(arg: Any) {
+            if(init) {
+                LogUtil.printDebugLog(this@AlarmDetailActivity.javaClass, "addOrUpdateAlarmCommand()")
+                val calendar = GregorianCalendar()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    calendar.set(GregorianCalendar.HOUR_OF_DAY, binding.timePicker.hour)
+                    calendar.set(GregorianCalendar.MINUTE, binding.timePicker.minute)
+                } else {
+                    calendar.set(GregorianCalendar.HOUR_OF_DAY, binding.timePicker.currentHour)
+                    calendar.set(GregorianCalendar.MINUTE, binding.timePicker.currentMinute)
+                }
+                viewModel.endTime.set(calendar.time)
+                viewModel.addOrUpdateAlarmCommand.execute(Unit)
+            }
+        }
+    }
 
     fun buildComponent(): ActivityComponent {
         return DaggerActivityComponent.builder()
@@ -58,6 +81,7 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_detail)
         binding.alarmDetailViewModel = viewModel
+        binding.alarmDetailActivity = this
 
         getBundleData()
         init()
@@ -107,7 +131,7 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
                 })
 
         binding.timePicker?.setOnTimeChangedListener { view, hourOfDay, minute ->
-            val calendar: GregorianCalendar = GregorianCalendar()
+            val calendar = GregorianCalendar()
             calendar.set(GregorianCalendar.HOUR_OF_DAY, hourOfDay)
             calendar.set(GregorianCalendar.MINUTE, minute)
 
@@ -135,6 +159,7 @@ class AlarmDetailActivity : LifecycleActivity(), View.OnTouchListener {
         })
 
         setStopSoundListener()
+        init = true
     }
 
     fun setStopSoundListener() {
