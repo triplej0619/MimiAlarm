@@ -175,6 +175,8 @@ class TimerFragment : LifecycleFragment() {
     fun answerChangePageEvent(event: ChangePageEvent) {
         if(event.page == 1) {
             viewModel.cancelDeleteModeCommand.execute(Unit)
+        } else {
+            keyboardHide();
         }
     }
 }
