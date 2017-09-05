@@ -17,4 +17,8 @@
     <string name="msg_add_alarm_under_1min">이내에 알람이 울립니다.</string>
 
     <string name="msg_show_activate_alarm_list">지금 동작중인 알람 보기</string>
+
+    <string name="msg_delete_part">정말 삭제하시겠습니까?</string>
+    <string name="msg_delete_all">전부 삭제하시겠습니까?</string>
+    <string name="msg_no_selected_alarm">선택된 알람이 없습니다.</string>
 </resources>

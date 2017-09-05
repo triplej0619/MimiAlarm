@@ -7,10 +7,7 @@ import android.databinding.ObservableInt
 import com.mimi.data.DBManager
 import com.mimi.data.model.MyTimer
 import com.mimi.mimialarm.android.utils.LogUtil
-import com.mimi.mimialarm.core.infrastructure.AddTimerEvent
-import com.mimi.mimialarm.core.infrastructure.AlarmManager
-import com.mimi.mimialarm.core.infrastructure.ChangeTimerStatusEvent
-import com.mimi.mimialarm.core.infrastructure.UIManager
+import com.mimi.mimialarm.core.infrastructure.*
 import com.mimi.mimialarm.core.model.DataMapper
 import com.mimi.mimialarm.core.utils.Command
 import com.mimi.mimialarm.core.utils.DateUtil
@@ -27,7 +24,8 @@ class TimerViewModel @Inject constructor(
         private val uiManager: UIManager,
         private val bus: Bus,
         private val dbManager: DBManager,
-        private val alarmManager: AlarmManager
+        private val alarmManager: AlarmManager,
+        private val localizedTextManager: LocalizedTextManager
 ) : BaseViewModel() {
 
     val SECOND_IN_MILLI: Int = 1000
@@ -85,7 +83,7 @@ class TimerViewModel @Inject constructor(
 
     val deleteTimersCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            uiManager.showAlertDialog("정말 삭제하시겠습니까?", "", true, object: Command { // TODO text -> resource
+            uiManager.showAlertDialog(localizedTextManager.getText(MimiAlarmTextCode.DELETE_PART), "", true, object: Command {
                 override fun execute(arg: Any) {
                     deleteTimers()
                 }
@@ -95,7 +93,7 @@ class TimerViewModel @Inject constructor(
 
     val deleteAllCommand: Command = object : Command {
         override fun execute(arg: Any) {
-            uiManager.showAlertDialog("전부 삭제하시겠습니까?", "", true, object: Command { // TODO text -> resource
+            uiManager.showAlertDialog(localizedTextManager.getText(MimiAlarmTextCode.DELETE_ALL), "", true, object: Command {
                 override fun execute(arg: Any) {
                     deleteAllTimer()
                 }
@@ -185,7 +183,7 @@ class TimerViewModel @Inject constructor(
     fun deleteTimers() {
         LogUtil.printDebugLog(this@TimerViewModel.javaClass, "deleteTimers()")
         if(timerList.filter { it.selectForDelete.get() }.isEmpty()) {
-            uiManager.showToast("선택된 타이머가 없습니다.") // TODO text -> resource
+            uiManager.showToast(localizedTextManager.getText(MimiAlarmTextCode.NO_SELECTED_TIMER))
         } else {
             timerList
                     .filter { it.selectForDelete.get() }
