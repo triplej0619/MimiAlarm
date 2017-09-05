@@ -111,7 +111,6 @@ class AlarmViewModel @Inject constructor(
         }
         alarmList.sort()
         showActivatedAlarmList.set(alarms.filter { it.usedSnoozeCount!! > 0 }.isNotEmpty())
-        alarmListLive.postValue(alarmList)
         alarmCount.set(alarms.size)
     }
 
@@ -165,6 +164,7 @@ class AlarmViewModel @Inject constructor(
                         }
                     }
             reLoadAlarmList()
+            alarmListLive.postValue(alarmList)
         }
         cancelDeleteModeCommand.execute(Unit)
     }

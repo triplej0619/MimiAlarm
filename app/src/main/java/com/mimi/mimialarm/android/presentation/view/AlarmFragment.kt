@@ -6,7 +6,6 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,9 +27,7 @@ import com.mimi.mimialarm.android.utils.LogUtil
 import com.mimi.mimialarm.core.infrastructure.*
 import com.mimi.mimialarm.core.utils.TimeCalculator
 import java.util.*
-import android.content.Intent
-
-
+import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator
 
 
 /**
@@ -85,7 +82,7 @@ class AlarmFragment : LifecycleFragment() {
     }
 
     fun initListView() {
-        binding.list.layoutManager = LinearLayoutManager(activity)
+        binding.list.layoutManager = WrapContentLinearLayoutManager(activity)
         listAdapter = AlarmListAdapter(viewModel.alarmList, R.layout.list_item_alarm, object : IListItemClick {
             override fun clickEvent(v: View, pos: Int) {
                 viewModel.clickListItem(pos)
@@ -97,6 +94,8 @@ class AlarmFragment : LifecycleFragment() {
         })
 
         binding.list.adapter = listAdapter
+        binding.list.itemAnimator = FadeInLeftAnimator()
+        binding.list.itemAnimator.addDuration = 400
     }
 
     private inner class AlarmListAdapter(items: List<AlarmListItemViewModel>?, layoutId: Int, itemClickEvent: IListItemClick, longClick: IListItemClick)
@@ -143,14 +142,16 @@ class AlarmFragment : LifecycleFragment() {
         LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerAddAlarmEvent()")
         Toast.makeText(context, getAlarmScheduleString(event.seconds), Toast.LENGTH_SHORT).show()
 
-        viewModel.loadAlarmList()
-        val index = listAdapter?.getItemIndex(event.id)
-        listAdapter?.addItem(index ?: 0)
-        binding.list.smoothScrollToPosition(index?: 0)
+        activity.runOnUiThread({
+            viewModel.loadAlarmList()
+            val index = listAdapter?.getItemIndex(event.id) ?: 0
+            listAdapter?.addItem(index)
+            binding.list.smoothScrollToPosition(index)
+        })
     }
 
     fun getAlarmScheduleString(second: Long) : String{
-        var text: String = ""
+        var text = ""
         val hour = TimeCalculator.getHourFromSeconds(second)
         val minute = TimeCalculator.getMinuteFromSeconds(second)
         val day = TimeCalculator.getDayFromSeconds(second)
@@ -178,9 +179,11 @@ class AlarmFragment : LifecycleFragment() {
         LogUtil.printDebugLog(this@AlarmFragment.javaClass, "answerUpdateAlarmEvent()")
         Toast.makeText(context, getAlarmScheduleString(event.seconds), Toast.LENGTH_SHORT).show()
 
-        viewModel.loadAlarmList()
-        val index = listAdapter?.getItemIndex(event.id)
-        binding.list.smoothScrollToPosition(index?: 0)
+        activity.runOnUiThread({
+            viewModel.loadAlarmList()
+            val index = listAdapter?.getItemIndex(event.id)
+            binding.list.smoothScrollToPosition(index ?: 0)
+        })
     }
 
     @Subscribe

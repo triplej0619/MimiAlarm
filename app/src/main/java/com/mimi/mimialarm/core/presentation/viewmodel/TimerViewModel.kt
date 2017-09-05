@@ -130,7 +130,7 @@ class TimerViewModel @Inject constructor(
         for (timer in timers) {
             updateOrInsertListItem(timer)
         }
-        timerListLive.postValue(timerList)
+//        timerListLive.postValue(timerList)
         timerCount.set(timers.size)
     }
 
@@ -165,7 +165,7 @@ class TimerViewModel @Inject constructor(
         timerList.add(listItem)
         timerList.sortBy { it }
         timerCount.set(timerCount.get() + 1)
-        timerListLive.postValue(timerList)
+//        timerListLive.postValue(timerList)
 
         try {
             bus.post(AddTimerEvent(timer.id))
@@ -194,6 +194,7 @@ class TimerViewModel @Inject constructor(
                         LogUtil.printDebugLog(this@TimerViewModel.javaClass, "deleteTimers() - cancelTimer : " + it.id)
                     }
             reLoadTimerList()
+            timerListLive.postValue(timerList)
         }
         cancelDeleteModeCommand.execute(Unit)
     }

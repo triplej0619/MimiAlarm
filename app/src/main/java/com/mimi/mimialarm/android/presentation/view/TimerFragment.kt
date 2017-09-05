@@ -27,6 +27,7 @@ import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
+import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator
 import javax.inject.Inject
 
 /**
@@ -71,7 +72,7 @@ class TimerFragment : LifecycleFragment() {
     }
 
     fun initListView() {
-        binding.list.layoutManager = LinearLayoutManager(activity)
+        binding.list.layoutManager = WrapContentLinearLayoutManager(activity)
         listAdapter = TimerListAdapter(viewModel.timerList, R.layout.list_item_timer, object : IListItemClick {
             override fun clickEvent(v: View, pos: Int) {
                 viewModel.clickListItem(pos)
@@ -83,6 +84,8 @@ class TimerFragment : LifecycleFragment() {
         })
 
         binding.list.adapter = listAdapter
+        binding.list.itemAnimator = FadeInLeftAnimator()
+        binding.list.itemAnimator.addDuration = 400
 
 //        viewModel.loadTimerList()
     }
@@ -147,8 +150,11 @@ class TimerFragment : LifecycleFragment() {
     @Subscribe
     fun answerAddTimerEvent(event: AddTimerEvent) {
         event.id?.let {
-            val index = listAdapter?.getItemIndex(event.id) ?: 0
-            binding.list.smoothScrollToPosition(index)
+            activity.runOnUiThread {
+                val index = listAdapter?.getItemIndex(event.id) ?: 0
+                listAdapter?.addItem(index)
+                binding.list.smoothScrollToPosition(index)
+            }
         }
         keyboardHide()
     }
