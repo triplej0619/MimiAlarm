@@ -4,7 +4,7 @@
     <string name="alarm_close">Stop</string>
     <string name="alarm_snooze">Snooze</string>
     
-    <string name="alarm_on_month">/</string>
+    <string name="alarm_on_month"> /</string>
     <string name="alarm_on_day"></string>
     
     <string name="alarm_on_sunday">SUN</string>
