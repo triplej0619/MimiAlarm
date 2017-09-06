@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg_no_timer">Set the time, and tap + button to star timer.</string>
+    
+    <string name="day">d</string>
+    <string name="hour">h</string>
+    <string name="minute">m</string>
+    <string name="second">s</string>
+    <string name="delete">Delete</string>
+    <string name="setting">Settings</string>
+    
+    <string name="msg_no_selected_timer">None was selected.</string>
+</resources>

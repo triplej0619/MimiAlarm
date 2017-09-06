@@ -1,0 +1,25 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg_no_alarm">Tap the + button below to set the first alarm</string>
+    
+    <string name="monday">MO</string>
+    <string name="tuesday">TU</string>
+    <string name="wednesday">WE</string>
+    <string name="thursday">TH</string>
+    <string name="friday">FR</string>
+    <string name="saturday">SA</string>
+    <string name="sunday">SU</string>
+    
+    <string name="count">times</string>
+    <string name="title_select_sound">Select sound</string>
+    
+    <string name="msg_add_alarm_over_1min">(after), the alarm is going to ring.</string>
+    <string name="msg_add_alarm_under_1min">(in), the alarm is going to ring.</string>
+    
+    <string name="msg_show_activate_alarm_list">Now ringing</string>
+    
+    <string name="msg_delete_part">Delete selecte item(s)?</string>
+    <string name="msg_delete_all">Delete all items?</string>
+    <string name="msg_no_selected_alarm">None was selected.</string>
+</resources>

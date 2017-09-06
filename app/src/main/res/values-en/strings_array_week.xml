@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="week">
+        <item name="sunday">SUN</item>
+        <item name="monday">MON</item>
+        <item name="tuesday">TUE</item>
+        <item name="wednesDay">WED</item>
+        <item name="thursday">THU</item>
+        <item name="friday">FRI</item>
+        <item name="saturday">SAT</item>
+    </string-array>
+</resources>

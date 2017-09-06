@@ -1,0 +1,15 @@
+<resources>
+    <string name="title_alarm_detail">Alarm detail</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Confirm</string>
+    <string name="save">Set</string>
+    
+    <string name="ad_main_bottom_banner">ca-app-pub-5908581214524694/8905935166</string>
+    <string name="ad_change_theme">ca-app-pub-5908581214524694/4808653961</string>
+    
+    <string name="test_ad_banner">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="test_ad_rewarded_video">ca-app-pub-3940256099942544/5224354917</string>
+    
+    <string name="adsmob_id">ca-app-pub-5908581214524694~3331920767</string>
+    
+</resources>

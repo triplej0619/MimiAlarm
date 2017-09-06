@@ -1,0 +1,22 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alarm_close">Stop</string>
+    <string name="alarm_snooze">Snooze</string>
+    
+    <string name="alarm_on_month">Month</string>
+    <string name="alarm_on_day">Day</string>
+    
+    <string name="alarm_on_sunday">SUN</string>
+    <string name="alarm_on_monday">MON</string>
+    <string name="alarm_on_tuesday">TUE</string>
+    <string name="alarm_on_wednesDay">WED</string>
+    <string name="alarm_on_thursday">THU</string>
+    <string name="alarm_on_friday">FRI</string>
+    <string name="alarm_on_saturday">SAT</string>
+    
+    <string name="alarm_on_deactivate_alarm">Turn off</string>
+    <string name="alarm_on_scheduled_alarm">The alarm is going to ring.</string>
+    <string name="alarm_on_kill_snooze">Turn off</string>
+    <string name="alarm_on_reset_snooze">Snoozed alarm</string>
+</resources>

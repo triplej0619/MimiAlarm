@@ -1,0 +1,30 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_alarm_close_method">Turn off button shows..</string>
+    <string name="settings_alarm_close_method_in_window">On the ringing alarm screen.</string>
+    <string name="settings_alarm_close_method_in_window_summary">Turn off button shows on the ringing alarm screen.</string>
+    <string name="settings_alarm_close_method_in_app">Only in the app</string>
+    <string name="settings_alarm_close_method_in_app_summary">You have to get in the app to turn off the ringing alarm.</string>
+    
+    <string name="settings_change_theme">App theme</string>
+    <string name="settings_fail_to_load_ad">Could not load the Ads. Please try it later.</string>
+    <string name="settings_ad_video_not_load_yet">Could not load the Ads. Please try it later.</string>
+    
+    <string name="settings_alarm_terminate_timing">Alarm rings while..</string>
+    <string name="settings_alarm_terminate_timing_60s">1 min</string>
+    <string name="settings_alarm_terminate_timing_wait_me">Until turn that off</string>
+    
+    <string name="settings_timer_volume">Timer volume</string>
+    
+    <string name="settings_send_user_report">Send feedback</string>
+    <string name="settings_send_user_report_to_developer">Any suggestion or bug? Send it to the developer!
+    </string>
+    
+    <string name="settings_app_recommend">Tell a friend</string>
+    <string name="settings_app_recommend_to_friends">Recommand it to your friend.</string>
+    
+    <string name="settings_app_version">Version</string>
+    <string name="settings_share_app">Recommand \'Alarm - Sleep More\'</string>
+    <string name="settings_see_alarm_app">Recommand \'Alarm - Sleep More\'! - </string>
+</resources>
